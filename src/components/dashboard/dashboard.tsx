@@ -167,7 +167,7 @@ export default function Dashboard() {
             <Route path="/">
               <Sprints />
             </Route>
-          </Switch>         
+          </Switch>
         </main>
       </div>
     </Router>   
