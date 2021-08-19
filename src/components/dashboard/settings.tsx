@@ -81,18 +81,11 @@ export default function Settings() {
   const [optionsProject, setOptionsProject] = React.useState<Project[]>([]);
   const loading = openProject && optionsProject.length === 0;
 
-  const setFieldState = (prop: keyof State, value: any) => {
+  const setFieldState = (prop: keyof State, value: any) => {  
     setState({ ...state, [prop]: value });
   };
-  
-  const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldState(prop, event.target.value);
-  };
-
 
   React.useEffect(() => {
-    let active = true;
-
     if (!loading) {
       return undefined;
     }
@@ -101,15 +94,10 @@ export default function Settings() {
       const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises');      
       const countries = await response.json();
 
-      if (active) {
-        setOptionsProject(Object.keys(countries).map((key) => countries[key]) as Project[]);
-      }
+      setOptionsProject(Object.keys(countries).map((key) => countries[key]) as Project[]);
     };
 
-    fetchData();
-    return () => {
-      active = false;
-    };
+    fetchData();    
   }, [loading]);
   
   React.useEffect(() => {
@@ -136,7 +124,9 @@ export default function Settings() {
                       id="ApiUrl" 
                       label="API URL" 
                       value={state.apiURL} 
-                      onChange={handleChange('apiURL')}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setState({ ...state, apiURL: event.target.value, errorApiURL: event.target.value.length === 0 });
+                      }}
                       onBlur={() => setFieldState('errorApiURL', state.apiURL.length === 0)}
                       error = {state.errorApiURL}
                     /> 
@@ -147,7 +137,9 @@ export default function Settings() {
                       id="api-token"
                       type={state.showApiToken ? 'text' : 'password'}
                       value={state.apiToken}
-                      onChange={handleChange('apiToken')}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setState({ ...state, apiToken: event.target.value, errorApiToken: event.target.value.length === 0 });
+                      }}
                       onBlur={() => setFieldState('errorApiToken', state.apiToken.length === 0)}
                       error = {state.errorApiToken}
                       endAdornment={
@@ -174,25 +166,23 @@ export default function Settings() {
                       justifyContent="flex-start"
                       alignItems="flex-end"
                     >
-                      <Grid item xs >
+                      <Grid item xs >                      
                         <Autocomplete
-                          id="ProjectRedmine"
-                          open={openProject}
-                          onOpen={() => {
-                            setOpenProject(true);
-                          }}
-                          onClose={() => {
-                            setFieldState('errorProject', state.projectSelected === null);
-                            setOpenProject(false);
-                          }}
+                          id="ProjectRedmine"                          
                           getOptionSelected={(option, value) => option.nome === value.nome}
                           getOptionLabel={(option) => option.nome}
                           options={optionsProject}
                           loading={loading}
                           value={state.projectSelected}
                           onChange={(_, newValue: Project | null) => {
-                            setFieldState('projectSelected', newValue)
+                            setState({ ...state, projectSelected: newValue, errorProject: newValue === null});
                           }}                          
+                          onOpen={() => {
+                            setOpenProject(true);
+                          }}
+                          onClose={() => {                            
+                            setOpenProject(false);
+                          }}
                           renderInput={(params) => (
                             <TextField
                               {...params}
