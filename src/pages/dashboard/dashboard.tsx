@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  NavLink
 } from "react-router-dom";
+import { Location } from 'history';
 
-import Sprints from './sprints';
-import Settings from './settings';
+import routes from "./routes";
 
 import clsx from 'clsx';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -25,9 +25,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import PollIcon from '@material-ui/icons/Poll';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-import GroupIcon from '@material-ui/icons/Group';
 
 const drawerWidth = 240;
 
@@ -93,18 +90,29 @@ const useStyles = makeStyles((theme: Theme) =>
     link: { 
       textDecoration: 'none',
       color: 'inherit',
+    },
+    menu: {
+      borderLeft: '4px solid transparent',      
+    },
+    menuActive: {
+      borderLeftColor: theme.palette.primary.main,
+      color: theme.palette.primary.main,
+    },
+    menuItemIconActive: {        
+      color: theme.palette.primary.main,
     }
   }),
 );
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [pathActive, setPathActive] = useState('');
 
   const handleDrawer = () => {
     setOpen(!open);
   };
-
+  
   return (
     <Router>
       <div className={classes.root}>
@@ -113,7 +121,7 @@ export default function Dashboard() {
           position="fixed"
           className={classes.appBar}
         >
-          <Toolbar className={clsx(classes.appBar, {[classes.appBarShift]: open, })}> 
+          <Toolbar className={clsx(classes.appBar, {[classes.appBarShift]: open})}> 
               <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawer} edge="start" >
                 {open ? <ChevronLeftIcon /> : <MenuIcon />}
               </IconButton>
@@ -138,35 +146,40 @@ export default function Dashboard() {
           <div className={classes.toolbar} />
           <Divider />
           <List>
-            <Link to="/" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon><PollIcon /></ListItemIcon>
-                <ListItemText primary={"Sprints"} />
-              </ListItem>
-            </Link>
+            {routes.filter(route => !route.isSetting).map(route => (
+              <NavLink to={route.path} className={classes.link} key={route.caption} isActive={(_, location: Location<any>) => {
+                if (location.pathname !== pathActive) {
+                  setPathActive(location.pathname);
+                }
+                
+                return true;
+              }}>
+                <ListItem button key={route.caption}>
+                  <ListItemIcon>{route.icon}</ListItemIcon>
+                  <ListItemText primary={route.caption} />
+                </ListItem>
+              </NavLink>
+            ))}
           </List>
           <Divider />
-          <List>                    
-            <ListItem button>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
-              <ListItemText primary={"Equipes"} />
-            </ListItem>         
-            <Link to="settings" className={classes.link}>
-              <ListItem button>
-                <ListItemIcon><SettingsApplicationsIcon /></ListItemIcon>              
-                  <ListItemText primary={"Configurações"} />
-              </ListItem>
-            </Link>              
+          <List>
+            {routes.filter(route => route.isSetting).map(route => (
+              <NavLink to={route.path} className={classes.link} key={route.caption}>
+                <ListItem button key={route.caption} className={clsx(classes.menu, {[classes.menuActive]: route.path === pathActive})}>
+                  <ListItemIcon className={clsx({[classes.menuItemIconActive]: route.path === pathActive})}>{route.icon}</ListItemIcon>
+                  <ListItemText primary={route.caption} />
+                </ListItem>
+              </NavLink>
+            ))}
           </List>
         </Drawer>
         <main className={classes.content}>            
           <Switch>
-            <Route path="/settings">
-              <Settings />
-            </Route>
-            <Route path="/">
-              <Sprints />
-            </Route>
+            {routes.map(route => (
+              <Route path={route.path} exact={route.exact} key={route.caption}>
+                {route.component}
+              </Route>
+            ))}
           </Switch>
         </main>
       </div>

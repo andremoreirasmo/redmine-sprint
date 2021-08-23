@@ -1,5 +1,5 @@
-import React from 'react';
-import fetch from 'cross-fetch';
+import React, { FormEvent, useState, useEffect } from "react";
+import api from '../../services/api';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -66,7 +66,7 @@ interface State {
 export default function Settings() {
   const classes = useStyles();
 
-  const [state, setState] = React.useState<State>({
+  const [state, setState] = useState<State>({
     showApiToken: false,
     apiToken: '',
     apiURL: '',
@@ -77,38 +77,45 @@ export default function Settings() {
     errorProject: false,
   });
 
-  const [openProject, setOpenProject] = React.useState(false);
-  const [optionsProject, setOptionsProject] = React.useState<Project[]>([]);
+  const [openProject, setOpenProject] = useState(false);
+  const [optionsProject, setOptionsProject] = useState<Project[]>([]);
   const loading = openProject && optionsProject.length === 0;
 
   const setFieldState = (prop: keyof State, value: any) => {  
     setState({ ...state, [prop]: value });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!loading) {
       return undefined;
     }
 
-    async function fetchData() {
-      const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises');      
-      const countries = await response.json();
-
-      setOptionsProject(Object.keys(countries).map((key) => countries[key]) as Project[]);
-    };
-
-    fetchData();    
+    api.get('localidades/paises').then(response => {
+      setOptionsProject(response.data)
+      // setOptionsProject(Object.keys(countries).map((key) => countries[key]) as Project[]);
+    });
   }, [loading]);
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (!openProject) {
       setOptionsProject([]);
     }
   }, [openProject]);
 
+  async function HandleSubmit(event: FormEvent) {
+    event.preventDefault();  
+
+    console.log(state);
+    // await api.post('orphanages', data);    
+
+    // alert('Cadastro realizado com sucesso!');
+
+    // history.push('/app');
+  }
+
   return (
     <Container maxWidth="md">
-      <form>
+      <form onSubmit={HandleSubmit}>
         <Grid
           container
           direction="column"
@@ -226,6 +233,7 @@ export default function Settings() {
                       size="medium"
                       className={classes.button}
                       startIcon={<SaveIcon />}
+                      type="submit"
                     >
                       Salvar
                     </Button>    

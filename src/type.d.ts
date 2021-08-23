@@ -1,16 +1,15 @@
-interface IArticle {
-  id: number;
-  title: string;
-  body: string;
+interface MainState {
+  location: Location<any> | null;
+  apiKey: string;
+};
+
+type AppState = {
+  main: MainState;
 }
 
-type ArticleState = {
-  articles: IArticle[];
-};
-
-type ArticleAction = {
+type AppAction = {
   type: string;
-  article: IArticle;
+  payload: any;
 };
 
-type DispatchType = (args: ArticleAction) => ArticleAction;
+type DispatchType = (args: AppAction) => AppAction;
