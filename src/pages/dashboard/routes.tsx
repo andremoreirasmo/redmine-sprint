@@ -1,5 +1,3 @@
-import React from "react";
-
 import PollIcon from '@material-ui/icons/Poll';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import GroupIcon from '@material-ui/icons/Group';

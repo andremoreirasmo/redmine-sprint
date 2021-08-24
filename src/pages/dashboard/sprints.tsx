@@ -1,27 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { asyncIncrement, decrement, increment } from '../../store/Stock.store';
-
 import Typography from '@material-ui/core/Typography';
 
 export default function Sprints() {
-  const dispatch = useDispatch();
-  const stock = useSelector((state: RootState) => state.stock);
-
   return (
-    <>
-      <div>
-        { stock.counter }
-        <button onClick={() => dispatch(increment(1))}>
-          Somar
-        </button>
-        <button onClick={() => dispatch(asyncIncrement(5))}>
-          sync Somar
-        </button>
-        <button onClick={() => dispatch(decrement())}>
-          Diminuir
-        </button>
-      </div>
+    <>    
       <Typography paragraph>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
             ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
