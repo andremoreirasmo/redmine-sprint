@@ -1,7 +1,6 @@
 import React, { FormEvent, useState, useEffect } from "react";
-import api from '../../services/api';
+import api from '../../../services/api';
 
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -23,30 +22,7 @@ import SendIcon from '@material-ui/icons/Send';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      
-    },       
-    button: {
-      margin: theme.spacing(1),
-    },
-    card: {
-      borderRadius: 5,
-    },
-    btnSave: {
-      marginTop: theme.spacing(5),
-    },
-    btnImport: {
-      margin: theme.spacing(0, 0, 0, 1),
-    },
-    marginTextField: {
-      marginTop: theme.spacing(3),
-    }
-  }),
-);
+import useStyles from "./style";
 
 interface Project {
   nome: string;

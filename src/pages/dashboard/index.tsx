@@ -4,7 +4,6 @@ import { Switch, Route, NavLink } from "react-router-dom";
 import routes from "./routes";
 
 import clsx from "clsx";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -22,83 +21,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    menuButton: {
-      marginRight: 36,
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      overflowX: "hidden",
-      width: theme.spacing(7) + 1,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1,
-      },
-    },
-    toolbar: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-end",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      backgroundColor: theme.palette.primary.main,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-    link: {
-      textDecoration: "none",
-      color: "inherit",
-    },
-    menu: {
-      borderLeft: "4px solid transparent",
-    },
-    menuActive: {
-      borderLeftColor: theme.palette.primary.main,
-      color: theme.palette.primary.main,
-    },
-    menuItemIconActive: {
-      color: theme.palette.primary.main,
-    },
-  })
-);
+import useStyles from "./styles";
 
 export default function Dashboard() {
   const classes = useStyles();
