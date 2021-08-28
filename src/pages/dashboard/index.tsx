@@ -1,57 +1,134 @@
-import { useState } from "react";
-import { Switch, Route, NavLink } from "react-router-dom";
+import {
+  AppBar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Grid,
+  IconButton,
+  List,
+  Popover,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 
-import routes from "./routes";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
+import PersonIcon from "@material-ui/icons/Person";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import MenuIcon from "@material-ui/icons/Menu";
+
+import ListSubheader from "@material-ui/core/ListSubheader";
+import Radio from "@material-ui/core/Radio";
 
 import clsx from "clsx";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { RootState } from "../../store";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { Route, Switch } from "react-router-dom";
+import ListItemLink from "../../components/ListItemLink";
+import { RootState } from "../../store";
+import routes from "./routes";
 import useStyles from "./styles";
 
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
     (state: RootState) => state.router.location.pathname
   );
 
+  const openIcon = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   const handleDrawer = () => {
+    console.log("drawer is open");
     setOpen(!open);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar
-          className={clsx(classes.appBar, { [classes.appBarShift]: open })}
-        >
+      <AppBar
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawer}
             edge="start"
+            className={classes.menuButton}
           >
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+            <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Redmine Sprint
-          </Typography>
+          <Grid
+            container
+            direction="column"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <IconButton
+              edge="end"
+              aria-haspopup="true"
+              onClick={handleClick}
+              color="default"
+            >
+              <AccountCircleIcon fontSize="large" />
+            </IconButton>
+            <Popover
+              id={id}
+              open={openIcon}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              <Box className={classes.popOverUser}>
+                <Box className={classes.boxInfoUser}>
+                  <Typography variant="subtitle1">Minimal UI</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    demo@minimals.cc
+                  </Typography>
+                </Box>
+                <Divider />
+                <List>
+                  <ListItemLink to="/" primary="Home" icon={<HomeIcon />} />
+                  <ListItemLink
+                    to="/"
+                    primary="Profile"
+                    icon={<PersonIcon />}
+                  />
+                  <ListItemLink
+                    to="/"
+                    primary="Settings"
+                    icon={<SettingsIcon />}
+                  />
+                </List>
+                <Box className={classes.boxButtonLogout}>
+                  <Button fullWidth size="medium" variant="outlined">
+                    Logout
+                  </Button>
+                </Box>
+              </Box>
+            </Popover>
+          </Grid>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -61,73 +138,54 @@ export default function Dashboard() {
           [classes.drawerClose]: !open,
         })}
         classes={{
-          paper: clsx({
+          paper: clsx(classes.paperDrawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
           }),
         }}
       >
-        <div className={classes.toolbar} />
-        <Divider />
+        <div className={classes.toolbar}>
+          <Radio
+            checked={open}
+            onClick={handleDrawer}
+          />
+          <IconButton onClick={handleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
         <List>
+          <ListSubheader className={classes.listSubheader}>Geral</ListSubheader>
           {routes
             .filter((route) => !route.isSetting)
             .map((route) => (
-              <NavLink
+              <ListItemLink
                 to={route.path}
-                className={classes.link}
-                key={route.caption}
-              >
-                <ListItem
-                  button
-                  key={route.caption}
-                  className={clsx(classes.menu, {
-                    [classes.menuActive]: route.path === pathActive,
-                  })}
-                >
-                  <ListItemIcon
-                    className={clsx({
-                      [classes.menuItemIconActive]: route.path === pathActive,
-                    })}
-                  >
-                    {route.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={route.caption} />
-                </ListItem>
-              </NavLink>
+                primary={route.caption}
+                icon={route.icon}
+                classNameItem={clsx(classes.menu, {
+                  [classes.menuActive]: route.path === pathActive,
+                })}
+              />
             ))}
         </List>
-        <Divider />
+        <ListSubheader className={classes.listSubheader}>Gestão</ListSubheader>
         <List>
           {routes
             .filter((route) => route.isSetting)
             .map((route) => (
-              <NavLink
+              <ListItemLink
                 to={route.path}
-                className={classes.link}
-                key={route.caption}
-              >
-                <ListItem
-                  button
-                  key={route.caption}
-                  className={clsx(classes.menu, {
-                    [classes.menuActive]: route.path === pathActive,
-                  })}
-                >
-                  <ListItemIcon
-                    className={clsx({
-                      [classes.menuItemIconActive]: route.path === pathActive,
-                    })}
-                  >
-                    {route.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={route.caption} />
-                </ListItem>
-              </NavLink>
+                primary={route.caption}
+                icon={route.icon}
+                classNameItem={clsx(classes.menu, {
+                  [classes.menuActive]: route.path === pathActive,
+                })}
+              />
             ))}
         </List>
       </Drawer>
       <main className={classes.content}>
+        <div className={classes.toolbar} />
         <Switch>
           {routes.map((route) => (
             <Route path={route.path} exact={route.exact} key={route.caption}>

@@ -1,6 +1,7 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { alpha } from "@material-ui/core/styles";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+      backgroundColor: alpha(theme.palette.background.default, 0.5),
+      backdropFilter: "blur(6px)",
+      boxShadow: "none",
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -29,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
       flexShrink: 0,
       whiteSpace: "nowrap",
+    },
+    paperDrawer: {
+      backgroundColor: 'inherit',
     },
     drawerOpen: {
       width: drawerWidth,
@@ -48,6 +55,10 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(9) + 1,
       },
     },
+    listSubheader: {
+      color: theme.palette.text.primary,
+      textTransform: "uppercase",
+    },
     toolbar: {
       display: "flex",
       alignItems: "center",
@@ -55,25 +66,34 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
-      backgroundColor: theme.palette.primary.main,
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
-    link: {
-      textDecoration: "none",
-      color: "inherit",
-    },
     menu: {
-      borderLeft: "4px solid transparent",
+      borderRight: "4px solid transparent",
     },
     menuActive: {
-      borderLeftColor: theme.palette.primary.main,
-      color: theme.palette.primary.main,
+      backgroundColor: alpha(theme.palette.primary.main, 0.1),
+      borderRightColor: theme.palette.primary.main,
+      color: theme.palette.primary.main,      
     },
     menuItemIconActive: {
       color: theme.palette.primary.main,
+    },
+    popOverUser: {
+      minWidth: "218px",
+      borderRadius: 20,
+    },
+    boxInfoUser: {
+      marginTop: "12px",
+      marginBottom: "12px",
+      paddingLeft: "20px",
+      paddingRight: "20px",
+    },
+    boxButtonLogout: {
+      padding: "0px 16px 16px",
     },
   })
 );
