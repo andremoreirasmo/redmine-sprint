@@ -24,6 +24,8 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import useStyles from "./style";
 import { Fab, Paper, Tooltip } from "@material-ui/core";
 
+import DialogConfirmation from "../../../components/DialogConfirmation";
+
 interface Project {
   nome: string;
 }
@@ -56,6 +58,7 @@ export default function Settings() {
   const [openProject, setOpenProject] = useState(false);
   const [optionsProject, setOptionsProject] = useState<Project[]>([]);
   const loading = openProject && optionsProject.length === 0;
+  const [openConfirmationImport, setOpenConfirmationImport] = useState(false);
 
   const setFieldState = (prop: keyof State, value: any) => {
     setState({ ...state, [prop]: value });
@@ -225,7 +228,6 @@ export default function Settings() {
                           )}
                         />
                       </Grid>
-
                       <Tooltip
                         title="Importar"
                         aria-label="Impor"
@@ -235,10 +237,24 @@ export default function Settings() {
                           className={classes.btnImportFab}
                           size="medium"
                           color="secondary"
+                          onClick={() => setOpenConfirmationImport(true)}
                         >
                           <SendIcon fontSize="small" />
                         </Fab>
                       </Tooltip>
+                      <DialogConfirmation
+                        title="Importar usuários?"
+                        description="Os usuários presentes neste projeto irão ser importados para o sistema."
+                        open={openConfirmationImport}
+                        onAccepted={() => {
+                          console.log("Aceitou");
+                          setOpenConfirmationImport(false);
+                        }}
+                        onRejected={() => {
+                          console.log("Recusou");
+                          setOpenConfirmationImport(false);
+                        }}
+                      />
                     </Grid>
                   </FormControl>
                   <Grid
