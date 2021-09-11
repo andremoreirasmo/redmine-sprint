@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
     },
     appBar: {
-      zIndex: theme.zIndex.drawer + 1,
+      width: `calc(100% - 102px)`,
       transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
-      whiteSpace: "nowrap",
+      whiteSpace: "nowrap",      
     },
     paperDrawer: {
       backgroundColor: 'inherit',
+      backdropFilter: "blur(16px)",
     },
     drawerOpen: {
       width: drawerWidth,
@@ -49,11 +50,10 @@ const useStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      overflowX: "hidden",
-      width: theme.spacing(7) + 1,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1,
-      },
+      overflowX: "hidden",      
+    },
+    drawerClosed: {      
+      width: 102,      
     },
     listSubheader: {
       color: theme.palette.text.primary,
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      marginTop: 80,
     },
     menu: {
       borderRight: "4px solid transparent",
@@ -79,8 +79,8 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRightColor: theme.palette.primary.main,
       color: theme.palette.primary.main,      
     },
-    menuItemIconActive: {
-      color: theme.palette.primary.main,
+    menuIcon: {
+      justifyContent: "center",
     },
     popOverUser: {
       minWidth: "218px",
@@ -95,6 +95,9 @@ const useStyles = makeStyles((theme: Theme) =>
     boxButtonLogout: {
       padding: "0px 16px 16px",
     },
+    hide: {
+      display: 'none',
+    }
   })
 );
 

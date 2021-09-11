@@ -10,10 +10,16 @@ interface ListItemLinkProps {
   to: string;
   classNameItem?: string;
   classNameIcon?: string;
+  showText?: Boolean;
+}
+
+const defaultProps = {
+  showText: true,
 }
 
 export default function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to, classNameItem, classNameIcon } = props;
+  props = { ...defaultProps, ...props }
+  const { icon, primary, to, classNameItem, classNameIcon, showText } = props;
 
   const renderLink = useMemo(
     () =>
@@ -27,7 +33,7 @@ export default function ListItemLink(props: ListItemLinkProps) {
     <li>
       <ListItem button component={renderLink} className={classNameItem}>
         {icon ? <ListItemIcon className={classNameIcon}>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
+        {showText ? <ListItemText primary={primary} /> : null}
       </ListItem>
     </li>
   );

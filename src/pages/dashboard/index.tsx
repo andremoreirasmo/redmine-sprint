@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  Container,
   Divider,
   Drawer,
   Grid,
@@ -33,18 +34,18 @@ import useStyles from "./styles";
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [openFixedDrawer, setOpenFixedDrawer] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
     (state: RootState) => state.router.location.pathname
   );
 
   const openIcon = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = openIcon ? "simple-popover" : undefined;
 
   const handleDrawer = () => {
-    console.log("drawer is open");
-    setOpen(!open);
+    setOpenFixedDrawer(!openFixedDrawer);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,23 +56,18 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
+  const drawerIsVisible = () => {
+    return showDrawer || openFixedDrawer;
+  };
+
   return (
     <div className={classes.root}>
       <AppBar
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: openFixedDrawer,
         })}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawer}
-            edge="start"
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
           <Grid
             container
             direction="column"
@@ -133,28 +129,38 @@ export default function Dashboard() {
       </AppBar>
       <Drawer
         variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
+        className={clsx({
+          [classes.drawerOpen]: openFixedDrawer,
+          [classes.drawerClose]: !openFixedDrawer,
         })}
         classes={{
           paper: clsx(classes.paperDrawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: drawerIsVisible(),
+            [classes.drawerClose]: !drawerIsVisible(),
+            [classes.drawerClosed]: !drawerIsVisible(),
           }),
         }}
+        onMouseOver={() => setShowDrawer(!showDrawer)}
+        onMouseOut={() => setShowDrawer(!showDrawer)}
       >
         <div className={classes.toolbar}>
+          <Typography>RDSP</Typography>
           <Radio
-            checked={open}
+            checked={openFixedDrawer}
             onClick={handleDrawer}
+            className={clsx({
+              [classes.hide]: !drawerIsVisible(),
+            })}
           />
-          <IconButton onClick={handleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
         </div>
         <List>
-          <ListSubheader className={classes.listSubheader}>Geral</ListSubheader>
+          <ListSubheader
+            className={clsx(classes.listSubheader, {
+              [classes.hide]: !drawerIsVisible(),
+            })}
+          >
+            Geral
+          </ListSubheader>
           {routes
             .filter((route) => !route.isSetting)
             .map((route) => (
@@ -165,10 +171,18 @@ export default function Dashboard() {
                 classNameItem={clsx(classes.menu, {
                   [classes.menuActive]: route.path === pathActive,
                 })}
+                classNameIcon={classes.menuIcon}
+                showText={drawerIsVisible()}
               />
             ))}
         </List>
-        <ListSubheader className={classes.listSubheader}>Gestão</ListSubheader>
+        <ListSubheader
+          className={clsx(classes.listSubheader, {
+            [classes.hide]: !drawerIsVisible(),
+          })}
+        >
+          Gestão
+        </ListSubheader>
         <List>
           {routes
             .filter((route) => route.isSetting)
@@ -180,12 +194,13 @@ export default function Dashboard() {
                 classNameItem={clsx(classes.menu, {
                   [classes.menuActive]: route.path === pathActive,
                 })}
+                classNameIcon={classes.menuIcon}
+                showText={drawerIsVisible()}
               />
             ))}
         </List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+      <Container className={classes.content} maxWidth="xl">
         <Switch>
           {routes.map((route) => (
             <Route path={route.path} exact={route.exact} key={route.caption}>
@@ -193,7 +208,7 @@ export default function Dashboard() {
             </Route>
           ))}
         </Switch>
-      </main>
+      </Container>
     </div>
   );
 }

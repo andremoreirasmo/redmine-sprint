@@ -10,6 +10,9 @@ export const theme = createTheme({
       main: "#147874",
     },
   },
+  shape: {
+    borderRadius: 14,
+  },
   overrides: {
     MuiListItemIcon: {
       root: {
@@ -20,8 +23,10 @@ export const theme = createTheme({
       root: {
         textTransform: "none",
         fontWeight: 700,
+        borderRadius: 8,
       },
-    },    
+    },
+    
     // MuiMenuItem: {
     //   root: {
     //     fontSize: "0.875rem",
