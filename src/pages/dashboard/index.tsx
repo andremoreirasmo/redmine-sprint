@@ -198,7 +198,12 @@ export default function Dashboard() {
             ))}
         </List>
       </Drawer>
-      <Container className={classes.content} maxWidth="xl">
+      <Container
+        className={clsx(classes.content, {
+          [classes.contentDrawerClose]: !openFixedDrawer,
+        })}
+        maxWidth="xl"
+      >
         <Switch>
           {routes.map((route) => (
             <Route path={route.path} exact={route.exact} key={route.caption}>

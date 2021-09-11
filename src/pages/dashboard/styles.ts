@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowX: "hidden",      
     },
     drawerClosed: {      
-      width: 102,      
+      width: 90,      
     },
     listSubheader: {
       color: theme.palette.text.primary,
@@ -67,9 +67,14 @@ const useStyles = makeStyles((theme: Theme) =>
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
     },
-    content: {
-      flexGrow: 1,
-      marginTop: 80,
+    contentDrawerClose: {
+      marginLeft: 92,
+    },
+    content: {      
+      paddingTop: 116,
+      paddingBottom: 80,
+      paddingLeft: 16,
+      paddingRight: 16,
     },
     menu: {
       borderRight: "4px solid transparent",
