@@ -7,7 +7,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
@@ -227,11 +226,19 @@ export default function Settings() {
                         />
                       </Grid>
 
-                      <Tooltip title="Importar" aria-label="Impor" className={classes.btnImport}>
-                        <Fab className={classes.btnImportFab} size="medium" color="secondary" >
-                          <SendIcon fontSize="small"/>
+                      <Tooltip
+                        title="Importar"
+                        aria-label="Impor"
+                        className={classes.btnImport}
+                      >
+                        <Fab
+                          className={classes.btnImportFab}
+                          size="medium"
+                          color="secondary"
+                        >
+                          <SendIcon fontSize="small" />
                         </Fab>
-                      </Tooltip>                                            
+                      </Tooltip>
                     </Grid>
                   </FormControl>
                   <Grid

@@ -26,12 +26,6 @@ export const theme = createTheme({
         borderRadius: 8,
       },
     },
-    
-    // MuiMenuItem: {
-    //   root: {
-    //     fontSize: "0.875rem",
-    //   },
-    // },
   },
 });
 
