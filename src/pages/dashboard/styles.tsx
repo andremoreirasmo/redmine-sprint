@@ -113,16 +113,12 @@ export const ToolbarSidebar = styled.div<ToolbarSidebarProps>`
     `}
 `;
 
-interface ListItemSidebarProps {
-  $active: boolean;
-}
-
-export const ListItemSidebar = styled(ListItemLink)<ListItemSidebarProps>`
+export const ListItemSidebar = styled(ListItemLink)`
   .item {
     border: 4px solid transparent;
 
     ${(props) =>
-      props.$active &&
+      props.selected &&
       css`
         background-color: ${(props) =>
           alpha(props.theme.palette.primary.main, 0.1)};

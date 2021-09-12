@@ -7,6 +7,7 @@ import {
   List,
   Popover,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -142,7 +143,9 @@ export default function Dashboard() {
       >
         <ToolbarSidebar $drawerIsVisible={drawerIsVisible()}>
           <Logo src={LogoImg} alt="logo" />
-          <Radio checked={openFixedDrawer} onClick={handleDrawer} />
+          <Tooltip title="Fixar">
+            <Radio checked={openFixedDrawer} onClick={handleDrawer} />
+          </Tooltip>
         </ToolbarSidebar>
         <List>
           <ListSubheader>Geral</ListSubheader>
@@ -153,7 +156,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                $active={route.path === pathActive}
+                selected={route.path === pathActive}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />
@@ -168,7 +171,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                $active={route.path === pathActive}
+                selected={route.path === pathActive}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />

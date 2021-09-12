@@ -220,7 +220,7 @@ export default function Settings() {
                           )}
                         />
                       </Grid>
-                      <Tooltip title="Importar" aria-label="Impor">
+                      <Tooltip title="Importar" aria-label="Import">
                         <BtnImport
                           size="medium"
                           color="secondary"
