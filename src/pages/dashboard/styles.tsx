@@ -35,8 +35,7 @@ export const PopOverUser = styled(Box)`
   border-radius: 20px;
 
   .boxInfoUser {
-    margin: 12px 0 12px 20px;
-    padding: 0 20p x 0 20px;
+    margin: 12px 0 12px 20px;    
     justify-content: flex-start;
   }
 
