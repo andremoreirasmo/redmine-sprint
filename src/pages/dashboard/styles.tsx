@@ -51,6 +51,7 @@ interface SideBarAppBarProps {
 }
 
 export const SideBar = styled(Drawer)<SideBarAppBarProps>`
+
   .MuiDrawer-paper {
     width: ${(props) => props.$drawerWidth}px;
     flex-shrink: 0;
@@ -80,6 +81,10 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
       `}
   }
 
+  .MuiListItemIcon-root, .MuiListSubheader-root, .MuiListItemText-root {
+    color: #9e9e9e;
+  }
+
   .MuiRadio-root,
   .MuiListSubheader-root {
     ${(props) =>
@@ -90,8 +95,8 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   }
 
   .MuiListSubheader-root {
-    color: ${(props) => props.theme.palette.text.primary};
     text-transform: uppercase;
+    font-weight: 700;
   }
 `;
 
@@ -123,7 +128,10 @@ export const ListItemSidebar = styled(ListItemLink)`
         background-color: ${(props) =>
           alpha(props.theme.palette.primary.main, 0.1)};
         border-right-color: ${(props) => props.theme.palette.primary.main};
-        color: ${(props) => props.theme.palette.primary.main};
+
+        .MuiListItemIcon-root, .MuiListItemText-root {
+          color: ${(props) => props.theme.palette.primary.main};
+        }
       `}
   }
 

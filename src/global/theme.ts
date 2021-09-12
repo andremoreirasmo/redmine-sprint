@@ -2,8 +2,8 @@ import { createTheme } from "@material-ui/core/styles";
 
 export const theme = createTheme({
   palette: {
-    type: 'dark',
-    primary: {     
+    type: "dark",
+    primary: {
       main: "#00AB55",
     },
     secondary: {
@@ -14,11 +14,6 @@ export const theme = createTheme({
     borderRadius: 14,
   },
   overrides: {
-    MuiListItemIcon: {
-      root: {
-        color: "none",
-      },
-    },
     MuiButton: {
       root: {
         textTransform: "none",
