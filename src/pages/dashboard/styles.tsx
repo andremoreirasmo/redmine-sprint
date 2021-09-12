@@ -55,7 +55,7 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
     backdrop-filter: blur(6px);
 
     ${(props) =>
-      props.open &&
+      props.$open &&
       css`
         transition: ${(props) =>
           props.theme.transitions.create("width", {
@@ -65,7 +65,7 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
       `}
 
     ${(props) =>
-      !props.open &&
+      !props.$open &&
       css`
         overflow-x: "hidden";
         transition: ${props.theme.transitions.create("width", {
@@ -78,7 +78,7 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   .MuiRadio-root,
   .MuiListSubheader-root {
     ${(props) =>
-      !props.open &&
+      !props.$open &&
       css`
         display: none;
       `}
