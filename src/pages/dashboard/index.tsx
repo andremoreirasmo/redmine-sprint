@@ -29,7 +29,10 @@ import {
   Root,
   SideBar,
   ToolbarSidebar,
+  Logo,
 } from "./styles";
+
+import LogoImg from "../../assets/logo.png";
 
 export default function Dashboard() {
   const [openFixedDrawer, setOpenFixedDrawer] = useState(false);
@@ -137,8 +140,8 @@ export default function Dashboard() {
         onMouseEnter={() => setShowDrawer(true)}
         onMouseLeave={() => setShowDrawer(false)}
       >
-        <ToolbarSidebar>
-          <Typography>RDSP</Typography>
+        <ToolbarSidebar $drawerIsVisible={drawerIsVisible()}>
+          <Logo src={LogoImg} alt="logo" />
           <Radio checked={openFixedDrawer} onClick={handleDrawer} />
         </ToolbarSidebar>
         <List>

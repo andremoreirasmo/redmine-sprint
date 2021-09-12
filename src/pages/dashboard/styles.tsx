@@ -3,6 +3,11 @@ import styled, { css } from "styled-components";
 import ListItemLink from "../../components/ListItemLink";
 import { alpha } from "@material-ui/core/styles";
 
+export const Logo = styled.img`
+  width: 40px;
+  height: 30px;
+`;
+
 export const Root = styled.div`
   display: flex;
 `;
@@ -90,12 +95,22 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   }
 `;
 
-export const ToolbarSidebar = styled.div`
+interface ToolbarSidebarProps {
+  $drawerIsVisible: boolean;
+}
+
+export const ToolbarSidebar = styled.div<ToolbarSidebarProps>`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: ${(props) => props.theme.spacing(0, 1)};
+  justify-content: center;
+  padding: 40px 24px 10px 24px;  
   ${(props) => props.theme.mixins.toolbar}
+
+  ${(props) =>
+    props.$drawerIsVisible &&
+    css`
+      justify-content: space-between;
+    `}
 `;
 
 interface ListItemSidebarProps {
