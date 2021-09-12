@@ -1,10 +1,7 @@
 import {
-  AppBar,
   Box,
   Button,
-  Container,
   Divider,
-  Drawer,
   Grid,
   IconButton,
   List,
@@ -12,16 +9,12 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-
+import ListSubheader from "@material-ui/core/ListSubheader";
+import Radio from "@material-ui/core/Radio";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
-
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Radio from "@material-ui/core/Radio";
-
-import clsx from "clsx";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
@@ -29,13 +22,13 @@ import ListItemLink from "../../components/ListItemLink";
 import { RootState } from "../../store";
 import routes from "./routes";
 import {
-  Root,
+  Content,
   HeaderAppBar,
+  ListItemSidebar,
   PopOverUser,
+  Root,
   SideBar,
   ToolbarSidebar,
-  ListItemSidebar,
-  Content,
 } from "./styles";
 
 export default function Dashboard() {
@@ -73,7 +66,10 @@ export default function Dashboard() {
 
   return (
     <Root>
-      <HeaderAppBar drawerWidth={getDrawerWidth()} drawerIsVisible={drawerIsVisible()}>
+      <HeaderAppBar
+        drawerWidth={getDrawerWidth()}
+        drawerIsVisible={drawerIsVisible()}
+      >
         <Toolbar>
           <Grid
             container
@@ -156,6 +152,7 @@ export default function Dashboard() {
                 icon={route.icon}
                 active={route.path === pathActive}
                 showText={drawerIsVisible()}
+                key={route.caption}
               />
             ))}
         </List>
@@ -170,11 +167,15 @@ export default function Dashboard() {
                 icon={route.icon}
                 active={route.path === pathActive}
                 showText={drawerIsVisible()}
+                key={route.caption}
               />
             ))}
         </List>
       </SideBar>
-      <Content maxWidth="xl" drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}>
+      <Content
+        maxWidth="xl"
+        drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}
+      >
         <Switch>
           {routes.map((route) => (
             <Route path={route.path} exact={route.exact} key={route.caption}>
