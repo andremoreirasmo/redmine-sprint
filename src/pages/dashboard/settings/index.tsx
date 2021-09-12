@@ -1,30 +1,24 @@
-import React, { FormEvent, useState, useEffect } from "react";
-import api from "../../../services/api";
-
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
+import { Paper, Tooltip } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Button from "@material-ui/core/Button";
-
-import Autocomplete from "@material-ui/lab/Autocomplete";
-
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 import SendIcon from "@material-ui/icons/Send";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
-import useStyles from "./style";
-import { Fab, Paper, Tooltip } from "@material-ui/core";
-
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import React, { FormEvent, useEffect, useState } from "react";
 import DialogConfirmation from "../../../components/DialogConfirmation";
+import api from "../../../services/api";
+import { BtnImport, DivTextField, GridBtnSave } from "./style";
 
 interface Project {
   nome: string;
@@ -42,8 +36,6 @@ interface State {
 }
 
 export default function Settings() {
-  const classes = useStyles();
-
   const [state, setState] = useState<State>({
     showApiToken: false,
     apiToken: "",
@@ -105,7 +97,7 @@ export default function Settings() {
             <Paper>
               <Card>
                 <CardContent>
-                  <FormControl fullWidth className={classes.marginTextField}>
+                  <DivTextField fullWidth>
                     <TextField
                       id="ApiUrl"
                       label="API URL"
@@ -124,8 +116,8 @@ export default function Settings() {
                       }
                       error={state.errorApiURL}
                     />
-                  </FormControl>
-                  <FormControl fullWidth className={classes.marginTextField}>
+                  </DivTextField>
+                  <DivTextField fullWidth>
                     <InputLabel htmlFor="api-token" error={state.errorApiToken}>
                       API Token
                     </InputLabel>
@@ -174,8 +166,8 @@ export default function Settings() {
                         </InputAdornment>
                       }
                     />
-                  </FormControl>
-                  <FormControl fullWidth className={classes.marginTextField}>
+                  </DivTextField>
+                  <DivTextField fullWidth>
                     <Grid
                       container
                       direction="row"
@@ -228,19 +220,14 @@ export default function Settings() {
                           )}
                         />
                       </Grid>
-                      <Tooltip
-                        title="Importar"
-                        aria-label="Impor"
-                        className={classes.btnImport}
-                      >
-                        <Fab
-                          className={classes.btnImportFab}
+                      <Tooltip title="Importar" aria-label="Impor">
+                        <BtnImport
                           size="medium"
                           color="secondary"
                           onClick={() => setOpenConfirmationImport(true)}
                         >
                           <SendIcon fontSize="small" />
-                        </Fab>
+                        </BtnImport>
                       </Tooltip>
                       <DialogConfirmation
                         title="Importar usuários?"
@@ -256,25 +243,23 @@ export default function Settings() {
                         }}
                       />
                     </Grid>
-                  </FormControl>
-                  <Grid
+                  </DivTextField>
+                  <GridBtnSave
                     container
                     direction="column"
                     justifyContent="flex-end"
                     alignItems="flex-end"
-                    className={classes.btnSave}
                   >
                     <Button
                       variant="contained"
                       color="primary"
                       size="medium"
-                      className={classes.button}
                       startIcon={<SaveIcon />}
                       type="submit"
                     >
                       Salvar
                     </Button>
-                  </Grid>
+                  </GridBtnSave>
                 </CardContent>
               </Card>
             </Paper>

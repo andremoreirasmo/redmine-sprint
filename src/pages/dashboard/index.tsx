@@ -28,10 +28,17 @@ import { Route, Switch } from "react-router-dom";
 import ListItemLink from "../../components/ListItemLink";
 import { RootState } from "../../store";
 import routes from "./routes";
-import useStyles from "./styles";
+import {
+  Root,
+  HeaderAppBar,
+  PopOverUser,
+  SideBar,
+  ToolbarSidebar,
+  ListItemSidebar,
+  Content,
+} from "./styles";
 
 export default function Dashboard() {
-  const classes = useStyles();
   const [openFixedDrawer, setOpenFixedDrawer] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -58,13 +65,15 @@ export default function Dashboard() {
     return showDrawer || openFixedDrawer;
   };
 
+  const drawerWidthMin = 90;
+  const drawerWidthMax = 280;
+  const getDrawerWidth = () => {
+    return drawerIsVisible() ? drawerWidthMax : drawerWidthMin;
+  };
+
   return (
-    <div className={classes.root}>
-      <AppBar
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: openFixedDrawer,
-        })}
-      >
+    <Root>
+      <HeaderAppBar drawerWidth={getDrawerWidth()} drawerIsVisible={drawerIsVisible()}>
         <Toolbar>
           <Grid
             container
@@ -94,8 +103,8 @@ export default function Dashboard() {
                 horizontal: "center",
               }}
             >
-              <Box className={classes.popOverUser}>
-                <Box className={classes.boxInfoUser}>
+              <PopOverUser>
+                <Box className="boxInfoUser">
                   <Typography variant="subtitle1">Minimal UI</Typography>
                   <Typography variant="body2" color="textSecondary">
                     demo@minimals.cc
@@ -115,95 +124,57 @@ export default function Dashboard() {
                     icon={<SettingsIcon />}
                   />
                 </List>
-                <Box className={classes.boxButtonLogout}>
+                <Box className="boxButtonLogout">
                   <Button fullWidth size="medium" variant="outlined">
                     Logout
                   </Button>
                 </Box>
-              </Box>
+              </PopOverUser>
             </Popover>
           </Grid>
         </Toolbar>
-      </AppBar>
-      <Drawer
+      </HeaderAppBar>
+      <SideBar
         variant="permanent"
-        className={clsx({
-          [classes.drawerOpen]: openFixedDrawer,
-          [classes.drawerClose]: !openFixedDrawer,
-        })}
-        classes={{
-          paper: clsx(classes.paperDrawer, {
-            [classes.drawerOpen]: drawerIsVisible(),
-            [classes.drawerClose]: !drawerIsVisible(),
-            [classes.drawerClosed]: !drawerIsVisible(),
-          }),
-        }}
-        onMouseOver={() => setShowDrawer(!showDrawer)}
-        onMouseOut={() => setShowDrawer(!showDrawer)}
+        drawerWidth={getDrawerWidth()}
+        open={drawerIsVisible()}
+        onMouseEnter={() => setShowDrawer(true)}
+        onMouseLeave={() => setShowDrawer(false)}
       >
-        <div className={classes.toolbar}>
+        <ToolbarSidebar>
           <Typography>RDSP</Typography>
-          <Radio
-            checked={openFixedDrawer}
-            onClick={handleDrawer}
-            className={clsx({
-              [classes.hide]: !drawerIsVisible(),
-            })}
-          />
-        </div>
+          <Radio checked={openFixedDrawer} onClick={handleDrawer} />
+        </ToolbarSidebar>
         <List>
-          <ListSubheader
-            className={clsx(classes.listSubheader, {
-              [classes.hide]: !drawerIsVisible(),
-            })}
-          >
-            Geral
-          </ListSubheader>
+          <ListSubheader>Geral</ListSubheader>
           {routes
             .filter((route) => !route.isSetting)
             .map((route) => (
-              <ListItemLink
+              <ListItemSidebar
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                classNameItem={clsx(classes.menu, {
-                  [classes.menuActive]: route.path === pathActive,
-                })}
-                classNameIcon={classes.menuIcon}
+                active={route.path === pathActive}
                 showText={drawerIsVisible()}
               />
             ))}
         </List>
-        <ListSubheader
-          className={clsx(classes.listSubheader, {
-            [classes.hide]: !drawerIsVisible(),
-          })}
-        >
-          Gestão
-        </ListSubheader>
+        <ListSubheader>Gestão</ListSubheader>
         <List>
           {routes
             .filter((route) => route.isSetting)
             .map((route) => (
-              <ListItemLink
+              <ListItemSidebar
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                classNameItem={clsx(classes.menu, {
-                  [classes.menuActive]: route.path === pathActive,
-                })}
-                classNameIcon={classes.menuIcon}
+                active={route.path === pathActive}
                 showText={drawerIsVisible()}
               />
             ))}
         </List>
-      </Drawer>
-      <Container
-        className={clsx(classes.content, {
-          [classes.contentDrawerClose]: !openFixedDrawer,
-        })}
-        maxWidth="xl"
-      >
+      </SideBar>
+      <Content maxWidth="xl" drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}>
         <Switch>
           {routes.map((route) => (
             <Route path={route.path} exact={route.exact} key={route.caption}>
@@ -211,7 +182,7 @@ export default function Dashboard() {
             </Route>
           ))}
         </Switch>
-      </Container>
-    </div>
+      </Content>
+    </Root>
   );
 }
