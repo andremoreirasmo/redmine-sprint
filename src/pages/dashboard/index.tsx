@@ -67,8 +67,8 @@ export default function Dashboard() {
   return (
     <Root>
       <HeaderAppBar
-        drawerWidth={getDrawerWidth()}
-        drawerIsVisible={drawerIsVisible()}
+        $drawerWidth={getDrawerWidth()}
+        $drawerIsVisible={drawerIsVisible()}
       >
         <Toolbar>
           <Grid
@@ -132,8 +132,8 @@ export default function Dashboard() {
       </HeaderAppBar>
       <SideBar
         variant="permanent"
-        drawerWidth={getDrawerWidth()}
-        open={drawerIsVisible()}
+        $drawerWidth={getDrawerWidth()}
+        $open={drawerIsVisible()}
         onMouseEnter={() => setShowDrawer(true)}
         onMouseLeave={() => setShowDrawer(false)}
       >
@@ -150,7 +150,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                active={route.path === pathActive}
+                $active={route.path === pathActive}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />
@@ -165,7 +165,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption}
                 icon={route.icon}
-                active={route.path === pathActive}
+                $active={route.path === pathActive}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />
@@ -174,7 +174,7 @@ export default function Dashboard() {
       </SideBar>
       <Content
         maxWidth="xl"
-        drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}
+        $drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}
       >
         <Switch>
           {routes.map((route) => (

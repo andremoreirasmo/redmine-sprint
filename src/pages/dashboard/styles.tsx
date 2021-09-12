@@ -8,15 +8,15 @@ export const Root = styled.div`
 `;
 
 interface HeaderAppBarProps {
-  drawerWidth: number;
-  drawerIsVisible: boolean;
+  $drawerWidth: number;
+  $drawerIsVisible: boolean;
 }
 
 export const HeaderAppBar = styled(AppBar)<HeaderAppBarProps>`
   ${(props) =>
-    !props.drawerIsVisible &&
+    !props.$drawerIsVisible &&
     css`
-      width: calc(100% - ${props.drawerWidth}px);
+      width: calc(100% - ${props.$drawerWidth}px);
     `}
 
   background-color: ${(props) =>
@@ -41,13 +41,13 @@ export const PopOverUser = styled(Box)`
 `;
 
 interface SideBarAppBarProps {
-  drawerWidth: number;
-  open: boolean;
+  $drawerWidth: number;
+  $open: boolean;
 }
 
 export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   .MuiDrawer-paper {
-    width: ${(props) => props.drawerWidth}px;
+    width: ${(props) => props.$drawerWidth}px;
     flex-shrink: 0;
     white-space: nowrap;
     background-color: ${(props) =>
@@ -99,7 +99,7 @@ export const ToolbarSidebar = styled.div`
 `;
 
 interface ListItemSidebarProps {
-  active: boolean;
+  $active: boolean;
 }
 
 export const ListItemSidebar = styled(ListItemLink)<ListItemSidebarProps>`
@@ -107,7 +107,7 @@ export const ListItemSidebar = styled(ListItemLink)<ListItemSidebarProps>`
     border: 4px solid transparent;
 
     ${(props) =>
-      props.active &&
+      props.$active &&
       css`
         background-color: ${(props) =>
           alpha(props.theme.palette.primary.main, 0.1)};
@@ -122,10 +122,10 @@ export const ListItemSidebar = styled(ListItemLink)<ListItemSidebarProps>`
 `;
 
 interface ContentProps {
-  drawerWidth: number;
+  $drawerWidth: number;
 }
 
 export const Content = styled(Container)<ContentProps>`
   padding: 116px 16px 80px 16px;
-  margin-left: ${(props) => props.drawerWidth}px;
+  margin-left: ${(props) => props.$drawerWidth}px;
 `;
