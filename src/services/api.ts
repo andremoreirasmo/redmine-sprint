@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios from "axios";
 
 const api = axios.create({
-    baseURL: 'https://servicodados.ibge.gov.br/api/v1/'
-})
+  baseURL: "http://localhost:3333",
+});
 
 export default api;
