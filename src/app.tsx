@@ -1,10 +1,9 @@
-import Dashboard from "./pages/dashboard";
-
 import { ThemeProvider } from "styled-components";
 import { MuiThemeProvider, StylesProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import theme from "./global/theme";
+import Routes from "./routes";
 
 export default function App() {
   return (
@@ -12,7 +11,7 @@ export default function App() {
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Dashboard />
+          <Routes />
         </ThemeProvider>
       </MuiThemeProvider>
     </StylesProvider>

@@ -1,0 +1,16 @@
+import { BrowserRouter, Redirect, Switch } from "react-router-dom";
+import Dashboard from "../pages/dashboard";
+import Login from "../pages/login";
+import { Route } from "react-router-dom";
+
+export default function Routes() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/login" exact component={Login} />
+        <Redirect exact from="/" to="/dashboard" />
+      </Switch>
+    </BrowserRouter>
+  );
+}
