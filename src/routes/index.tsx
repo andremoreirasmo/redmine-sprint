@@ -7,7 +7,7 @@ export default function Routes() {
   return (
     <Switch>
       <Route path="/dashboard" component={Dashboard} />
-      <Route path="/login" exact component={Login} />
+      <Route path="/auth/login" exact component={Login} />
       <Redirect exact from="/" to="/dashboard" />
     </Switch>
   );
