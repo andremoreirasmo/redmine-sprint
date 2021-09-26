@@ -10,11 +10,6 @@ export const Root = styled.div`
   }
 `;
 
-export const FormLogin = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const DivInformation = styled.div`
   margin-bottom: 40px;
 `;
