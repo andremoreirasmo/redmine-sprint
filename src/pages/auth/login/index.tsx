@@ -17,13 +17,13 @@ import {
   DivSignup,
 } from "./styles";
 
-import DividerWithText from "../../components/DividerWithText";
+import DividerWithText from "../../../components/DividerWithText";
 import {
   TextFieldCustom,
   defaultStateTextFieldCustom,
-} from "../../components/TextFieldCustom";
-import LoadingButton from "../../components/LoadingButton";
-import googleIcon from "../../assets/google_icon.svg";
+} from "../../../components/TextFieldCustom";
+import LoadingButton from "../../../components/LoadingButton";
+import googleIcon from "../../../assets/google_icon.svg";
 
 export default function Login() {
   const [stateEmail, setStateEmail] = useState(defaultStateTextFieldCustom);

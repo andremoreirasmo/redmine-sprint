@@ -4,10 +4,16 @@ import { CircularProgressLoadingButton } from "./styles";
 interface Props {
   label: string;
   isLoading: boolean;
-  onClick: () => void;
+  type?: "submit" | "reset" | "button" | undefined;
+  onClick?: () => void;
 }
 
-export default function LoadingButton({ label, isLoading, onClick }: Props) {
+export default function LoadingButton({
+  label,
+  isLoading,
+  type,
+  onClick,
+}: Props) {
   return (
     <Button
       variant="contained"
@@ -15,6 +21,7 @@ export default function LoadingButton({ label, isLoading, onClick }: Props) {
       disabled={isLoading}
       fullWidth
       color="primary"
+      type={type}
     >
       {isLoading && <CircularProgressLoadingButton size={14} />}
       {label}
