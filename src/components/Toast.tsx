@@ -29,7 +29,7 @@ export default function Toast(props: PropsToast) {
   };
 
   return (
-    <Snackbar open={props.open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={props.open} autoHideDuration={3000} onClose={handleClose}>
       <MuiAlert onClose={handleClose} severity={props.type}>
         {props.message}
       </MuiAlert>
