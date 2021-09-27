@@ -29,7 +29,7 @@ export const DivTextField = styled.div`
   }
 `;
 
-export const DivSignup = styled.div`
+export const DivBackLogin = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 15px;

@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import * as Yup from "yup";
 
 Yup.setLocale({
@@ -7,6 +8,7 @@ Yup.setLocale({
   string: {
     email: "E-mail inválido",
     url: "URL inválida",
+    min: "Deve ter pelo menos ${min} caracteres",
   },
 });
 

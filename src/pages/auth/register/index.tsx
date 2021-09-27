@@ -1,16 +1,28 @@
 import { Container, Typography, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import Yup from "../../../global/YupDictionary";
-
-import { Root, DivInformation, DivTextField, DivSignup } from "./styles";
+import { AxiosError } from "axios";
+import { useHistory } from "react-router-dom";
 
 import DividerWithText from "../../../components/DividerWithText";
 import LoadingButton from "../../../components/LoadingButton";
+import Toast, { DefaultPropsToast } from "../../../components/Toast";
 import googleIcon from "../../../assets/google_icon.svg";
+import api from "../../../services/api";
 
-const initialValues = {
+import { Root, DivInformation, DivTextField, DivBackLogin } from "./styles";
+import { useState } from "react";
+
+interface ValuesRegister {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
+const initialValues: ValuesRegister = {
   name: "",
   email: "",
   password: "",
@@ -20,15 +32,58 @@ const initialValues = {
 const schema = Yup.object().shape({
   name: Yup.string().required(),
   email: Yup.string().required().email(),
-  password: Yup.string().required(),
+  password: Yup.string().required().min(4),
   passwordConfirmation: Yup.string()
     .required()
     .oneOf([Yup.ref("password"), null], "Senhas não conferem."),
 });
 
 export default function Register() {
+  const history = useHistory();
+  const [toastProps, setToastProps] = useState(DefaultPropsToast);
+  console.log("Render");
+
+  const handleSubmit = async (
+    values: ValuesRegister,
+    { setSubmitting }: FormikHelpers<ValuesRegister>
+  ) => {
+    api
+      .post("user", values)
+      .then((response) => {
+        setSubmitting(false);
+        history.push("/auth/login");
+
+        console.log(response.data);
+      })
+      .catch((e: AxiosError) => {
+        switch (e.response?.status) {
+          case 400:
+            setToastProps({
+              type: "error",
+              open: true,
+              message: e.response.data.message,
+            });
+            break;
+
+          default:
+            setToastProps({
+              type: "error",
+              open: true,
+              message: "Erro inesperado",
+            });
+            break;
+        }
+      });
+  };
+
   return (
     <Root>
+      <Toast
+        open={toastProps.open}
+        message={toastProps.message}
+        type={toastProps.type}
+        setOpen={(open) => setToastProps({ ...toastProps, open })}
+      />
       <Container maxWidth="sm">
         <DivInformation>
           <Typography variant="h5">Crie sua conta em Redmine Sprint</Typography>
@@ -43,12 +98,7 @@ export default function Register() {
         <DividerWithText>OU</DividerWithText>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-              alert(JSON.stringify(values, null, 2));
-            }, 500);
-          }}
+          onSubmit={handleSubmit}
           validationSchema={schema}
         >
           {({ submitForm, isSubmitting }) => (
@@ -87,13 +137,13 @@ export default function Register() {
             </Form>
           )}
         </Formik>
-        <DivSignup>
+        <DivBackLogin>
           <Typography variant="subtitle2" color="primary">
             <Link to="/auth/login" component={RouterLink}>
               Voltar para login
             </Link>
           </Typography>
-        </DivSignup>
+        </DivBackLogin>
       </Container>
     </Root>
   );
