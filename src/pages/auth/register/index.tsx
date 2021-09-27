@@ -2,7 +2,7 @@ import { Container, Typography, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
-import * as Yup from "yup";
+import Yup from "../../../global/YupDictionary";
 
 import { Root, DivInformation, DivTextField, DivSignup } from "./styles";
 
@@ -18,11 +18,11 @@ const initialValues = {
 };
 
 const schema = Yup.object().shape({
-  name: Yup.string().required("Campo obrigatório"),
-  email: Yup.string().required("Campo obrigatório"),
-  password: Yup.string().required("Campo obrigatório"),
+  name: Yup.string().required(),
+  email: Yup.string().required().email(),
+  password: Yup.string().required(),
   passwordConfirmation: Yup.string()
-    .required("Campo obrigatório")
+    .required()
     .oneOf([Yup.ref("password"), null], "Senhas não conferem."),
 });
 
