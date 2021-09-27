@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { Color } from "@material-ui/lab/Alert";
