@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import DividerWithText from "../../../components/DividerWithText";
 import LoadingButton from "../../../components/LoadingButton";
 import Toast, { DefaultPropsToast } from "../../../components/Toast";
+import TextFieldPassword from "../../../components/TextFieldPassword";
 import googleIcon from "../../../assets/google_icon.svg";
 import api from "../../../services/api";
 
@@ -41,7 +42,7 @@ const schema = Yup.object().shape({
 export default function Register() {
   const history = useHistory();
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
-  console.log("Render");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (
     values: ValuesRegister,
@@ -116,17 +117,17 @@ export default function Register() {
                   name="email"
                   type="email"
                 />
-                <Field
-                  component={TextField}
+                <TextFieldPassword
                   label="Senha"
                   name="password"
-                  type="password"
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
-                <Field
-                  component={TextField}
+                <TextFieldPassword
                   label="Confirme sua senha"
                   name="passwordConfirmation"
-                  type="password"
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
               </DivTextField>
               <LoadingButton
