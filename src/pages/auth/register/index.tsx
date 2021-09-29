@@ -44,17 +44,11 @@ export default function Register() {
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (
-    values: ValuesRegister,
-    { setSubmitting }: FormikHelpers<ValuesRegister>
-  ) => {
+  const handleSubmit = async (values: ValuesRegister) => {
     api
       .post("user", values)
       .then((response) => {
-        setSubmitting(false);
         history.push("/auth/login");
-
-        console.log(response.data);
       })
       .catch((e: AxiosError) => {
         switch (e.response?.status) {
