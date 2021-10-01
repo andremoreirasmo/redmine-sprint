@@ -28,10 +28,6 @@ export const DivTextField = styled.div`
   .MuiTextField-root {
     margin-top: 10px;
   }
-
-  .MuiTypography-root {
-    margin-top: 5px;
-  }
 `;
 
 export const DivSignup = styled.div`
