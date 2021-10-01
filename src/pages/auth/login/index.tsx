@@ -15,7 +15,13 @@ import TextFieldPassword from "../../../components/TextFieldPassword";
 import googleIcon from "../../../assets/google_icon.svg";
 import api from "../../../services/api";
 
-import { Root, DivInformation, DivTextField, DivSignup } from "./styles";
+import {
+  Root,
+  DivInformation,
+  DivTextField,
+  DivRembemerMe,
+  DivSignup,
+} from "./styles";
 
 import { login } from "../../../store/auth.store";
 
@@ -43,7 +49,7 @@ export default function Login() {
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
 
   const handleSubmit = async (values: LoginRequest) => {
-    api
+    await api
       .post("sessions", values)
       .then((response) => {
         dispatch(login(response.data));
@@ -113,16 +119,23 @@ export default function Login() {
                   type="email"
                 />
                 <TextFieldPassword label="Senha" name="password" />
-                <Field
-                  component={CheckboxWithLabel}
-                  Label={{
-                    label: (
-                      <Typography variant="subtitle1">Lembre-me</Typography>
-                    ),
-                  }}
-                  name="rememberMe"
-                  type="checkbox"
-                />
+                <DivRembemerMe>
+                  <Field
+                    component={CheckboxWithLabel}
+                    Label={{
+                      label: (
+                        <Typography variant="subtitle1">Lembre-me</Typography>
+                      ),
+                    }}
+                    name="rememberMe"
+                    type="checkbox"
+                  />
+                  <Typography variant="subtitle2" color="primary">
+                    <Link to="/auth/forgot" component={RouterLink}>
+                      Esqueceu a senha?
+                    </Link>
+                  </Typography>
+                </DivRembemerMe>
               </DivTextField>
               <LoadingButton
                 label="Entrar"
