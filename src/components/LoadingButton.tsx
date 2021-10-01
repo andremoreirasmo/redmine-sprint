@@ -1,4 +1,5 @@
 import { Button, LinearProgress } from "@material-ui/core";
+import styled from "styled-components";
 
 interface Props {
   label: string;
@@ -6,7 +7,14 @@ interface Props {
   onClick?: () => void;
 }
 
+const LinearProgressBordeRadius = styled(LinearProgress)`
+  border-radius: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+`;
+
 export default function LoadingButton({ label, isLoading, onClick }: Props) {
+  console.log(isLoading);
   return (
     <>
       <Button
@@ -18,7 +26,7 @@ export default function LoadingButton({ label, isLoading, onClick }: Props) {
       >
         {label}
       </Button>
-      {isLoading && <LinearProgress color="secondary" />}
+      {isLoading && <LinearProgressBordeRadius color="secondary" />}
     </>
   );
 }
