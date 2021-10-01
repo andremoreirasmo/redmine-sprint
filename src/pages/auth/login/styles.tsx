@@ -10,11 +10,6 @@ export const Root = styled.div`
   }
 `;
 
-export const FormLogin = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const DivInformation = styled.div`
   margin-bottom: 40px;
 `;
@@ -28,6 +23,12 @@ export const DivTextField = styled.div`
   .MuiTextField-root {
     margin-top: 10px;
   }
+`;
+
+export const DivRembemerMe = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const DivSignup = styled.div`
