@@ -28,7 +28,7 @@ interface LoginRequest {
 const initialValues: LoginRequest = {
   email: "",
   password: "",
-  rememberMe: false,
+  rememberMe: true,
 };
 
 const schema = Yup.object().shape({
