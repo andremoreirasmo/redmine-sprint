@@ -45,7 +45,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values: RegisterRequest) => {
-    api
+    await api
       .post("user", values)
       .then((response) => {
         history.push("/auth/login");
