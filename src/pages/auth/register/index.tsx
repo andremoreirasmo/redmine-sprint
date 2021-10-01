@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Container, Typography, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
@@ -14,16 +15,15 @@ import googleIcon from "../../../assets/google_icon.svg";
 import api from "../../../services/api";
 
 import { Root, DivInformation, DivTextField, DivBackLogin } from "./styles";
-import { useState } from "react";
 
-interface ValuesRegister {
+interface RegisterRequest {
   name: string;
   email: string;
   password: string;
   passwordConfirmation: string;
 }
 
-const initialValues: ValuesRegister = {
+const initialValues: RegisterRequest = {
   name: "",
   email: "",
   password: "",
@@ -44,7 +44,7 @@ export default function Register() {
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (values: ValuesRegister) => {
+  const handleSubmit = async (values: RegisterRequest) => {
     api
       .post("user", values)
       .then((response) => {

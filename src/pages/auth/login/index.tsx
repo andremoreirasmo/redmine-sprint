@@ -1,66 +1,88 @@
 import { useState } from "react";
-import {
-  Container,
-  Typography,
-  Button,
-  Link,
-  FormControlLabel,
-  Checkbox,
-} from "@material-ui/core";
+import { Container, Typography, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
-
-import {
-  Root,
-  FormLogin,
-  DivInformation,
-  DivTextField,
-  DivSignup,
-} from "./styles";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+import Yup from "../../../global/YupDictionary";
+import { AxiosError } from "axios";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import DividerWithText from "../../../components/DividerWithText";
-import {
-  TextFieldCustom,
-  defaultStateTextFieldCustom,
-} from "../../../components/TextFieldCustom";
 import LoadingButton from "../../../components/LoadingButton";
+import Toast, { DefaultPropsToast } from "../../../components/Toast";
+import TextFieldPassword from "../../../components/TextFieldPassword";
 import googleIcon from "../../../assets/google_icon.svg";
+import api from "../../../services/api";
+
+import { Root, DivInformation, DivTextField, DivSignup } from "./styles";
+
+import { login } from "../../../store/auth.store";
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+const initialValues: LoginRequest = {
+  email: "",
+  password: "",
+};
+
+const schema = Yup.object().shape({
+  email: Yup.string().required().email(),
+  password: Yup.string().required(),
+});
 
 export default function Login() {
-  const [stateEmail, setStateEmail] = useState(defaultStateTextFieldCustom);
-  const [statePassword, setStatePassword] = useState(
-    defaultStateTextFieldCustom
-  );
-  const [rememberPassword, setRememberPassword] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [toastProps, setToastProps] = useState(DefaultPropsToast);
 
-  async function handleSubmit() {
-    if (stateEmail.value.length === 0) {
-      stateEmail.error = true;
-      setStateEmail({
-        ...stateEmail,
-        error: true,
+  const handleSubmit = async (values: LoginRequest) => {
+    api
+      .post("sessions", values)
+      .then((response) => {
+        dispatch(login(response.data));
+        history.push("/dashboard");
+      })
+      .catch((e: AxiosError) => {
+        switch (e.response?.status) {
+          case 400:
+            setToastProps({
+              type: "error",
+              open: true,
+              message: e.response.data.message,
+            });
+            break;
+
+          case 401:
+            setToastProps({
+              type: "error",
+              open: true,
+              message: "Email ou senha incorretos",
+            });
+            break;
+
+          default:
+            setToastProps({
+              type: "error",
+              open: true,
+              message: "Erro inesperado",
+            });
+            break;
+        }
       });
-    }
-
-    if (statePassword.value.length === 0) {
-      statePassword.error = true;
-      setStatePassword({
-        ...statePassword,
-        error: true,
-      });
-    }
-
-    if (stateEmail.error || statePassword.error) {
-      return;
-    }
-
-    setIsLoading(true);
-    console.log(stateEmail);
-    console.log(statePassword);
-  }
+  };
 
   return (
     <Root>
+      <Toast
+        open={toastProps.open}
+        message={toastProps.message}
+        type={toastProps.type}
+        setOpen={(open) => setToastProps({ ...toastProps, open })}
+      />
       <Container maxWidth="sm">
         <DivInformation>
           <Typography variant="h5">Entrar em Redmine Sprint</Typography>
@@ -73,51 +95,38 @@ export default function Login() {
           </Button>
         </DivInformation>
         <DividerWithText>OU</DividerWithText>
-        <FormLogin onSubmit={handleSubmit}>
-          <DivTextField>
-            <TextFieldCustom
-              label="Email"
-              type="email"
-              state={stateEmail}
-              setState={setStateEmail}
-            />
-            <TextFieldCustom
-              label="Senha"
-              type="password"
-              state={statePassword}
-              setState={setStatePassword}
-            />
-            <Typography variant="subtitle2" color="primary">
-              <Link to="/auth/forgot" component={RouterLink}>
-                Esqueci minha senha
-              </Link>
-            </Typography>
-          </DivTextField>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={rememberPassword}
-                onChange={(event) => setRememberPassword(event.target.checked)}
-                name="rememberPassword"
-                color="primary"
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={schema}
+        >
+          {({ submitForm, isSubmitting }) => (
+            <Form>
+              <DivTextField>
+                <Field
+                  component={TextField}
+                  label="Email"
+                  name="email"
+                  type="email"
+                />
+                <TextFieldPassword label="Senha" name="password" />
+              </DivTextField>
+              <LoadingButton
+                label="Entrar"
+                isLoading={isSubmitting}
+                onClick={submitForm}
               />
-            }
-            label="Lembrar minha senha"
-          />
-          <LoadingButton
-            label="Entrar"
-            isLoading={isLoading}
-            onClick={handleSubmit}
-          />
-          <DivSignup>
-            <Typography variant="subtitle2">Não tem uma conta?</Typography>
-            <Typography variant="subtitle2" color="primary">
-              <Link to="/auth/register" component={RouterLink}>
-                Registre-se
-              </Link>
-            </Typography>
-          </DivSignup>
-        </FormLogin>
+            </Form>
+          )}
+        </Formik>
+        <DivSignup>
+          <Typography variant="subtitle2">Não tem uma conta?</Typography>
+          <Typography variant="subtitle2" color="primary">
+            <Link to="/auth/register" component={RouterLink}>
+              Registre-se
+            </Link>
+          </Typography>
+        </DivSignup>
       </Container>
     </Root>
   );

@@ -17,7 +17,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import ListItemLink from "../../components/ListItemLink";
 import { RootState } from "../../store";
@@ -34,14 +34,18 @@ import {
 } from "./styles";
 
 import LogoImg from "../../assets/logo.png";
+import { useAuth } from "../../hooks/useAuth";
+import { logout } from "../../store/auth.store";
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
   const [openFixedDrawer, setOpenFixedDrawer] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
     (state: RootState) => state.router.location.pathname
   );
+  const userAuth = useAuth();
 
   const openIcon = Boolean(anchorEl);
   const id = openIcon ? "simple-popover" : undefined;
@@ -105,9 +109,11 @@ export default function Dashboard() {
             >
               <PopOverUser>
                 <Box className="boxInfoUser">
-                  <Typography variant="subtitle1">Minimal UI</Typography>
+                  <Typography variant="subtitle1">
+                    {userAuth.user?.name}
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    demo@minimals.cc
+                    {userAuth.user?.email}
                   </Typography>
                 </Box>
                 <Divider />
@@ -125,7 +131,12 @@ export default function Dashboard() {
                   />
                 </List>
                 <Box className="boxButtonLogout">
-                  <Button fullWidth size="medium" variant="outlined">
+                  <Button
+                    fullWidth
+                    size="medium"
+                    variant="outlined"
+                    onClick={() => dispatch(logout({}))}
+                  >
                     Logout
                   </Button>
                 </Box>

@@ -1,21 +1,28 @@
-import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
-import appReducer from './app.store';
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import authReducer from "./auth.store";
 import { createBrowserHistory } from "history";
 import { createReduxHistoryContext } from "redux-first-history";
 
-const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({ 
-  history: createBrowserHistory(),
-});
+const { createReduxHistory, routerMiddleware, routerReducer } =
+  createReduxHistoryContext({
+    history: createBrowserHistory(),
+  });
 
 const rootReducer = combineReducers({
   router: routerReducer,
-  app: appReducer,
+  auth: authReducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(routerMiddleware),
 });
 
 export const history = createReduxHistory(store);
