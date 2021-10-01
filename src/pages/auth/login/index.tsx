@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Container, Typography, Button, Link } from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
+import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import Yup from "../../../global/YupDictionary";
 import { AxiosError } from "axios";
 import { useHistory } from "react-router-dom";
@@ -22,16 +22,19 @@ import { login } from "../../../store/auth.store";
 interface LoginRequest {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 const initialValues: LoginRequest = {
   email: "",
   password: "",
+  rememberMe: false,
 };
 
 const schema = Yup.object().shape({
   email: Yup.string().required().email(),
   password: Yup.string().required(),
+  rememberMe: Yup.boolean(),
 });
 
 export default function Login() {
@@ -110,6 +113,16 @@ export default function Login() {
                   type="email"
                 />
                 <TextFieldPassword label="Senha" name="password" />
+                <Field
+                  component={CheckboxWithLabel}
+                  Label={{
+                    label: (
+                      <Typography variant="subtitle1">Lembre-me</Typography>
+                    ),
+                  }}
+                  name="rememberMe"
+                  type="checkbox"
+                />
               </DivTextField>
               <LoadingButton
                 label="Entrar"
