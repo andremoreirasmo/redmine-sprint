@@ -32,5 +32,5 @@ export const DivTextField = styled.div`
 export const DivBackLogin = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: 5px;
 `;

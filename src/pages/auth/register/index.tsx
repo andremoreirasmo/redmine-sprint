@@ -133,11 +133,14 @@ export default function Register() {
           )}
         </Formik>
         <DivBackLogin>
-          <Typography variant="subtitle2" color="primary">
-            <Link to="/auth/login" component={RouterLink}>
-              Voltar para login
-            </Link>
-          </Typography>
+          <Button
+            fullWidth
+            color="primary"
+            component={RouterLink}
+            to="/auth/login"
+          >
+            Voltar para login
+          </Button>
         </DivBackLogin>
       </Container>
     </Root>
