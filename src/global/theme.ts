@@ -21,6 +21,11 @@ export const theme = createTheme({
         borderRadius: 8,
       },
     },
+    MuiTypography: {
+      h5: {
+        fontWeight: 700,
+      },
+    },
   },
 });
 
