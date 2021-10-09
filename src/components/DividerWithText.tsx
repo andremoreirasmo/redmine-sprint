@@ -1,5 +1,4 @@
-import React from "react";
-import { Grid, Divider as MuiDivider } from "@material-ui/core";
+import { Grid, Divider as MuiDivider } from '@material-ui/core';
 
 interface Props {
   children: JSX.Element | string;

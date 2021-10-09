@@ -9,19 +9,19 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import Radio from "@material-ui/core/Radio";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import HomeIcon from "@material-ui/icons/Home";
-import PersonIcon from "@material-ui/icons/Person";
-import SettingsIcon from "@material-ui/icons/Settings";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Switch } from "react-router-dom";
-import ListItemLink from "../../components/ListItemLink";
-import { RootState } from "../../store";
-import routes from "./routes";
+} from '@material-ui/core';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Radio from '@material-ui/core/Radio';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
+import PersonIcon from '@material-ui/icons/Person';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+import ListItemLink from '../../components/ListItemLink';
+import { RootState } from '../../store';
+import routes from './routes';
 import {
   Content,
   HeaderAppBar,
@@ -31,11 +31,11 @@ import {
   SideBar,
   ToolbarSidebar,
   Logo,
-} from "./styles";
+} from './styles';
 
-import LogoImg from "../../assets/logo.png";
-import { useAuth } from "../../hooks/useAuth";
-import { logout } from "../../store/auth.store";
+import LogoImg from '../../assets/logo.png';
+import { useAuth } from '../../hooks/useAuth';
+import { logout } from '../../store/auth.store';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -43,12 +43,12 @@ export default function Dashboard() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
-    (state: RootState) => state.router.location.pathname
+    (state: RootState) => state.router.location.pathname,
   );
   const userAuth = useAuth();
 
   const openIcon = Boolean(anchorEl);
-  const id = openIcon ? "simple-popover" : undefined;
+  const id = openIcon ? 'simple-popover' : undefined;
 
   const handleDrawer = () => {
     setOpenFixedDrawer(!openFixedDrawer);
@@ -99,12 +99,12 @@ export default function Dashboard() {
               anchorEl={anchorEl}
               onClose={handleClose}
               anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
+                vertical: 'bottom',
+                horizontal: 'left',
               }}
               transformOrigin={{
-                vertical: "top",
-                horizontal: "center",
+                vertical: 'top',
+                horizontal: 'center',
               }}
             >
               <PopOverUser>
@@ -135,7 +135,7 @@ export default function Dashboard() {
                     fullWidth
                     size="medium"
                     variant="outlined"
-                    onClick={() => dispatch(logout({}))}
+                    onClick={() => dispatch(logout())}
                   >
                     Logout
                   </Button>
@@ -161,8 +161,8 @@ export default function Dashboard() {
         <List>
           <ListSubheader>Geral</ListSubheader>
           {routes
-            .filter((route) => !route.isSetting)
-            .map((route) => (
+            .filter(route => !route.isSetting)
+            .map(route => (
               <ListItemSidebar
                 to={route.path}
                 primary={route.caption}
@@ -176,8 +176,8 @@ export default function Dashboard() {
         <ListSubheader>Gestão</ListSubheader>
         <List>
           {routes
-            .filter((route) => route.isSetting)
-            .map((route) => (
+            .filter(route => route.isSetting)
+            .map(route => (
               <ListItemSidebar
                 to={route.path}
                 primary={route.caption}
@@ -194,7 +194,7 @@ export default function Dashboard() {
         $drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}
       >
         <Switch>
-          {routes.map((route) => (
+          {routes.map(route => (
             <Route path={route.path} exact={route.exact} key={route.caption}>
               {route.component}
             </Route>

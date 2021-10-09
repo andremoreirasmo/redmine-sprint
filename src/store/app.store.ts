@@ -1,6 +1,6 @@
 // import { AppDispatch, AppThunk } from './index';
 // import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 // import { setTimeout } from 'timers';
 
 export interface AppState {
@@ -9,18 +9,16 @@ export interface AppState {
 
 const initialState: AppState = {
   data: '',
-}
+};
 
 const app = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    
     // setLocation(state, action: PayloadAction<Location<any>>) {
     //   state.location = action.payload;
     // },
-    
-  }
+  },
 });
 
 // export const { setLocation } = app.actions;
@@ -34,5 +32,5 @@ export default app.reducer;
 //   return async function (dispatch: AppDispatch) {
 //     await sleep(2000);
 //     dispatch(increment(amount))
-//   } 
+//   }
 // }

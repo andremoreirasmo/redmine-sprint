@@ -1,66 +1,74 @@
-import { useState } from "react";
-import { Container, Typography, Button } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import Yup from "../../../global/YupDictionary";
-import { AxiosError } from "axios";
+import { useState } from 'react';
+import { Container, Typography, Button } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import Yup from '../../../global/YupDictionary';
+import { AxiosError } from 'axios';
 
-import api from "../../../services/api";
+import api, { ErrorResponse } from '../../../services/api';
 
-import LoadingButton from "../../../components/LoadingButton";
-import Toast, { DefaultPropsToast } from "../../../components/Toast";
-import Successfull from "./successfull";
+import LoadingButton from '../../../components/LoadingButton';
+import Toast, { DefaultPropsToast } from '../../../components/Toast';
+import Successfull from './successfull';
 
-import { Root, DivInformation, DivTextField, DivBack } from "./styles";
+import { Root, DivInformation, DivTextField, DivBack } from './styles';
 
 interface ForgotRequest {
   email: string;
 }
 
 const initialValues: ForgotRequest = {
-  email: "",
+  email: '',
 };
 
 const schema = Yup.object().shape({
   email: Yup.string().required().email(),
 });
 
+interface State {
+  isSubmit: boolean;
+  email: string;
+}
+
 export default function Forgot() {
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [emailSubmit, setEmailSubmit] = useState("");
+  const [state, setState] = useState<State>({ isSubmit: false, email: '' });
 
   const handleSubmit = async (values: ForgotRequest) => {
     await api
-      .post("password/forgot", values)
-      .then((response) => {
-        setEmailSubmit(values.email);
-        setIsSubmit(true);
+      .post('password/forgot', values)
+      .then(() => {
+        setState({
+          isSubmit: true,
+          email: values.email,
+        });
       })
       .catch((e: AxiosError) => {
+        const serverError = e as AxiosError<ErrorResponse>;
+
         switch (e.response?.status) {
           case 400:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: e.response.data.message,
+              message: serverError.response?.data.message,
             });
             break;
 
           default:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: "Erro inesperado",
+              message: 'Erro inesperado',
             });
             break;
         }
       });
   };
 
-  if (isSubmit) {
-    return <Successfull email={emailSubmit} />;
+  if (state.isSubmit) {
+    return <Successfull email={state.email} />;
   }
 
   return (
@@ -69,7 +77,7 @@ export default function Forgot() {
         open={toastProps.open}
         message={toastProps.message}
         type={toastProps.type}
-        setOpen={(open) => setToastProps({ ...toastProps, open })}
+        setOpen={open => setToastProps({ ...toastProps, open })}
       />
       <Container maxWidth="sm">
         <DivInformation>

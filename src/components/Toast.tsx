@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert, { Color } from "@material-ui/lab/Alert";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { Color } from '@material-ui/lab/Alert';
 
 interface StatePropsToast {
   open: boolean;
-  message: string;
+  message: string | undefined;
   type: Color;
 }
 
@@ -15,13 +15,13 @@ interface PropsToast extends StatePropsToast {
 
 export const DefaultPropsToast: StatePropsToast = {
   open: false,
-  message: "",
-  type: "success",
+  message: '',
+  type: 'success',
 };
 
 export default function Toast(props: PropsToast) {
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 

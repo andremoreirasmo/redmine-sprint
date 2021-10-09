@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { Container, Typography, Button } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
-import Yup from "../../../global/YupDictionary";
-import { AxiosError } from "axios";
-import { useHistory } from "react-router-dom";
+import { useState } from 'react';
+import { Container, Typography, Button } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
+import { TextField } from 'formik-material-ui';
+import Yup from '../../../global/YupDictionary';
+import { AxiosError } from 'axios';
+import { useHistory } from 'react-router-dom';
 
-import DividerWithText from "../../../components/DividerWithText";
-import LoadingButton from "../../../components/LoadingButton";
-import Toast, { DefaultPropsToast } from "../../../components/Toast";
-import TextFieldPassword from "../../../components/TextFieldPassword";
-import googleIcon from "../../../assets/google_icon.svg";
-import api from "../../../services/api";
+import DividerWithText from '../../../components/DividerWithText';
+import LoadingButton from '../../../components/LoadingButton';
+import Toast, { DefaultPropsToast } from '../../../components/Toast';
+import TextFieldPassword from '../../../components/TextFieldPassword';
+import googleIcon from '../../../assets/google_icon.svg';
+import api, { ErrorResponse } from '../../../services/api';
 
-import { Root, DivInformation, DivTextField, DivBackLogin } from "./styles";
+import { Root, DivInformation, DivTextField, DivBackLogin } from './styles';
 
 interface RegisterRequest {
   name: string;
@@ -24,10 +24,10 @@ interface RegisterRequest {
 }
 
 const initialValues: RegisterRequest = {
-  name: "",
-  email: "",
-  password: "",
-  passwordConfirmation: "",
+  name: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
 };
 
 const schema = Yup.object().shape({
@@ -36,7 +36,7 @@ const schema = Yup.object().shape({
   password: Yup.string().required().min(4),
   passwordConfirmation: Yup.string()
     .required()
-    .oneOf([Yup.ref("password"), null], "Senhas não conferem."),
+    .oneOf([Yup.ref('password'), null], 'Senhas não conferem.'),
 });
 
 export default function Register() {
@@ -46,25 +46,27 @@ export default function Register() {
 
   const handleSubmit = async (values: RegisterRequest) => {
     await api
-      .post("user", values)
-      .then((response) => {
-        history.push("/auth/login");
+      .post('user', values)
+      .then(() => {
+        history.push('/auth/login');
       })
       .catch((e: AxiosError) => {
+        const serverError = e as AxiosError<ErrorResponse>;
+
         switch (e.response?.status) {
           case 400:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: e.response.data.message,
+              message: serverError.response?.data.message,
             });
             break;
 
           default:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: "Erro inesperado",
+              message: 'Erro inesperado',
             });
             break;
         }
@@ -77,7 +79,7 @@ export default function Register() {
         open={toastProps.open}
         message={toastProps.message}
         type={toastProps.type}
-        setOpen={(open) => setToastProps({ ...toastProps, open })}
+        setOpen={open => setToastProps({ ...toastProps, open })}
       />
       <Container maxWidth="sm">
         <DivInformation>

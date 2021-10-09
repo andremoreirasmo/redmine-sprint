@@ -1,14 +1,14 @@
 /* eslint-disable no-template-curly-in-string */
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 Yup.setLocale({
   mixed: {
-    required: "Campo obrigatório",
+    required: 'Campo obrigatório',
   },
   string: {
-    email: "E-mail inválido",
-    url: "URL inválida",
-    min: "Deve ter pelo menos ${min} caracteres",
+    email: 'E-mail inválido',
+    url: 'URL inválida',
+    min: 'Deve ter pelo menos ${min} caracteres',
   },
 });
 

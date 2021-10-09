@@ -1,24 +1,24 @@
-import { Paper, Tooltip } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
-import SaveIcon from "@material-ui/icons/Save";
-import SendIcon from "@material-ui/icons/Send";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, { FormEvent, useEffect, useState } from "react";
-import DialogConfirmation from "../../../components/DialogConfirmation";
-import api from "../../../services/api";
-import { BtnImport, DivTextField, GridBtnSave } from "./style";
+import { Paper, Tooltip } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+import SaveIcon from '@material-ui/icons/Save';
+import SendIcon from '@material-ui/icons/Send';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { FormEvent, useEffect, useState } from 'react';
+import DialogConfirmation from '../../../components/DialogConfirmation';
+import api from '../../../services/api';
+import { BtnImport, DivTextField, GridBtnSave } from './style';
 
 interface Project {
   nome: string;
@@ -38,10 +38,10 @@ interface State {
 export default function Settings() {
   const [state, setState] = useState<State>({
     showApiToken: false,
-    apiToken: "",
-    apiURL: "",
+    apiToken: '',
+    apiURL: '',
     projectSelected: null,
-    inputProject: "",
+    inputProject: '',
     errorApiURL: false,
     errorApiToken: false,
     errorProject: false,
@@ -52,7 +52,7 @@ export default function Settings() {
   const loading = openProject && optionsProject.length === 0;
   const [openConfirmationImport, setOpenConfirmationImport] = useState(false);
 
-  const setFieldState = (prop: keyof State, value: any) => {
+  const setFieldState = (prop: keyof State, value: unknown) => {
     setState({ ...state, [prop]: value });
   };
 
@@ -61,7 +61,7 @@ export default function Settings() {
       return undefined;
     }
 
-    api.get("localidades/paises").then((response) => {
+    api.get('localidades/paises').then(response => {
       setOptionsProject(response.data);
       // setOptionsProject(Object.keys(countries).map((key) => countries[key]) as Project[]);
     });
@@ -103,7 +103,7 @@ export default function Settings() {
                       label="API URL"
                       value={state.apiURL}
                       onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
+                        event: React.ChangeEvent<HTMLInputElement>,
                       ) => {
                         setState({
                           ...state,
@@ -112,7 +112,7 @@ export default function Settings() {
                         });
                       }}
                       onBlur={() =>
-                        setFieldState("errorApiURL", state.apiURL.length === 0)
+                        setFieldState('errorApiURL', state.apiURL.length === 0)
                       }
                       error={state.errorApiURL}
                     />
@@ -123,10 +123,10 @@ export default function Settings() {
                     </InputLabel>
                     <Input
                       id="api-token"
-                      type={state.showApiToken ? "text" : "password"}
+                      type={state.showApiToken ? 'text' : 'password'}
                       value={state.apiToken}
                       onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
+                        event: React.ChangeEvent<HTMLInputElement>,
                       ) => {
                         setState({
                           ...state,
@@ -136,8 +136,8 @@ export default function Settings() {
                       }}
                       onBlur={() =>
                         setFieldState(
-                          "errorApiToken",
-                          state.apiToken.length === 0
+                          'errorApiToken',
+                          state.apiToken.length === 0,
                         )
                       }
                       error={state.errorApiToken}
@@ -147,12 +147,12 @@ export default function Settings() {
                             aria-label="Exibir token"
                             onClick={() => {
                               setFieldState(
-                                "showApiToken",
-                                !state.showApiToken
+                                'showApiToken',
+                                !state.showApiToken,
                               );
                             }}
                             onMouseDown={(
-                              event: React.MouseEvent<HTMLButtonElement>
+                              event: React.MouseEvent<HTMLButtonElement>,
                             ) => {
                               event.preventDefault();
                             }}
@@ -180,7 +180,7 @@ export default function Settings() {
                           getOptionSelected={(option, value) =>
                             option.nome === value.nome
                           }
-                          getOptionLabel={(option) => option.nome}
+                          getOptionLabel={option => option.nome}
                           options={optionsProject}
                           loading={loading}
                           value={state.projectSelected}
@@ -197,7 +197,7 @@ export default function Settings() {
                           onClose={() => {
                             setOpenProject(false);
                           }}
-                          renderInput={(params) => (
+                          renderInput={params => (
                             <TextField
                               {...params}
                               label="Projeto para importar usuarios"
@@ -234,11 +234,11 @@ export default function Settings() {
                         description="Os usuários presentes neste projeto irão ser importados para o sistema."
                         open={openConfirmationImport}
                         onAccepted={() => {
-                          console.log("Aceitou");
+                          console.log('Aceitou');
                           setOpenConfirmationImport(false);
                         }}
                         onRejected={() => {
-                          console.log("Recusou");
+                          console.log('Recusou');
                           setOpenConfirmationImport(false);
                         }}
                       />

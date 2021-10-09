@@ -1,5 +1,5 @@
-import { Button, LinearProgress } from "@material-ui/core";
-import styled from "styled-components";
+import { Button, LinearProgress } from '@material-ui/core';
+import styled from 'styled-components';
 
 interface Props {
   label: string;

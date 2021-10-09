@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { Container, Typography, Button, Link } from "@material-ui/core";
-import { Link as RouterLink } from "react-router-dom";
-import { Field, Form, Formik } from "formik";
-import { TextField, CheckboxWithLabel } from "formik-material-ui";
-import Yup from "../../../global/YupDictionary";
-import { AxiosError } from "axios";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useState } from 'react';
+import { Container, Typography, Button, Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { Field, Form, Formik } from 'formik';
+import { TextField, CheckboxWithLabel } from 'formik-material-ui';
+import Yup from '../../../global/YupDictionary';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import DividerWithText from "../../../components/DividerWithText";
-import LoadingButton from "../../../components/LoadingButton";
-import Toast, { DefaultPropsToast } from "../../../components/Toast";
-import TextFieldPassword from "../../../components/TextFieldPassword";
-import googleIcon from "../../../assets/google_icon.svg";
-import api from "../../../services/api";
+import DividerWithText from '../../../components/DividerWithText';
+import LoadingButton from '../../../components/LoadingButton';
+import Toast, { DefaultPropsToast } from '../../../components/Toast';
+import TextFieldPassword from '../../../components/TextFieldPassword';
+import googleIcon from '../../../assets/google_icon.svg';
+import api, { ErrorResponse } from '../../../services/api';
 
 import {
   Root,
@@ -21,9 +21,9 @@ import {
   DivTextField,
   DivRembemerMe,
   DivSignup,
-} from "./styles";
+} from './styles';
 
-import { login } from "../../../store/auth.store";
+import { AuthState, login } from '../../../store/auth.store';
 
 interface LoginRequest {
   email: string;
@@ -32,8 +32,8 @@ interface LoginRequest {
 }
 
 const initialValues: LoginRequest = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
   rememberMe: true,
 };
 
@@ -49,35 +49,36 @@ export default function Login() {
   const [toastProps, setToastProps] = useState(DefaultPropsToast);
 
   const handleSubmit = async (values: LoginRequest) => {
-    await api
-      .post("sessions", values)
-      .then((response) => {
+    (await api.post)<LoginRequest, AxiosResponse<AuthState>>('sessions', values)
+      .then(response => {
         dispatch(login(response.data));
-        history.push("/dashboard");
+        history.push('/dashboard');
       })
       .catch((e: AxiosError) => {
+        const serverError = e as AxiosError<ErrorResponse>;
+
         switch (e.response?.status) {
           case 400:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: e.response.data.message,
+              message: serverError.response?.data.message,
             });
             break;
 
           case 401:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: "Email ou senha incorretos",
+              message: 'Email ou senha incorretos',
             });
             break;
 
           default:
             setToastProps({
-              type: "error",
+              type: 'error',
               open: true,
-              message: "Erro inesperado",
+              message: 'Erro inesperado',
             });
             break;
         }
@@ -90,7 +91,7 @@ export default function Login() {
         open={toastProps.open}
         message={toastProps.message}
         type={toastProps.type}
-        setOpen={(open) => setToastProps({ ...toastProps, open })}
+        setOpen={open => setToastProps({ ...toastProps, open })}
       />
       <Container maxWidth="sm">
         <DivInformation>

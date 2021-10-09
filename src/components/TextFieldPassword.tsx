@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Field } from "formik";
-import { TextField } from "formik-material-ui";
-import { IconButton, InputAdornment } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { useState } from 'react';
+import { Field } from 'formik';
+import { TextField } from 'formik-material-ui';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface Props {
   label: string;
@@ -15,7 +15,7 @@ export default function TextFieldPassword(props: Props) {
   const { label, name } = props;
 
   const [showPasswordInternal, setShowPasswordInternal] = useState(
-    props.showPassword ?? false
+    props.showPassword ?? false,
   );
 
   const showPassword = props.showPassword ?? showPasswordInternal;
@@ -32,7 +32,7 @@ export default function TextFieldPassword(props: Props) {
       component={TextField}
       label={label}
       name={name}
-      type={showPassword ? "text" : "password"}
+      type={showPassword ? 'text' : 'password'}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
