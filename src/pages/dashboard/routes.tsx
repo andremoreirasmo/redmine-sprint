@@ -17,7 +17,7 @@ interface Routes {
 
 const routes: Routes[] = [
   {
-    path: '/dashboard/',
+    path: '/dashboard',
     exact: true,
     caption: 'Sprints',
     component: Sprints,
