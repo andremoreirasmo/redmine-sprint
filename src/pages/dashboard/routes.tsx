@@ -10,7 +10,7 @@ interface Routes {
   path: string;
   exact: boolean;
   caption: string;
-  component: () => JSX.Element;
+  component: JSX.Element;
   icon: JSX.Element;
   isSetting: boolean;
 }
@@ -20,7 +20,7 @@ const routes: Routes[] = [
     path: '/dashboard',
     exact: true,
     caption: 'Sprints',
-    component: Sprints,
+    component: <Sprints />,
     icon: <PollIcon />,
     isSetting: false,
   },
@@ -28,7 +28,7 @@ const routes: Routes[] = [
     path: '/dashboard/teams',
     exact: true,
     caption: 'Equipes',
-    component: Team,
+    component: <Team />,
     icon: <GroupIcon />,
     isSetting: true,
   },
@@ -36,7 +36,7 @@ const routes: Routes[] = [
     path: '/dashboard/settings',
     exact: true,
     caption: 'Configurações',
-    component: Settings,
+    component: <Settings />,
     icon: <SettingsApplicationsIcon />,
     isSetting: true,
   },
