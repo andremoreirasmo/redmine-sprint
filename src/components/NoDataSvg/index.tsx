@@ -1,8 +1,8 @@
-import { Overlay } from './styles';
+import { Root } from './styles';
 
-export default function DataGridNoRowsOverlay() {
+export default function NoDataSvg() {
   return (
-    <Overlay>
+    <Root>
       <svg
         width="120"
         height="100"
@@ -42,7 +42,7 @@ export default function DataGridNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <div>Sem dados</div>
-    </Overlay>
+      <div>Não há dados</div>
+    </Root>
   );
 }

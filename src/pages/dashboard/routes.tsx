@@ -5,7 +5,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 
 import Sprints from './sprints';
 import Settings from './settings';
-import Redmine from './redmine';
+import Redmine from './redmine/list';
 import Team from './team';
 
 interface Routes {

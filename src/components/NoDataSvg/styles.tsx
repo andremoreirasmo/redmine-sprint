@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { GridOverlay } from '@mui/x-data-grid';
 
-export const Overlay = styled(GridOverlay)`
+export const Root = styled.div`
+  display: flex;
+  align-items: center;
   flex-direction: column;
 
   & .ant-empty-img-1 {

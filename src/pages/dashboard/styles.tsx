@@ -146,6 +146,6 @@ interface ContentProps {
 }
 
 export const Content = styled(Container)<ContentProps>`
-  padding: 116px 16px 80px 16px;
+  padding: 80px 16px 0px 16px;
   margin-left: ${props => props.$drawerWidth}px;
 `;
