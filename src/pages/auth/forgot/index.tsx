@@ -9,10 +9,11 @@ import { AxiosError } from 'axios';
 import api, { ErrorResponse } from '../../../services/api';
 
 import LoadingButton from '../../../components/LoadingButton';
-import Toast, { DefaultPropsToast } from '../../../components/Toast';
 import Successfull from './successfull';
 
 import { Root, DivInformation, DivTextField, DivBack } from './styles';
+
+import { useSnackbar } from 'notistack';
 
 interface ForgotRequest {
   email: string;
@@ -32,7 +33,7 @@ interface State {
 }
 
 export default function Forgot() {
-  const [toastProps, setToastProps] = useState(DefaultPropsToast);
+  const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState<State>({ isSubmit: false, email: '' });
 
   const handleSubmit = async (values: ForgotRequest) => {
@@ -49,18 +50,14 @@ export default function Forgot() {
 
         switch (e.response?.status) {
           case 400:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: serverError.response?.data.message,
+            enqueueSnackbar(serverError.response?.data.message, {
+              variant: 'warning',
             });
             break;
 
           default:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: 'Erro inesperado',
+            enqueueSnackbar('Erro inesperado', {
+              variant: 'error',
             });
             break;
         }
@@ -73,12 +70,6 @@ export default function Forgot() {
 
   return (
     <Root>
-      <Toast
-        open={toastProps.open}
-        message={toastProps.message}
-        type={toastProps.type}
-        setOpen={open => setToastProps({ ...toastProps, open })}
-      />
       <Container maxWidth="sm">
         <DivInformation>
           <Typography variant="h5">Esqueceu a senha?</Typography>

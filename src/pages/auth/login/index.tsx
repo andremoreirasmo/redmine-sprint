@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Container, Typography, Button, Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
@@ -10,10 +9,11 @@ import { useDispatch } from 'react-redux';
 
 import DividerWithText from '../../../components/DividerWithText';
 import LoadingButton from '../../../components/LoadingButton';
-import Toast, { DefaultPropsToast } from '../../../components/Toast';
 import TextFieldPassword from '../../../components/TextFieldPassword';
 import googleIcon from '../../../assets/google_icon.svg';
 import api, { ErrorResponse } from '../../../services/api';
+
+import { useSnackbar } from 'notistack';
 
 import {
   Root,
@@ -46,7 +46,7 @@ const schema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [toastProps, setToastProps] = useState(DefaultPropsToast);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values: LoginRequest) => {
     (await api.post)<LoginRequest, AxiosResponse<AuthState>>('sessions', values)
@@ -59,26 +59,20 @@ export default function Login() {
 
         switch (e.response?.status) {
           case 400:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: serverError.response?.data.message,
+            enqueueSnackbar(serverError.response?.data.message, {
+              variant: 'warning',
             });
             break;
 
           case 401:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: 'Email ou senha incorretos',
+            enqueueSnackbar('Email ou senha incorretos', {
+              variant: 'warning',
             });
             break;
 
           default:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: 'Erro inesperado',
+            enqueueSnackbar('Erro inesperado', {
+              variant: 'error',
             });
             break;
         }
@@ -87,12 +81,6 @@ export default function Login() {
 
   return (
     <Root>
-      <Toast
-        open={toastProps.open}
-        message={toastProps.message}
-        type={toastProps.type}
-        setOpen={open => setToastProps({ ...toastProps, open })}
-      />
       <Container maxWidth="sm">
         <DivInformation>
           <Typography variant="h5">Entrar em Redmine Sprint</Typography>

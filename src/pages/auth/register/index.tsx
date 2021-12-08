@@ -9,12 +9,13 @@ import { useHistory } from 'react-router-dom';
 
 import DividerWithText from '../../../components/DividerWithText';
 import LoadingButton from '../../../components/LoadingButton';
-import Toast, { DefaultPropsToast } from '../../../components/Toast';
 import TextFieldPassword from '../../../components/TextFieldPassword';
 import googleIcon from '../../../assets/google_icon.svg';
 import api, { ErrorResponse } from '../../../services/api';
 
 import { Root, DivInformation, DivTextField, DivBackLogin } from './styles';
+
+import { useSnackbar } from 'notistack';
 
 interface RegisterRequest {
   name: string;
@@ -41,7 +42,7 @@ const schema = Yup.object().shape({
 
 export default function Register() {
   const history = useHistory();
-  const [toastProps, setToastProps] = useState(DefaultPropsToast);
+  const { enqueueSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values: RegisterRequest) => {
@@ -55,18 +56,14 @@ export default function Register() {
 
         switch (e.response?.status) {
           case 400:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: serverError.response?.data.message,
+            enqueueSnackbar(serverError.response?.data.message, {
+              variant: 'warning',
             });
             break;
 
           default:
-            setToastProps({
-              type: 'error',
-              open: true,
-              message: 'Erro inesperado',
+            enqueueSnackbar('Erro inesperado', {
+              variant: 'error',
             });
             break;
         }
@@ -75,12 +72,6 @@ export default function Register() {
 
   return (
     <Root>
-      <Toast
-        open={toastProps.open}
-        message={toastProps.message}
-        type={toastProps.type}
-        setOpen={open => setToastProps({ ...toastProps, open })}
-      />
       <Container maxWidth="sm">
         <DivInformation>
           <Typography variant="h5">Crie sua conta em Redmine Sprint</Typography>

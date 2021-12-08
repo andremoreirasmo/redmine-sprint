@@ -1,6 +1,7 @@
 import { ThemeProvider } from 'styled-components';
 import { MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { SnackbarProvider } from 'notistack';
 
 import theme from './global/theme';
 import Routes from './routes';
@@ -10,8 +11,10 @@ export default function App() {
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Routes />
+          <SnackbarProvider maxSnack={5}>
+            <CssBaseline />
+            <Routes />
+          </SnackbarProvider>
         </ThemeProvider>
       </MuiThemeProvider>
     </StylesProvider>
