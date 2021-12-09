@@ -4,8 +4,15 @@ import styled from 'styled-components';
 interface Props {
   label: string;
   isLoading: boolean;
+  fullWidth?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any;
   onClick?: () => void;
 }
+
+const defaultProps = {
+  fullWidth: true,
+};
 
 const LinearProgressBordeRadius = styled(LinearProgress)`
   border-radius: 15px;
@@ -13,15 +20,18 @@ const LinearProgressBordeRadius = styled(LinearProgress)`
   margin-right: 5px;
 `;
 
-export default function LoadingButton({ label, isLoading, onClick }: Props) {
-  console.log(isLoading);
+export default function LoadingButton(props: Props) {
+  props = { ...defaultProps, ...props };
+  const { label, isLoading, onClick, fullWidth, ...rest } = props;
+
   return (
     <>
       <Button
+        {...rest}
         variant="contained"
         onClick={onClick}
         disabled={isLoading}
-        fullWidth
+        fullWidth={fullWidth}
         color="primary"
       >
         {label}
