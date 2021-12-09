@@ -6,18 +6,19 @@ import LanguageIcon from '@material-ui/icons/Language';
 import Sprints from './sprints';
 import Settings from './settings';
 import Redmine from './redmine/list';
+import CreateRedmine from './redmine/create';
 import Team from './team';
 
 interface Routes {
   path: string;
   exact: boolean;
-  caption: string;
+  caption?: string;
   component: JSX.Element;
-  icon: JSX.Element;
-  isSetting: boolean;
+  icon?: JSX.Element;
+  isSetting?: boolean;
 }
 
-const routes: Routes[] = [
+const routesMenu: Routes[] = [
   {
     path: '/dashboard',
     exact: true,
@@ -52,4 +53,16 @@ const routes: Routes[] = [
   },
 ];
 
-export default routes;
+const generalRoutes: Routes[] = [
+  {
+    path: '/dashboard/redmine/create',
+    exact: true,
+    component: <CreateRedmine />,
+  },
+];
+
+function allRoutes() {
+  return generalRoutes.concat(routesMenu);
+}
+
+export { routesMenu, allRoutes };

@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import ListItemLink from '../../components/ListItemLink';
 import { RootState } from '../../store';
-import routes from './routes';
+import { routesMenu, allRoutes } from './routes';
 import {
   Content,
   HeaderAppBar,
@@ -160,12 +160,12 @@ export default function Dashboard() {
         </ToolbarSidebar>
         <List>
           <ListSubheader>Geral</ListSubheader>
-          {routes
+          {routesMenu
             .filter(route => !route.isSetting)
             .map(route => (
               <ListItemSidebar
                 to={route.path}
-                primary={route.caption}
+                primary={route.caption ?? ''}
                 icon={route.icon}
                 selected={route.path === pathActive}
                 showText={drawerIsVisible()}
@@ -175,12 +175,12 @@ export default function Dashboard() {
         </List>
         <ListSubheader>Gestão</ListSubheader>
         <List>
-          {routes
+          {routesMenu
             .filter(route => route.isSetting)
             .map(route => (
               <ListItemSidebar
                 to={route.path}
-                primary={route.caption}
+                primary={route.caption ?? ''}
                 icon={route.icon}
                 selected={route.path === pathActive}
                 showText={drawerIsVisible()}
@@ -194,7 +194,7 @@ export default function Dashboard() {
         $drawerWidth={openFixedDrawer ? drawerWidthMax : drawerWidthMin}
       >
         <Switch>
-          {routes.map(route => (
+          {allRoutes().map(route => (
             <Route path={route.path} exact={route.exact} key={route.caption}>
               {route.component}
             </Route>

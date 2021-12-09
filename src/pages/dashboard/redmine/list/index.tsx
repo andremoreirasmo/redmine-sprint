@@ -25,6 +25,7 @@ import If from '../../../../components/If';
 
 import { Root, DivHeaderPage, HeaderPage, DivNoData } from './styles';
 import { Redmine } from '../typesRedmine';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function Index() {
   const [redmines, setRedmines] = useState<Redmine[]>([]);
@@ -41,7 +42,13 @@ export default function Index() {
       <DivHeaderPage>
         <HeaderPage>
           <Typography variant="h5">Redmines cadastrados</Typography>
-          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            component={RouterLink}
+            to="/dashboard/redmine/create"
+          >
             Novo Redmine
           </Button>
         </HeaderPage>
