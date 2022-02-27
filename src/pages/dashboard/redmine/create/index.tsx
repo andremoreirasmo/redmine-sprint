@@ -42,10 +42,7 @@ export default function Index() {
 
   const handleSubmit = async (values: CreateRedmineForm) => {
     const { autocomplete, ...rest } = values;
-
     const redmine = { ...rest, project_import: autocomplete.id };
-
-    alert(JSON.stringify(redmine, null, 2));
 
     await api
       .post('redmine', redmine)
