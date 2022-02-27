@@ -195,7 +195,7 @@ export default function Dashboard() {
       >
         <Switch>
           {allRoutes().map(route => (
-            <Route path={route.path} exact={route.exact} key={route.caption}>
+            <Route path={route.path} exact={route.exact} key={route.path}>
               {route.component}
             </Route>
           ))}
