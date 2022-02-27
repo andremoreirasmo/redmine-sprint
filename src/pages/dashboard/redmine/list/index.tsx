@@ -18,7 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import api from '../../../../services/api';
+import api, { ErrorResponse } from '../../../../services/api';
 import LinkRouter from '../../../../components/LinkRouter';
 import NoDataSvg from '../../../../components/NoDataSvg';
 import If from '../../../../components/If';
@@ -28,17 +28,38 @@ import { Redmine } from '../typesRedmine';
 import EnumRoleRedmine from '../EnumRoleRedmine';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../../hooks/useAuth';
+import { AxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
 
 export default function Index() {
   const userAuth = useAuth();
   const [redmines, setRedmines] = useState<Redmine[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    //Todo: Implementar catch
-    api.get<Redmine[]>('redmine').then(response => {
-      setRedmines(response.data);
-    });
-  }, []);
+    api
+      .get<Redmine[]>('redmine')
+      .then(response => {
+        setRedmines(response.data);
+      })
+      .catch((e: AxiosError) => {
+        const serverError = e as AxiosError<ErrorResponse>;
+
+        switch (e.response?.status) {
+          case 400:
+            enqueueSnackbar(serverError.response?.data.message, {
+              variant: 'warning',
+            });
+            break;
+
+          default:
+            enqueueSnackbar('Erro inesperado', {
+              variant: 'error',
+            });
+            break;
+        }
+      });
+  }, [enqueueSnackbar]);
 
   function getRoleUser(redmine: Redmine): number {
     const redmineUser = redmine.redmine_users.find(
