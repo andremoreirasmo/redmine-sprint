@@ -20,6 +20,10 @@ export const PaperForm = styled(Paper)`
   .MuiTextField-root {
     margin: 10px;
   }
+
+  .MuiAutocomplete-root {
+    margin-right: 18px;
+  }
 `;
 
 export const DivBtnCreate = styled.div`

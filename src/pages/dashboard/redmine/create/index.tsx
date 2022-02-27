@@ -5,7 +5,6 @@ import { TextField } from 'formik-material-ui';
 
 import LinkRouter from '../../../../components/LinkRouter';
 import LoadingButton from '../../../../components/LoadingButton';
-import Yup from '../../../../global/YupDictionary';
 import api, { ErrorResponse } from '../../../../services/api';
 
 import {
@@ -20,33 +19,36 @@ import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
 import TextFieldPassword from '../../../../components/TextFieldPassword';
 import { useState } from 'react';
+import { AutocompleteRenderInputParams } from 'formik-material-ui-lab';
+import MuiTextField from '@material-ui/core/TextField';
 
-interface CreateRedmineRequest {
-  name: string;
-  url: string;
-  apiKey: string;
-}
+import {
+  CreateRedmineForm,
+  ProjectRedmine,
+  initialValues,
+  schema,
+} from './types';
+import { Autocomplete } from '@material-ui/lab';
 
-const initialValues: CreateRedmineRequest = {
-  name: '',
-  url: '',
-  apiKey: '',
-};
-
-const schema = Yup.object().shape({
-  name: Yup.string().required(),
-  url: Yup.string().required().url(),
-  apiKey: Yup.string().required(),
-});
+const redmines: ProjectRedmine[] = [
+  { id: 1, name: 'Barcelona' },
+  { id: 2, name: 'Real Madrid' },
+];
 
 export default function Index() {
   const history = useHistory();
   const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (values: CreateRedmineRequest) => {
+  const handleSubmit = async (values: CreateRedmineForm) => {
+    const { autocomplete, ...rest } = values;
+
+    const redmine = { ...rest, project_import: autocomplete.id };
+
+    alert(JSON.stringify(redmine, null, 2));
+
     await api
-      .post('redmine', values)
+      .post('redmine', redmine)
       .then(() => {
         enqueueSnackbar('Sucesso', {
           variant: 'success',
@@ -93,7 +95,14 @@ export default function Index() {
         onSubmit={handleSubmit}
         validationSchema={schema}
       >
-        {({ submitForm, isSubmitting }) => (
+        {({
+          submitForm,
+          isSubmitting,
+          touched,
+          errors,
+          setFieldValue,
+          setFieldTouched,
+        }) => (
           <Form>
             <PaperForm elevation={3}>
               <Field component={TextField} label="Nome" name="name" />
@@ -103,6 +112,41 @@ export default function Index() {
                 name="apiKey"
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+              />
+              <Field
+                name="autocomplete"
+                component={Autocomplete}
+                options={redmines}
+                getOptionLabel={(option: ProjectRedmine) => option.name}
+                getOptionSelected={(
+                  option: ProjectRedmine,
+                  value: ProjectRedmine,
+                ) => option.name === value.name}
+                onChange={(
+                  _: React.ChangeEvent<HTMLInputElement>,
+                  value: ProjectRedmine,
+                ) =>
+                  setFieldValue(
+                    'autocomplete',
+                    value || initialValues.autocomplete,
+                  )
+                }
+                onBlur={() => {
+                  setFieldTouched('autocomplete', true, true);
+                }}
+                fullwidth
+                renderInput={(params: AutocompleteRenderInputParams) => (
+                  <MuiTextField
+                    {...params}
+                    error={Boolean(
+                      touched.autocomplete && errors.autocomplete?.name,
+                    )}
+                    helperText={
+                      touched.autocomplete && errors.autocomplete?.name
+                    }
+                    label="Projeto para importar usuarios"
+                  />
+                )}
               />
               <DivBtnCreate>
                 <LoadingButton
