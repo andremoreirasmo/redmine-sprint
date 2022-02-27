@@ -25,9 +25,12 @@ import If from '../../../../components/If';
 
 import { Root, DivHeaderPage, HeaderPage, DivNoData } from './styles';
 import { Redmine } from '../typesRedmine';
+import EnumRoleRedmine from '../EnumRoleRedmine';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from '../../../../hooks/useAuth';
 
 export default function Index() {
+  const userAuth = useAuth();
   const [redmines, setRedmines] = useState<Redmine[]>([]);
 
   useEffect(() => {
@@ -36,6 +39,14 @@ export default function Index() {
       setRedmines(response.data);
     });
   }, []);
+
+  function getRoleUser(redmine: Redmine): number {
+    const redmineUser = redmine.redmine_users.find(
+      user => user.user.id === userAuth.user?.id,
+    );
+
+    return redmineUser?.role || EnumRoleRedmine.Contributor;
+  }
 
   return (
     <Root maxWidth="lg">
@@ -82,27 +93,26 @@ export default function Index() {
                   </TableCell>
                   <TableCell>{redmine.url}</TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      color="inherit"
-                      aria-label="upload picture"
-                      component="span"
+                    <If
+                      test={
+                        getRoleUser(redmine) === EnumRoleRedmine.Owner ||
+                        getRoleUser(redmine) === EnumRoleRedmine.Admin
+                      }
                     >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="inherit"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton
-                      color="inherit"
-                      aria-label="upload picture"
-                      component="span"
-                    >
-                      <ExitToAppIcon />
-                    </IconButton>
+                      <IconButton color="inherit" component="span">
+                        <EditIcon />
+                      </IconButton>
+                    </If>
+                    <If test={getRoleUser(redmine) === EnumRoleRedmine.Owner}>
+                      <IconButton color="inherit" component="span">
+                        <DeleteIcon />
+                      </IconButton>
+                    </If>
+                    <If test={getRoleUser(redmine) != EnumRoleRedmine.Owner}>
+                      <IconButton color="inherit" component="span">
+                        <ExitToAppIcon />
+                      </IconButton>
+                    </If>
                   </TableCell>
                 </TableRow>
               ))}
