@@ -22,7 +22,7 @@ export const PaperForm = styled(Paper)`
   }
 
   .MuiAutocomplete-root {
-    margin-right: 18px;
+    margin-right: 20px;
   }
 `;
 
