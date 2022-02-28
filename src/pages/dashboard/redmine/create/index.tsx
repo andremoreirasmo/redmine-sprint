@@ -16,11 +16,10 @@ import {
 } from './styles';
 
 import { useSnackbar } from 'notistack';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import TextFieldPassword from '../../../../components/TextFieldPassword';
+import AsynchronousAutocomplete from '../../../../components/AsynchronousAutocomplete';
 import { useState } from 'react';
-import { AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import MuiTextField from '@material-ui/core/TextField';
 
 import {
   CreateRedmineForm,
@@ -28,17 +27,29 @@ import {
   initialValues,
   schema,
 } from './types';
-import { Autocomplete } from '@material-ui/lab';
 
 const redmines: ProjectRedmine[] = [
   { id: 1, name: 'Barcelona' },
   { id: 2, name: 'Real Madrid' },
 ];
 
+interface RouteParams {
+  id: string;
+}
+
+function sleep(delay = 0) {
+  return new Promise(resolve => {
+    setTimeout(resolve, delay);
+  });
+}
+
 export default function Index() {
+  const { id } = useParams<RouteParams>();
   const history = useHistory();
   const [showPassword, setShowPassword] = useState(false);
+  const [refreshProjects, setRefreshProjects] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const caption = id ? 'Editar' : 'Novo';
 
   const handleSubmit = async (values: CreateRedmineForm) => {
     const { autocomplete, ...rest } = values;
@@ -71,11 +82,18 @@ export default function Index() {
       });
   };
 
+  const fetchRedmineProjects = async () => {
+    await sleep(1e3); // For demo purposes.
+    setRefreshProjects(false);
+
+    return redmines;
+  };
+
   return (
     <Root maxWidth="lg">
       <DivHeaderPage>
         <HeaderPage>
-          <Typography variant="h5">Criar um novo Redmine</Typography>
+          <Typography variant="h5">{caption} Redmine</Typography>
         </HeaderPage>
         <Breadcrumbs aria-label="breadcrumb">
           <LinkRouter to="/dashboard" color="inherit">
@@ -84,7 +102,7 @@ export default function Index() {
           <LinkRouter to="/dashboard/redmine/list" color="inherit">
             Redmine
           </LinkRouter>
-          <Typography color="textPrimary">Novo Redmine</Typography>
+          <Typography color="textPrimary">{caption} Redmine</Typography>
         </Breadcrumbs>
       </DivHeaderPage>
       <Formik
@@ -103,17 +121,27 @@ export default function Index() {
           <Form>
             <PaperForm elevation={3}>
               <Field component={TextField} label="Nome" name="name" />
-              <Field component={TextField} label="URL" name="url" />
+              <Field
+                component={TextField}
+                label="URL"
+                name="url"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setFieldValue('url', event.target.value);
+                  setRefreshProjects(true);
+                }}
+              />
               <TextFieldPassword
                 label="Api Key"
                 name="apiKey"
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setFieldValue('apiKey', event.target.value);
+                  setRefreshProjects(true);
+                }}
               />
-              <Field
+              <AsynchronousAutocomplete
                 name="autocomplete"
-                component={Autocomplete}
-                options={redmines}
                 getOptionLabel={(option: ProjectRedmine) => option.name}
                 getOptionSelected={(
                   option: ProjectRedmine,
@@ -131,19 +159,13 @@ export default function Index() {
                 onBlur={() => {
                   setFieldTouched('autocomplete', true, true);
                 }}
-                fullwidth
-                renderInput={(params: AutocompleteRenderInputParams) => (
-                  <MuiTextField
-                    {...params}
-                    error={Boolean(
-                      touched.autocomplete && errors.autocomplete?.name,
-                    )}
-                    helperText={
-                      touched.autocomplete && errors.autocomplete?.name
-                    }
-                    label="Projeto para importar usuarios"
-                  />
+                error={Boolean(
+                  touched.autocomplete && errors.autocomplete?.name,
                 )}
+                helperText={touched.autocomplete && errors.autocomplete?.name}
+                label="Projeto para importar usuarios"
+                fetchData={fetchRedmineProjects}
+                refresh={refreshProjects}
               />
               <DivBtnCreate>
                 <LoadingButton

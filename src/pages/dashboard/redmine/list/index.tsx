@@ -30,11 +30,20 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../../hooks/useAuth';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
+import DialogConfirmation from '../../../../components/DialogConfirmation';
+
+interface DeleteRedmineValues {
+  open: boolean;
+  redmine?: Redmine;
+}
 
 export default function Index() {
   const userAuth = useAuth();
   const [redmines, setRedmines] = useState<Redmine[]>([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [valueDeleteRedmine, setValueDeleteRedmine] =
+    useState<DeleteRedmineValues>({ open: false });
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     api
@@ -59,7 +68,7 @@ export default function Index() {
             break;
         }
       });
-  }, [enqueueSnackbar]);
+  }, [enqueueSnackbar, refresh]);
 
   function getRoleUser(redmine: Redmine): number {
     const redmineUser = redmine.redmine_users.find(
@@ -67,6 +76,37 @@ export default function Index() {
     );
 
     return redmineUser?.role || EnumRoleRedmine.Contributor;
+  }
+
+  async function DeleteRedmine() {
+    const idDelete = valueDeleteRedmine.redmine?.id || '';
+
+    await api
+      .delete(`redmine/${idDelete}`)
+      .then(() => {
+        enqueueSnackbar('Sucesso', {
+          variant: 'success',
+        });
+        setValueDeleteRedmine({ open: false });
+        setRefresh(true);
+      })
+      .catch((e: AxiosError) => {
+        const serverError = e as AxiosError<ErrorResponse>;
+
+        switch (e.response?.status) {
+          case 400:
+            enqueueSnackbar(serverError.response?.data.message, {
+              variant: 'warning',
+            });
+            break;
+
+          default:
+            enqueueSnackbar('Erro inesperado', {
+              variant: 'error',
+            });
+            break;
+        }
+      });
   }
 
   return (
@@ -120,12 +160,22 @@ export default function Index() {
                         getRoleUser(redmine) === EnumRoleRedmine.Admin
                       }
                     >
-                      <IconButton color="inherit" component="span">
+                      <IconButton
+                        color="inherit"
+                        component={RouterLink}
+                        to={`/dashboard/redmine/edit/${redmine.id}`}
+                      >
                         <EditIcon />
                       </IconButton>
                     </If>
                     <If test={getRoleUser(redmine) === EnumRoleRedmine.Owner}>
-                      <IconButton color="inherit" component="span">
+                      <IconButton
+                        color="inherit"
+                        component="span"
+                        onClick={() =>
+                          setValueDeleteRedmine({ open: true, redmine })
+                        }
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </If>
@@ -141,6 +191,17 @@ export default function Index() {
           </Table>
         </TableContainer>
       </If>
+      <DialogConfirmation
+        title="Excluir redmine?"
+        description="Todas as informações vinculadas a esse redmine serão excluidas permanentemente."
+        open={valueDeleteRedmine.open}
+        onAccepted={() => {
+          DeleteRedmine();
+        }}
+        onRejected={() => {
+          setValueDeleteRedmine({ open: false });
+        }}
+      />
     </Root>
   );
 }

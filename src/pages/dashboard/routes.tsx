@@ -59,6 +59,11 @@ const generalRoutes: Routes[] = [
     exact: true,
     component: <CreateRedmine />,
   },
+  {
+    path: '/dashboard/redmine/edit/:id',
+    exact: true,
+    component: <CreateRedmine />,
+  },
 ];
 
 function allRoutes() {

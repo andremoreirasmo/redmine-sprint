@@ -5,15 +5,12 @@ import { IconButton, InputAdornment } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface Props {
-  label: string;
-  name: string;
   showPassword?: boolean;
   setShowPassword?: React.Dispatch<React.SetStateAction<boolean>>;
+  [x: string]: unknown;
 }
 
 export default function TextFieldPassword(props: Props) {
-  const { label, name } = props;
-
   const [showPasswordInternal, setShowPasswordInternal] = useState(
     props.showPassword ?? false,
   );
@@ -30,9 +27,8 @@ export default function TextFieldPassword(props: Props) {
   return (
     <Field
       component={TextField}
-      label={label}
-      name={name}
       type={showPassword ? 'text' : 'password'}
+      {...props}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
