@@ -10,15 +10,19 @@ interface Props {
   [x: string]: unknown;
 }
 
-export default function TextFieldPassword(props: Props) {
+export default function TextFieldPassword({
+  showPassword,
+  setShowPassword,
+  ...rest
+}: Props) {
   const [showPasswordInternal, setShowPasswordInternal] = useState(
-    props.showPassword ?? false,
+    showPassword ?? false,
   );
 
-  const showPassword = props.showPassword ?? showPasswordInternal;
-  const setShowPassword = (value: boolean) => {
-    if (props.setShowPassword) {
-      props.setShowPassword(value);
+  const showPasswordInField = showPassword ?? showPasswordInternal;
+  const setShowPasswordInField = (value: boolean) => {
+    if (setShowPassword) {
+      setShowPassword(value);
     } else {
       setShowPasswordInternal(value);
     }
@@ -27,13 +31,15 @@ export default function TextFieldPassword(props: Props) {
   return (
     <Field
       component={TextField}
-      type={showPassword ? 'text' : 'password'}
-      {...props}
+      type={showPasswordInField ? 'text' : 'password'}
+      {...rest}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+            <IconButton
+              onClick={() => setShowPasswordInField(!showPasswordInField)}
+            >
+              {showPasswordInField ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         ),
