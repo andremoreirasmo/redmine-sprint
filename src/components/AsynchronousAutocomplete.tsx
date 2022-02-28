@@ -15,14 +15,19 @@ interface AsynchronousAutocompleteProps<T> {
   [x: string]: unknown;
 }
 
-export default function AsynchronousAutocomplete<T>(
-  props: AsynchronousAutocompleteProps<T>,
-) {
+export default function AsynchronousAutocomplete<T>({
+  error,
+  helperText,
+  label,
+  refresh,
+  fetchData,
+  ...rest
+}: AsynchronousAutocompleteProps<T>) {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<T[]>([]);
-  const loading = open && (options.length === 0 || props.refresh);
+  const loading = open && (options.length === 0 || refresh);
 
-  if (props.refresh && options.length > 0) {
+  if (refresh && options.length > 0) {
     setOptions([]);
   }
 
@@ -32,16 +37,15 @@ export default function AsynchronousAutocomplete<T>(
     }
 
     (async () => {
-      setOptions(await props.fetchData());
+      setOptions(await fetchData());
     })();
-  }, [loading, props]);
+  }, [fetchData, loading]);
 
   return (
     <Field
       component={Autocomplete}
       options={options}
-      {...props}
-      fullwidth
+      {...rest}
       loading={loading}
       open={open}
       onOpen={() => {
@@ -53,9 +57,9 @@ export default function AsynchronousAutocomplete<T>(
       renderInput={(params: AutocompleteRenderInputParams) => (
         <MuiTextField
           {...params}
-          error={props.error}
-          helperText={props.helperText}
-          label={props.label}
+          error={error}
+          helperText={helperText}
+          label={label}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

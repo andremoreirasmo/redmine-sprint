@@ -18,29 +18,13 @@ import {
 import { useSnackbar } from 'notistack';
 import { useHistory, useParams } from 'react-router-dom';
 import TextFieldPassword from '../../../../components/TextFieldPassword';
-import AsynchronousAutocomplete from '../../../../components/AsynchronousAutocomplete';
 import { useState } from 'react';
+import AutocompleteProjectsRedmine from './components/AutocompleteProjectsRedmine';
 
-import {
-  CreateRedmineForm,
-  ProjectRedmine,
-  initialValues,
-  schema,
-} from './types';
-
-const redmines: ProjectRedmine[] = [
-  { id: 1, name: 'Barcelona' },
-  { id: 2, name: 'Real Madrid' },
-];
+import { CreateRedmineForm, initialValues, schema } from './types';
 
 interface RouteParams {
   id: string;
-}
-
-function sleep(delay = 0) {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
 }
 
 export default function Index() {
@@ -82,13 +66,6 @@ export default function Index() {
       });
   };
 
-  const fetchRedmineProjects = async () => {
-    await sleep(1e3); // For demo purposes.
-    setRefreshProjects(false);
-
-    return redmines;
-  };
-
   return (
     <Root maxWidth="lg">
       <DivHeaderPage>
@@ -110,14 +87,7 @@ export default function Index() {
         onSubmit={handleSubmit}
         validationSchema={schema}
       >
-        {({
-          submitForm,
-          isSubmitting,
-          touched,
-          errors,
-          setFieldValue,
-          setFieldTouched,
-        }) => (
+        {({ submitForm, isSubmitting, setFieldValue }) => (
           <Form>
             <PaperForm elevation={3}>
               <Field component={TextField} label="Nome" name="name" />
@@ -140,32 +110,9 @@ export default function Index() {
                   setRefreshProjects(true);
                 }}
               />
-              <AsynchronousAutocomplete
-                name="autocomplete"
-                getOptionLabel={(option: ProjectRedmine) => option.name}
-                getOptionSelected={(
-                  option: ProjectRedmine,
-                  value: ProjectRedmine,
-                ) => option.name === value.name}
-                onChange={(
-                  _: React.ChangeEvent<HTMLInputElement>,
-                  value: ProjectRedmine,
-                ) =>
-                  setFieldValue(
-                    'autocomplete',
-                    value || initialValues.autocomplete,
-                  )
-                }
-                onBlur={() => {
-                  setFieldTouched('autocomplete', true, true);
-                }}
-                error={Boolean(
-                  touched.autocomplete && errors.autocomplete?.name,
-                )}
-                helperText={touched.autocomplete && errors.autocomplete?.name}
-                label="Projeto para importar usuarios"
-                fetchData={fetchRedmineProjects}
-                refresh={refreshProjects}
+              <AutocompleteProjectsRedmine
+                refreshProjects={refreshProjects}
+                setRefreshProjects={setRefreshProjects}
               />
               <DivBtnCreate>
                 <LoadingButton
