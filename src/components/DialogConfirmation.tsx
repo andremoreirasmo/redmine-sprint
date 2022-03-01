@@ -5,6 +5,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+export interface DialogConfirmationState<T> {
+  open: boolean;
+  payload?: T;
+}
+
 interface DialogConfirmationProps {
   open: boolean;
   title: string;

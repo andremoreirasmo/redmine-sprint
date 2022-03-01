@@ -11,7 +11,10 @@ interface AsynchronousAutocompleteProps<T> {
   helperText: string | undefined;
   label: string;
   refresh: boolean;
-  fetchData: () => Promise<T[]>;
+  options: T[];
+  selected?: T;
+  isLoading: boolean;
+  fetchData: () => Promise<void>;
   [x: string]: unknown;
 }
 
@@ -20,40 +23,46 @@ export default function AsynchronousAutocomplete<T>({
   helperText,
   label,
   refresh,
+  options,
   fetchData,
+  selected,
+  isLoading,
   ...rest
 }: AsynchronousAutocompleteProps<T>) {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<T[]>([]);
-  const loading = open && (options.length === 0 || refresh);
+  const [canFetchData, setCanFetchData] = useState(true);
+  const loading = open && (options.length === 0 || refresh) && canFetchData;
 
-  if (refresh && options.length > 0) {
-    setOptions([]);
-  }
+  const dataIsLoading = () => loading || isLoading;
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading || isLoading) {
       return undefined;
     }
 
+    setCanFetchData(false);
+
     (async () => {
-      setOptions(await fetchData());
+      await fetchData();
     })();
-  }, [fetchData, loading]);
+  }, [fetchData, isLoading, loading]);
 
   return (
     <Field
       component={Autocomplete}
       options={options}
       {...rest}
-      loading={loading}
+      loading={dataIsLoading()}
       open={open}
       onOpen={() => {
+        setCanFetchData(true);
         setOpen(true);
       }}
       onClose={() => {
+        setCanFetchData(true);
         setOpen(false);
       }}
+      value={selected}
       renderInput={(params: AutocompleteRenderInputParams) => (
         <MuiTextField
           {...params}
@@ -64,7 +73,7 @@ export default function AsynchronousAutocomplete<T>({
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? (
+                {dataIsLoading() ? (
                   <CircularProgress color="inherit" size={20} />
                 ) : null}
                 {params.InputProps.endAdornment}

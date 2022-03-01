@@ -1,4 +1,4 @@
-import { User } from './../../auth/types';
+import { User } from './../../../auth/types';
 
 export interface RedmineUser {
   role: number;
@@ -10,5 +10,6 @@ export interface Redmine {
   name: string;
   url: string;
   apiKey: string;
+  project_import: number;
   redmine_users: RedmineUser[];
 }

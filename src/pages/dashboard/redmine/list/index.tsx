@@ -12,11 +12,13 @@ import {
   TableRow,
   Typography,
   IconButton,
+  Tooltip,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SyncIcon from '@material-ui/icons/Sync';
 
 import api, { ErrorResponse } from '../../../../services/api';
 import LinkRouter from '../../../../components/LinkRouter';
@@ -24,28 +26,38 @@ import NoDataSvg from '../../../../components/NoDataSvg';
 import If from '../../../../components/If';
 
 import { Root, DivHeaderPage, HeaderPage, DivNoData } from './styles';
-import { Redmine } from '../typesRedmine';
-import EnumRoleRedmine from '../EnumRoleRedmine';
+import { Redmine } from '../types/';
+import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../../hooks/useAuth';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import DialogConfirmation from '../../../../components/DialogConfirmation';
-
-interface DeleteRedmineValues {
-  open: boolean;
-  redmine?: Redmine;
-}
+import DialogConfirmation, {
+  DialogConfirmationState,
+} from '../../../../components/DialogConfirmation';
 
 export default function Index() {
   const userAuth = useAuth();
   const [redmines, setRedmines] = useState<Redmine[]>([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [valueDeleteRedmine, setValueDeleteRedmine] =
-    useState<DeleteRedmineValues>({ open: false });
-  const [refresh, setRefresh] = useState(false);
+
+  const [stateDeleteRedmine, setStateDeleteRedmine] = useState<
+    DialogConfirmationState<Redmine>
+  >({ open: false });
+
+  const [stateSyncRedmine, setStateSyncRedmine] = useState<
+    DialogConfirmationState<Redmine>
+  >({ open: false });
+
+  const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
+    if (!refresh) {
+      return;
+    }
+
+    setRefresh(false);
+
     api
       .get<Redmine[]>('redmine')
       .then(response => {
@@ -79,7 +91,7 @@ export default function Index() {
   }
 
   async function DeleteRedmine() {
-    const idDelete = valueDeleteRedmine.redmine?.id || '';
+    const idDelete = stateDeleteRedmine.payload?.id as string;
 
     await api
       .delete(`redmine/${idDelete}`)
@@ -87,7 +99,7 @@ export default function Index() {
         enqueueSnackbar('Sucesso', {
           variant: 'success',
         });
-        setValueDeleteRedmine({ open: false });
+        setStateDeleteRedmine({ open: false });
         setRefresh(true);
       })
       .catch((e: AxiosError) => {
@@ -107,6 +119,11 @@ export default function Index() {
             break;
         }
       });
+  }
+
+  async function SyncRedmine() {
+    setStateSyncRedmine({ open: false });
+    return;
   }
 
   return (
@@ -160,29 +177,58 @@ export default function Index() {
                         getRoleUser(redmine) === EnumRoleRedmine.Admin
                       }
                     >
-                      <IconButton
-                        color="inherit"
-                        component={RouterLink}
-                        to={`/dashboard/redmine/edit/${redmine.id}`}
-                      >
-                        <EditIcon />
-                      </IconButton>
+                      <Tooltip title="Editar" aria-label="Edit">
+                        <IconButton
+                          color="inherit"
+                          component={RouterLink}
+                          to={`/dashboard/redmine/edit/${redmine.id}`}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </If>
+                    <If
+                      test={
+                        getRoleUser(redmine) === EnumRoleRedmine.Owner ||
+                        getRoleUser(redmine) === EnumRoleRedmine.Admin
+                      }
+                    >
+                      <Tooltip title="Sincronizar usuários" aria-label="Sync">
+                        <IconButton
+                          color="inherit"
+                          onClick={() =>
+                            setStateSyncRedmine({
+                              open: true,
+                              payload: redmine,
+                            })
+                          }
+                        >
+                          <SyncIcon />
+                        </IconButton>
+                      </Tooltip>
                     </If>
                     <If test={getRoleUser(redmine) === EnumRoleRedmine.Owner}>
-                      <IconButton
-                        color="inherit"
-                        component="span"
-                        onClick={() =>
-                          setValueDeleteRedmine({ open: true, redmine })
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      <Tooltip title="Excluir" aria-label="Delete">
+                        <IconButton
+                          color="inherit"
+                          component="span"
+                          onClick={() =>
+                            setStateDeleteRedmine({
+                              open: true,
+                              payload: redmine,
+                            })
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                     </If>
                     <If test={getRoleUser(redmine) != EnumRoleRedmine.Owner}>
-                      <IconButton color="inherit" component="span">
-                        <ExitToAppIcon />
-                      </IconButton>
+                      <Tooltip title="Sair" aria-label="Exit">
+                        <IconButton color="inherit" component="span">
+                          <ExitToAppIcon />
+                        </IconButton>
+                      </Tooltip>
                     </If>
                   </TableCell>
                 </TableRow>
@@ -194,12 +240,23 @@ export default function Index() {
       <DialogConfirmation
         title="Excluir redmine?"
         description="Todas as informações vinculadas a esse redmine serão excluidas permanentemente."
-        open={valueDeleteRedmine.open}
+        open={stateDeleteRedmine.open}
         onAccepted={() => {
           DeleteRedmine();
         }}
         onRejected={() => {
-          setValueDeleteRedmine({ open: false });
+          setStateDeleteRedmine({ open: false });
+        }}
+      />
+      <DialogConfirmation
+        title="Sincronizar usuários?"
+        description="Será importado todos os usuários do redmine que estão presentes no projeto para a plataforma."
+        open={stateSyncRedmine.open}
+        onAccepted={() => {
+          SyncRedmine();
+        }}
+        onRejected={() => {
+          setStateSyncRedmine({ open: false });
         }}
       />
     </Root>

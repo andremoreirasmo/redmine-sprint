@@ -28,7 +28,7 @@ const routesMenu: Routes[] = [
     isSetting: false,
   },
   {
-    path: '/dashboard/redmine/list',
+    path: '/dashboard/redmine/',
     exact: true,
     caption: 'Redmine',
     component: <Redmine />,
@@ -60,7 +60,7 @@ const generalRoutes: Routes[] = [
     component: <CreateRedmine />,
   },
   {
-    path: '/dashboard/redmine/edit/:id',
+    path: '/dashboard/redmine/edit/:idRedmine',
     exact: true,
     component: <CreateRedmine />,
   },

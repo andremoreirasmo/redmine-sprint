@@ -1,10 +1,11 @@
 import { useFormikContext } from 'formik';
+import { useSnackbar, VariantType } from 'notistack';
+import { useCallback, useContext } from 'react';
 import AsynchronousAutocomplete from '../../../../../components/AsynchronousAutocomplete';
-import { CreateRedmineForm, ProjectRedmine, initialValues } from '../types';
-import api, { ErrorResponse } from '../../../../../services/api';
-import { AxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import AppError from '../../../../../shared/errors/AppError';
+import { CreateRedmineContext } from '../context/CreateRedmineContext';
+import FetchProjectsRedmine from '../services/FetchProjectsRedmine';
+import { CreateRedmineForm, initialValues, ProjectRedmine } from '../types/';
 
 interface Props {
   refreshProjects: boolean;
@@ -19,6 +20,12 @@ export default function AutocompleteProjectsRedmine({
   const { setFieldValue, setFieldTouched, touched, errors, values } =
     useFormikContext<CreateRedmineForm>();
 
+  const createRedmineContext = useContext(CreateRedmineContext);
+  const valueSelected =
+    values.autocomplete != initialValues.autocomplete && !refreshProjects
+      ? values.autocomplete
+      : null;
+
   const fetchRedmineProjects = useCallback(async () => {
     if (
       values.url === initialValues.url ||
@@ -27,62 +34,67 @@ export default function AutocompleteProjectsRedmine({
       enqueueSnackbar('Informe os campos URL e Api Key', {
         variant: 'warning',
       });
-      return [];
+
+      createRedmineContext.actions.setProjects([]);
+      return;
     }
 
-    const projects = await api
-      .get('apiredmine/projects', {
-        headers: {
-          url_redmine: values.url,
-          api_key_redmine: values.apiKey,
-        },
-      })
-      .then(response => {
-        return response.data;
-      })
-      .catch<ProjectRedmine[]>((e: AxiosError) => {
-        const serverError = e as AxiosError<ErrorResponse>;
+    try {
+      createRedmineContext.actions.setIsLoadingProjects(true);
+      const projects = await FetchProjectsRedmine({
+        url_redmine: values.url,
+        api_key_redmine: values.apiKey,
+      });
 
-        switch (e.response?.status) {
-          case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
-            break;
+      setRefreshProjects(false);
 
-          default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
-            break;
-        }
+      createRedmineContext.actions.setIsLoadingProjects(false);
+      createRedmineContext.actions.setProjects(projects);
+    } catch (e) {
+      createRedmineContext.actions.setIsLoadingProjects(false);
 
-        return [];
-      })
-      .finally(() => setRefreshProjects(false));
+      if (e instanceof AppError) {
+        const error = e as AppError;
 
-    return projects;
-  }, [enqueueSnackbar, setRefreshProjects, values.apiKey, values.url]);
+        enqueueSnackbar(error.message, {
+          variant: error.type as VariantType,
+        });
+
+        return;
+      }
+    }
+  }, [
+    createRedmineContext.actions,
+    enqueueSnackbar,
+    setRefreshProjects,
+    values.apiKey,
+    values.url,
+  ]);
 
   return (
-    <AsynchronousAutocomplete
-      name="autocomplete"
-      getOptionLabel={(option: ProjectRedmine) => option.name}
-      getOptionSelected={(option: ProjectRedmine, value: ProjectRedmine) =>
-        option.name === value.name
-      }
-      onChange={(
-        _: React.ChangeEvent<HTMLInputElement>,
-        value: ProjectRedmine,
-      ) => setFieldValue('autocomplete', value || initialValues.autocomplete)}
-      onBlur={() => {
-        setFieldTouched('autocomplete', true, true);
-      }}
-      error={Boolean(touched.autocomplete && errors.autocomplete?.name)}
-      helperText={touched.autocomplete && errors.autocomplete?.name}
-      label="Projeto para importar usuarios"
-      fetchData={fetchRedmineProjects}
-      refresh={refreshProjects}
-    />
+    <>
+      <AsynchronousAutocomplete
+        name="autocomplete"
+        getOptionLabel={(option: ProjectRedmine) => option.name}
+        getOptionSelected={(option: ProjectRedmine, value: ProjectRedmine) =>
+          option.id === value.id
+        }
+        onChange={(
+          _: React.ChangeEvent<HTMLInputElement>,
+          value: ProjectRedmine,
+        ) => setFieldValue('autocomplete', value || initialValues.autocomplete)}
+        onBlur={() => {
+          setFieldTouched('autocomplete', true, true);
+        }}
+        error={Boolean(touched.autocomplete && errors.autocomplete?.name)}
+        helperText={touched.autocomplete && errors.autocomplete?.name}
+        label="Projeto para importar usuarios"
+        fetchData={fetchRedmineProjects}
+        refresh={refreshProjects}
+        options={createRedmineContext.state.projects}
+        selected={valueSelected}
+        isLoading={createRedmineContext.state.isLoadingProjects}
+      />
+    </>
   );
 }
