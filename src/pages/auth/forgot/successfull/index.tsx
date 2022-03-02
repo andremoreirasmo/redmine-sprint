@@ -1,9 +1,7 @@
-import { Container, Typography, Button } from '@material-ui/core';
+import sentSvg from '@/assets/sent.svg';
+import { Button, Container, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-
-import sentSvg from '../../../../assets/sent.svg';
-
-import { Root, DivSentSvg, DivInformation, DivBack } from './styles';
+import { DivBack, DivInformation, DivSentSvg, Root } from './styles';
 
 interface Props {
   email: string;

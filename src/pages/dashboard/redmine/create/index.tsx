@@ -1,6 +1,6 @@
 import { Breadcrumbs, Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import LinkRouter from '../../../../components/LinkRouter';
+import LinkRouter from '@/components/LinkRouter';
 import FormCreate from './components/FormCreate';
 import CreateRedmineProvider from './context/CreateRedmineContext';
 import { DivHeaderPage, HeaderPage, Root } from './styles';

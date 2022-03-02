@@ -1,19 +1,15 @@
-import { useState } from 'react';
-import { Container, Typography, Button } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import LoadingButton from '@/components/LoadingButton';
+import Yup from '@/global/YupDictionary';
+import api, { ErrorResponse } from '@/services/api';
+import { Button, Container, Typography } from '@material-ui/core';
+import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import Yup from '../../../global/YupDictionary';
-import { AxiosError } from 'axios';
-
-import api, { ErrorResponse } from '../../../services/api';
-
-import LoadingButton from '../../../components/LoadingButton';
-import Successfull from './successfull';
-
-import { Root, DivInformation, DivTextField, DivBack } from './styles';
-
 import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { DivBack, DivInformation, DivTextField, Root } from './styles';
+import Successfull from './successfull';
 
 interface ForgotRequest {
   email: string;

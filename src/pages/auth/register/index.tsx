@@ -1,21 +1,17 @@
-import { useState } from 'react';
-import { Container, Typography, Button } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import googleIcon from '@/assets/google_icon.svg';
+import DividerWithText from '@/components/DividerWithText';
+import LoadingButton from '@/components/LoadingButton';
+import TextFieldPassword from '@/components/TextFieldPassword';
+import Yup from '@/global/YupDictionary';
+import api, { ErrorResponse } from '@/services/api';
+import { Button, Container, Typography } from '@material-ui/core';
+import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import Yup from '../../../global/YupDictionary';
-import { AxiosError } from 'axios';
-import { useHistory } from 'react-router-dom';
-
-import DividerWithText from '../../../components/DividerWithText';
-import LoadingButton from '../../../components/LoadingButton';
-import TextFieldPassword from '../../../components/TextFieldPassword';
-import googleIcon from '../../../assets/google_icon.svg';
-import api, { ErrorResponse } from '../../../services/api';
-
-import { Root, DivInformation, DivTextField, DivBackLogin } from './styles';
-
 import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { DivBackLogin, DivInformation, DivTextField, Root } from './styles';
 
 interface RegisterRequest {
   name: string;

@@ -1,8 +1,15 @@
-import { useEffect, useState } from 'react';
-
+import DialogConfirmation, {
+  DialogConfirmationState,
+} from '@/components/DialogConfirmation';
+import If from '@/components/If';
+import LinkRouter from '@/components/LinkRouter';
+import NoDataSvg from '@/components/NoDataSvg';
+import { useAuth } from '@/hooks/useAuth';
+import api, { ErrorResponse } from '@/services/api';
 import {
   Breadcrumbs,
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -10,31 +17,21 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  IconButton,
   Tooltip,
+  Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
-
-import api, { ErrorResponse } from '../../../../services/api';
-import LinkRouter from '../../../../components/LinkRouter';
-import NoDataSvg from '../../../../components/NoDataSvg';
-import If from '../../../../components/If';
-
-import { Root, DivHeaderPage, HeaderPage, DivNoData } from './styles';
-import { Redmine } from '../types/';
-import EnumRoleRedmine from '../enums/EnumRoleRedmine';
-import { Link as RouterLink } from 'react-router-dom';
-import { useAuth } from '../../../../hooks/useAuth';
 import { AxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import DialogConfirmation, {
-  DialogConfirmationState,
-} from '../../../../components/DialogConfirmation';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import EnumRoleRedmine from '../enums/EnumRoleRedmine';
+import { Redmine } from '../types/';
+import { DivHeaderPage, DivNoData, HeaderPage, Root } from './styles';
 
 export default function Index() {
   const userAuth = useAuth();

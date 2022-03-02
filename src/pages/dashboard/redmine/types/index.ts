@@ -1,4 +1,4 @@
-import { User } from './../../../auth/types';
+import { User } from '@/pages/auth/types';
 
 export interface RedmineUser {
   role: number;

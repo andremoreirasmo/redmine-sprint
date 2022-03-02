@@ -1,10 +1,8 @@
 import PollIcon from '@material-ui/icons/Poll';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import GroupIcon from '@material-ui/icons/Group';
 import LanguageIcon from '@material-ui/icons/Language';
 
 import Sprints from './sprints';
-import Settings from './settings';
 import Redmine from './redmine/list';
 import CreateRedmine from './redmine/create';
 import Team from './team';
@@ -28,14 +26,6 @@ const routesMenu: Routes[] = [
     isSetting: false,
   },
   {
-    path: '/dashboard/redmine/',
-    exact: true,
-    caption: 'Redmine',
-    component: <Redmine />,
-    icon: <LanguageIcon />,
-    isSetting: true,
-  },
-  {
     path: '/dashboard/teams',
     exact: true,
     caption: 'Equipes',
@@ -44,11 +34,11 @@ const routesMenu: Routes[] = [
     isSetting: true,
   },
   {
-    path: '/dashboard/settings',
+    path: '/dashboard/redmine/',
     exact: true,
-    caption: 'Configurações',
-    component: <Settings />,
-    icon: <SettingsApplicationsIcon />,
+    caption: 'Redmine',
+    component: <Redmine />,
+    icon: <LanguageIcon />,
     isSetting: true,
   },
 ];

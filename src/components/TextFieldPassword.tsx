@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Field } from 'formik';
-import { TextField } from 'formik-material-ui';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { Field } from 'formik';
+import { TextField } from 'formik-material-ui';
+import { useState } from 'react';
 
 interface Props {
   showPassword?: boolean;

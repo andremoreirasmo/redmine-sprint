@@ -1,8 +1,8 @@
+import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
+import AppError from '@/shared/errors/AppError';
 import { useFormikContext } from 'formik';
 import { useSnackbar, VariantType } from 'notistack';
 import { useCallback, useContext } from 'react';
-import AsynchronousAutocomplete from '../../../../../components/AsynchronousAutocomplete';
-import AppError from '../../../../../shared/errors/AppError';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
 import FetchProjectsRedmine from '../services/FetchProjectsRedmine';
 import { CreateRedmineForm, initialValues, ProjectRedmine } from '../types/';

@@ -1,13 +1,13 @@
+import LoadingButton from '@/components/LoadingButton';
+import TextFieldPassword from '@/components/TextFieldPassword';
+import api, { ErrorResponse } from '@/services/api';
+import AppError from '@/shared/errors/AppError';
 import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useSnackbar, VariantType } from 'notistack';
 import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import LoadingButton from '../../../../../components/LoadingButton';
-import TextFieldPassword from '../../../../../components/TextFieldPassword';
-import api, { ErrorResponse } from '../../../../../services/api';
-import AppError from '../../../../../shared/errors/AppError';
 import { Redmine } from '../../types';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
 import FetchProjectsRedmine from '../services/FetchProjectsRedmine';

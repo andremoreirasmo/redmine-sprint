@@ -1,29 +1,24 @@
-import { Container, Typography, Button, Link } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
-import { Field, Form, Formik } from 'formik';
-import { TextField, CheckboxWithLabel } from 'formik-material-ui';
-import Yup from '../../../global/YupDictionary';
+import googleIcon from '@/assets/google_icon.svg';
+import DividerWithText from '@/components/DividerWithText';
+import LoadingButton from '@/components/LoadingButton';
+import TextFieldPassword from '@/components/TextFieldPassword';
+import Yup from '@/global/YupDictionary';
+import api, { ErrorResponse } from '@/services/api';
+import { AuthState, login } from '@/store/auth.store';
+import { Button, Container, Link, Typography } from '@material-ui/core';
 import { AxiosError, AxiosResponse } from 'axios';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
-import DividerWithText from '../../../components/DividerWithText';
-import LoadingButton from '../../../components/LoadingButton';
-import TextFieldPassword from '../../../components/TextFieldPassword';
-import googleIcon from '../../../assets/google_icon.svg';
-import api, { ErrorResponse } from '../../../services/api';
-
+import { Field, Form, Formik } from 'formik';
+import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import { useSnackbar } from 'notistack';
-
+import { useDispatch } from 'react-redux';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
-  Root,
   DivInformation,
-  DivTextField,
   DivRembemerMe,
   DivSignup,
+  DivTextField,
+  Root,
 } from './styles';
-
-import { AuthState, login } from '../../../store/auth.store';
 
 interface LoginRequest {
   email: string;

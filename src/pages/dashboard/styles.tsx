@@ -1,7 +1,7 @@
+import ListItemLink from '@/components/ListItemLink';
 import { AppBar, Box, Container, Drawer } from '@material-ui/core';
-import styled, { css } from 'styled-components';
-import ListItemLink from '../../components/ListItemLink';
 import { alpha } from '@material-ui/core/styles';
+import styled, { css } from 'styled-components';
 
 export const Logo = styled.img`
   width: 40px;

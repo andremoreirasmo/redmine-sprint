@@ -14,6 +14,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.3",
     "axios": "^0.22.0",
+    "customize-cra": "^1.0.0",
     "formik": "^2.2.9",
     "formik-material-ui": "^4.0.0-alpha.1",
     "formik-material-ui-lab": "^1.0.0-alpha.1",
@@ -32,9 +33,9 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -67,12 +68,14 @@
     "@types/styled-components": "^5.1.15",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "babel-plugin-root-import": "^6.6.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^2.4.1",
+    "react-app-rewired": "^2.2.1",
     "redux-devtools-extension": "^2.13.9"
   }
 }

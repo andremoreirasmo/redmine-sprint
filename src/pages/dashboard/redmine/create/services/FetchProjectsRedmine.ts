@@ -1,6 +1,6 @@
+import api, { ErrorResponse } from '@/services/api';
+import AppError from '@/shared/errors/AppError';
 import { AxiosError } from 'axios';
-import api, { ErrorResponse } from '../../../../../services/api';
-import AppError from '../../../../../shared/errors/AppError';
 import { ProjectRedmine } from '../types';
 
 interface Props {

@@ -1,3 +1,8 @@
+import LogoImg from '@/assets/logo.png';
+import ListItemLink from '@/components/ListItemLink';
+import { useAuth } from '@/hooks/useAuth';
+import { RootState } from '@/store';
+import { logout } from '@/store/auth.store';
 import {
   Box,
   Button,
@@ -19,23 +24,17 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import ListItemLink from '../../components/ListItemLink';
-import { RootState } from '../../store';
-import { routesMenu, allRoutes } from './routes';
+import { allRoutes, routesMenu } from './routes';
 import {
   Content,
   HeaderAppBar,
   ListItemSidebar,
+  Logo,
   PopOverUser,
   Root,
   SideBar,
   ToolbarSidebar,
-  Logo,
 } from './styles';
-
-import LogoImg from '../../assets/logo.png';
-import { useAuth } from '../../hooks/useAuth';
-import { logout } from '../../store/auth.store';
 
 export default function Dashboard() {
   const dispatch = useDispatch();

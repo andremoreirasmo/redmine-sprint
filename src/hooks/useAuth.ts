@@ -1,8 +1,8 @@
-import { RootState } from './../store/index';
+import api from '@/services/api';
+import { AuthState, login, logout } from '@/store/auth.store';
+import { RootState } from '@/store/index';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import api from '../services/api';
-import { AuthState, login, logout } from '../store/auth.store';
 
 export const useAuth = () => {
   const dispatch = useDispatch();
