@@ -8,7 +8,7 @@ interface Props {
   api_key_redmine: string;
 }
 
-const FetchProjectsRedmine = async ({
+const FetchProjectsRedmineService = async ({
   url_redmine,
   api_key_redmine,
 }: Props) => {
@@ -42,4 +42,4 @@ const FetchProjectsRedmine = async ({
   return projects;
 };
 
-export default FetchProjectsRedmine;
+export default FetchProjectsRedmineService;

@@ -4,7 +4,7 @@ import { useFormikContext } from 'formik';
 import { useSnackbar, VariantType } from 'notistack';
 import { useCallback, useContext } from 'react';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
-import FetchProjectsRedmine from '../services/FetchProjectsRedmine';
+import FetchProjectsRedmineService from '../services/FetchProjectsRedmineService';
 import { CreateRedmineForm, initialValues, ProjectRedmine } from '../types/';
 
 interface Props {
@@ -41,7 +41,7 @@ export default function AutocompleteProjectsRedmine({
 
     try {
       createRedmineContext.actions.setIsLoadingProjects(true);
-      const projects = await FetchProjectsRedmine({
+      const projects = await FetchProjectsRedmineService({
         url_redmine: values.url,
         api_key_redmine: values.apiKey,
       });

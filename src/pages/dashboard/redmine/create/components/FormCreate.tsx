@@ -1,8 +1,6 @@
 import LoadingButton from '@/components/LoadingButton';
 import TextFieldPassword from '@/components/TextFieldPassword';
-import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
-import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useSnackbar, VariantType } from 'notistack';
@@ -10,7 +8,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Redmine } from '../../types';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
-import FetchProjectsRedmine from '../services/FetchProjectsRedmine';
+import CreateRedmineService from '../services/CreateRedmineService';
+import FetchProjectsRedmineService from '../services/FetchProjectsRedmineService';
+import FetchRedmineService from '../services/FetchRedmineService';
 import { DivBtnCreate, PaperForm } from '../styles';
 import { CreateRedmineForm, initialValues, schema } from '../types';
 import AutocompleteProjectsRedmine from './AutocompleteProjectsRedmine';
@@ -33,31 +33,20 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
     const { autocomplete, ...rest } = values;
     const redmine = { ...rest, project_import: autocomplete.id };
 
-    await api
-      .post('redmine', redmine)
-      .then(() => {
-        enqueueSnackbar('Sucesso', {
-          variant: 'success',
-        });
-        history.push('/dashboard/redmine/');
-      })
-      .catch((e: AxiosError) => {
-        const serverError = e as AxiosError<ErrorResponse>;
+    try {
+      CreateRedmineService(redmine);
 
-        switch (e.response?.status) {
-          case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
-            break;
-
-          default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
-            break;
-        }
+      enqueueSnackbar('Sucesso', {
+        variant: 'success',
       });
+      history.push('/dashboard/redmine/');
+    } catch (e) {
+      const error = e as AppError;
+
+      enqueueSnackbar(error.message, {
+        variant: error.type as VariantType,
+      });
+    }
   };
 
   return (
@@ -72,61 +61,33 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
             return;
           }
 
-          api
-            .get<Redmine>(`/redmine/${idRedmine}`)
-            .then(async response => {
-              const redmine = response.data;
-
-              let k: keyof Redmine;
-              for (k in redmine) {
-                setFieldValue(k, redmine[k], false);
-              }
-
+          async function fetchRedmine() {
+            try {
               createRedmineContext.actions.setIsLoadingProjects(true);
-              const projects = await FetchProjectsRedmine({
+              const redmine = await FetchRedmineService(idRedmine);
+              const projects = await FetchProjectsRedmineService({
                 url_redmine: redmine.url,
                 api_key_redmine: redmine.apiKey,
               });
 
               createRedmineContext.actions.setProjects(projects);
 
-              const projectRedmine = projects.find(
-                project => project.id === response.data.project_import,
-              );
-
-              if (projectRedmine) {
-                setFieldValue('autocomplete', { ...projectRedmine });
-              }
-            })
-            .catch(e => {
-              if (e instanceof AppError) {
-                const error = e as AppError;
-
-                enqueueSnackbar(error.message, {
-                  variant: error.type as VariantType,
-                });
-
-                return;
+              let k: keyof Redmine;
+              for (k in redmine) {
+                setFieldValue(k, redmine[k], false);
               }
 
-              const serverError = e as AxiosError<ErrorResponse>;
+              setFieldValue('autocomplete', { id: redmine.project_import });
+            } catch (e) {
+              const error = e as AppError;
 
-              switch (e.response?.status) {
-                case 400:
-                  enqueueSnackbar(serverError.response?.data.message, {
-                    variant: 'warning',
-                  });
-                  break;
+              enqueueSnackbar(error.message, {
+                variant: error.type as VariantType,
+              });
+            }
+          }
 
-                default:
-                  enqueueSnackbar('Erro inesperado', {
-                    variant: 'error',
-                  });
-                  break;
-              }
-
-              history.push('/dashboard/redmine/');
-            });
+          fetchRedmine();
         }, [setFieldValue]);
 
         return (
