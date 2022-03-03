@@ -2,12 +2,12 @@ import { User } from './../pages/auth/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type AuthState = {
-  user: User | null;
+  user: User;
   token: string | null;
 };
 
 const initialState: AuthState = {
-  user: null,
+  user: { id: '', name: '', email: '' },
   token: localStorage.getItem('token'),
 };
 
@@ -22,7 +22,7 @@ const slice = createSlice({
       localStorage.setItem('token', token ?? '');
     },
     logout: state => {
-      state.user = null;
+      state.user = initialState.user;
       state.token = null;
 
       localStorage.removeItem('token');
