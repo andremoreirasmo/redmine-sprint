@@ -84,6 +84,7 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
               enqueueSnackbar(error.message, {
                 variant: error.type as VariantType,
               });
+              history.push('/dashboard/redmine/');
             }
           }
 
