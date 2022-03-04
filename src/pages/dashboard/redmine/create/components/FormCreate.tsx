@@ -77,7 +77,13 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
                 setFieldValue(k, redmine[k], false);
               }
 
-              setFieldValue('autocomplete', { id: redmine.project_import });
+              const projectRedmine = projects.find(
+                project => project.id === redmine.project_import,
+              );
+
+              if (projectRedmine) {
+                setFieldValue('autocomplete', { ...projectRedmine });
+              }
             } catch (e) {
               const error = e as AppError;
 

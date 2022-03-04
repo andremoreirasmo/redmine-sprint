@@ -5,7 +5,7 @@ import If from '@/components/If';
 import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
 import { useAuth } from '@/hooks/useAuth';
-import api, { ErrorResponse } from '@/services/api';
+import AppError from '@/shared/errors/AppError';
 import {
   Breadcrumbs,
   Button,
@@ -25,12 +25,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
-import { AxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
+import { useSnackbar, VariantType } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Redmine } from '../types/';
+import DeleteRedminesService from './services/DeleteRedminesService';
+import FetchRedminesService from './services/FetchRedminesService';
 import { DivHeaderPage, DivNoData, HeaderPage, Root } from './styles';
 
 export default function Index() {
@@ -55,27 +56,14 @@ export default function Index() {
 
     setRefresh(false);
 
-    api
-      .get<Redmine[]>('redmine')
-      .then(response => {
-        setRedmines(response.data);
-      })
-      .catch((e: AxiosError) => {
-        const serverError = e as AxiosError<ErrorResponse>;
+    FetchRedminesService()
+      .then(redmines => setRedmines(redmines))
+      .catch(e => {
+        const error = e as AppError;
 
-        switch (e.response?.status) {
-          case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
-            break;
-
-          default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
-            break;
-        }
+        enqueueSnackbar(error.message, {
+          variant: error.type as VariantType,
+        });
       });
   }, [enqueueSnackbar, refresh]);
 
@@ -90,8 +78,7 @@ export default function Index() {
   async function DeleteRedmine() {
     const idDelete = stateDeleteRedmine.payload?.id as string;
 
-    await api
-      .delete(`redmine/${idDelete}`)
+    DeleteRedminesService(idDelete)
       .then(() => {
         enqueueSnackbar('Sucesso', {
           variant: 'success',
@@ -99,22 +86,12 @@ export default function Index() {
         setStateDeleteRedmine({ open: false });
         setRefresh(true);
       })
-      .catch((e: AxiosError) => {
-        const serverError = e as AxiosError<ErrorResponse>;
+      .catch(e => {
+        const error = e as AppError;
 
-        switch (e.response?.status) {
-          case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
-            break;
-
-          default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
-            break;
-        }
+        enqueueSnackbar(error.message, {
+          variant: error.type as VariantType,
+        });
       });
   }
 
