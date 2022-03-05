@@ -1,16 +1,18 @@
 import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
 import { AxiosError } from 'axios';
+import { CreateRedmineRequest } from './CreateRedmineService';
 
-export interface CreateRedmineRequest {
-  project_import: number;
-  name: string;
-  url: string;
-  apiKey: string;
+interface Props {
+  id: string;
+  redmineProps: CreateRedmineRequest;
 }
 
-const CreateRedmineService = async (redmine: CreateRedmineRequest) => {
-  await api.post('redmine', redmine).catch((e: AxiosError) => {
+const UpdateRedmineService = async ({ id, redmineProps }: Props) => {
+  const { project_import, name, url, apiKey } = redmineProps;
+  const redmine = { project_import, name, url, apiKey };
+
+  await api.put(`redmine/${id}`, redmine).catch((e: AxiosError) => {
     const serverError = e as AxiosError<ErrorResponse>;
 
     switch (e.response?.status) {
@@ -25,4 +27,4 @@ const CreateRedmineService = async (redmine: CreateRedmineRequest) => {
   });
 };
 
-export default CreateRedmineService;
+export default UpdateRedmineService;

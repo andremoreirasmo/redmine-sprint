@@ -17,8 +17,14 @@ export default function AutocompleteProjectsRedmine({
   setRefreshProjects,
 }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-  const { setFieldValue, setFieldTouched, touched, errors, values } =
-    useFormikContext<CreateRedmineForm>();
+  const {
+    setFieldValue,
+    setFieldTouched,
+    touched,
+    errors,
+    values,
+    isSubmitting,
+  } = useFormikContext<CreateRedmineForm>();
 
   const createRedmineContext = useContext(CreateRedmineContext);
   const valueSelected =
@@ -94,6 +100,7 @@ export default function AutocompleteProjectsRedmine({
         options={createRedmineContext.state.projects}
         selected={valueSelected}
         isLoading={createRedmineContext.state.isLoadingProjects}
+        disabled={isSubmitting}
       />
     </>
   );

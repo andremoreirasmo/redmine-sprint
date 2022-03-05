@@ -1,6 +1,6 @@
 import googleIcon from '@/assets/google_icon.svg';
 import DividerWithText from '@/components/DividerWithText';
-import LoadingButton from '@/components/LoadingButton';
+import LoadingButton from '@/components/LoadingButton/';
 import TextFieldPassword from '@/components/TextFieldPassword';
 import Yup from '@/global/YupDictionary';
 import api, { ErrorResponse } from '@/services/api';

@@ -29,8 +29,4 @@ export const PaperForm = styled(Paper)`
 export const DivBtnCreate = styled.div`
   display: flex;
   justify-content: flex-end;
-
-  .MuiButtonBase-root {
-    margin-top: 15px;
-  }
 `;

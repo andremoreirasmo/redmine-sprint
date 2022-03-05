@@ -1,12 +1,12 @@
-import { Button, LinearProgress } from '@material-ui/core';
-import styled from 'styled-components';
+import { Button } from '@material-ui/core';
+import { DivButton, LinearProgressBordeRadius } from './style';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface Props {
   label: string;
   isLoading: boolean;
   fullWidth?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [x: string]: any;
+  [x: string]: unknown;
   onClick?: () => void;
 }
 
@@ -14,18 +14,12 @@ const defaultProps = {
   fullWidth: true,
 };
 
-const LinearProgressBordeRadius = styled(LinearProgress)`
-  border-radius: 15px;
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
 export default function LoadingButton(props: Props) {
   props = { ...defaultProps, ...props };
   const { label, isLoading, onClick, fullWidth, ...rest } = props;
 
   return (
-    <>
+    <DivButton>
       <Button
         {...rest}
         variant="contained"
@@ -36,7 +30,7 @@ export default function LoadingButton(props: Props) {
       >
         {label}
       </Button>
-      {isLoading && <LinearProgressBordeRadius color="secondary" />}
-    </>
+      {isLoading && <LinearProgressBordeRadius />}
+    </DivButton>
   );
 }

@@ -1,4 +1,4 @@
-import LoadingButton from '@/components/LoadingButton';
+import LoadingButton from '@/components/LoadingButton/';
 import TextFieldPassword from '@/components/TextFieldPassword';
 import AppError from '@/shared/errors/AppError';
 import { Field, Form, Formik } from 'formik';
@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { Redmine } from '../../types';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
 import CreateRedmineService from '../services/CreateRedmineService';
+import UpdateRedmineService from '../services/UpdateRedmineService';
 import FetchProjectsRedmineService from '../services/FetchProjectsRedmineService';
 import FetchRedmineService from '../services/FetchRedmineService';
 import { DivBtnCreate, PaperForm } from '../styles';
@@ -34,7 +35,11 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
     const redmine = { ...rest, project_import: autocomplete.id };
 
     try {
-      CreateRedmineService(redmine);
+      if (!isEditMode) {
+        await CreateRedmineService(redmine);
+      } else {
+        await UpdateRedmineService({ id: idRedmine, redmineProps: redmine });
+      }
 
       enqueueSnackbar('Sucesso', {
         variant: 'success',

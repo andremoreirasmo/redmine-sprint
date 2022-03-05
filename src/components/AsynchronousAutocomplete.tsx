@@ -14,6 +14,7 @@ interface AsynchronousAutocompleteProps<T> {
   options: T[];
   selected?: T;
   isLoading: boolean;
+  disabled: boolean;
   fetchData: () => Promise<void>;
   [x: string]: unknown;
 }
@@ -27,6 +28,7 @@ export default function AsynchronousAutocomplete<T>({
   fetchData,
   selected,
   isLoading,
+  disabled,
   ...rest
 }: AsynchronousAutocompleteProps<T>) {
   const [open, setOpen] = useState(false);
@@ -63,6 +65,8 @@ export default function AsynchronousAutocomplete<T>({
         setOpen(false);
       }}
       value={selected}
+      noOptionsText="Não há dados"
+      disabled={disabled}
       renderInput={(params: AutocompleteRenderInputParams) => (
         <MuiTextField
           {...params}

@@ -1,4 +1,4 @@
-import LoadingButton from '@/components/LoadingButton';
+import LoadingButton from '@/components/LoadingButton/';
 import Yup from '@/global/YupDictionary';
 import api, { ErrorResponse } from '@/services/api';
 import { Button, Container, Typography } from '@material-ui/core';
