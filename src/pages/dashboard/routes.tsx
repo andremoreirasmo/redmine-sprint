@@ -18,7 +18,7 @@ interface Routes {
 
 const routesMenu: Routes[] = [
   {
-    path: '/dashboard',
+    path: '/dashboard/sprint',
     exact: true,
     caption: 'Sprints',
     component: <Sprints />,

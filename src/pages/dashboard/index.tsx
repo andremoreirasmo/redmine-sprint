@@ -166,7 +166,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption ?? ''}
                 icon={route.icon}
-                selected={route.path === pathActive}
+                selected={pathActive.indexOf(route.path) === 0}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />
@@ -181,7 +181,7 @@ export default function Dashboard() {
                 to={route.path}
                 primary={route.caption ?? ''}
                 icon={route.icon}
-                selected={route.path === pathActive}
+                selected={pathActive.indexOf(route.path) === 0}
                 showText={drawerIsVisible()}
                 key={route.caption}
               />
