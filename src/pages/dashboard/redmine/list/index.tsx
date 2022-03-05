@@ -33,12 +33,13 @@ import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Redmine } from '../types/';
 import DeleteRedminesService from './services/DeleteRedminesService';
 import FetchRedminesService from './services/FetchRedminesService';
+import SyncUsersRedmineService from './services/SyncUsersRedmineService';
 import {
+  DivCircularProgress,
   DivHeaderPage,
   DivNoData,
   HeaderPage,
   Root,
-  DivCircularProgress,
 } from './styles';
 
 export default function Index() {
@@ -105,7 +106,21 @@ export default function Index() {
 
   async function SyncRedmine() {
     setStateSyncRedmine({ open: false });
-    return;
+    const id = stateSyncRedmine.payload?.id as string;
+
+    SyncUsersRedmineService(id)
+      .then(() => {
+        enqueueSnackbar('Sucesso', {
+          variant: 'success',
+        });
+      })
+      .catch(e => {
+        const error = e as AppError;
+
+        enqueueSnackbar(error.message, {
+          variant: error.type as VariantType,
+        });
+      });
   }
 
   return (
