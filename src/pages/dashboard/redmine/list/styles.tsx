@@ -17,3 +17,15 @@ export const DivNoData = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+export const DivCircularProgress = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;

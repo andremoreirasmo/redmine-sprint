@@ -20,6 +20,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -32,7 +33,13 @@ import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Redmine } from '../types/';
 import DeleteRedminesService from './services/DeleteRedminesService';
 import FetchRedminesService from './services/FetchRedminesService';
-import { DivHeaderPage, DivNoData, HeaderPage, Root } from './styles';
+import {
+  DivHeaderPage,
+  DivNoData,
+  HeaderPage,
+  Root,
+  DivCircularProgress,
+} from './styles';
 
 export default function Index() {
   const userAuth = useAuth();
@@ -54,10 +61,11 @@ export default function Index() {
       return;
     }
 
-    setRefresh(false);
-
     FetchRedminesService()
-      .then(redmines => setRedmines(redmines))
+      .then(redmines => {
+        setRefresh(false);
+        setRedmines(redmines);
+      })
       .catch(e => {
         const error = e as AppError;
 
@@ -122,12 +130,17 @@ export default function Index() {
           <Typography color="textPrimary">Redmine</Typography>
         </Breadcrumbs>
       </DivHeaderPage>
-      <If test={redmines.length === 0}>
+      <If test={refresh}>
+        <DivCircularProgress>
+          <CircularProgress />
+        </DivCircularProgress>
+      </If>
+      <If test={!refresh && redmines.length === 0}>
         <DivNoData>
           <NoDataSvg />
         </DivNoData>
       </If>
-      <If test={redmines.length > 0}>
+      <If test={!refresh && redmines.length > 0}>
         <TableContainer component={Paper}>
           <Table aria-label="list redmine">
             <TableHead>
