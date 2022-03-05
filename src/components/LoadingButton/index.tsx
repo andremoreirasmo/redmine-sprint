@@ -1,6 +1,5 @@
 import { Button } from '@material-ui/core';
 import { DivButton, LinearProgressBordeRadius } from './style';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface Props {
   label: string;
