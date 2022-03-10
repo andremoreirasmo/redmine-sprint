@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export const useAuth = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth);
+  const auth = useSelector((state: RootState) => state.auth);
 
-  if (user.token && !user.user) {
-    api
+  if (auth.token && !auth.user) {
+    api()
       .get('/profile')
       .then(response => {
         dispatch(
           login({
-            token: user.token,
+            token: auth.token,
             user: response.data,
           }),
         );
@@ -24,5 +24,5 @@ export const useAuth = () => {
       });
   }
 
-  return useMemo<AuthState>((): AuthState => user, [user]);
+  return useMemo<AuthState>((): AuthState => auth, [auth]);
 };

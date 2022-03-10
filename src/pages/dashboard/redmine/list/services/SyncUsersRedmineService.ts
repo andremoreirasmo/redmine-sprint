@@ -3,7 +3,7 @@ import AppError from '@/shared/errors/AppError';
 import { AxiosError } from 'axios';
 
 const SyncUsersRedmineService = async (id: string) => {
-  const response = await api
+  const response = await api()
     .put(`redmine/syncUsersRedmine/${id}`)
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;

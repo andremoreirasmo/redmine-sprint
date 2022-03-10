@@ -33,7 +33,7 @@ export default function Forgot() {
   const [state, setState] = useState<State>({ isSubmit: false, email: '' });
 
   const handleSubmit = async (values: ForgotRequest) => {
-    await api
+    await api()
       .post('password/forgot', values)
       .then(() => {
         setState({

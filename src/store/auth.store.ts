@@ -15,11 +15,14 @@ const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, { payload: { user, token } }: PayloadAction<AuthState>) => {
+    login: (
+      state,
+      { payload: { user, token } }: PayloadAction<Omit<AuthState, 'isLoading'>>,
+    ) => {
       state.user = user;
       state.token = token;
 
-      localStorage.setItem('token', token ?? '');
+      localStorage.setItem('token', token as string);
     },
     logout: state => {
       state.user = null;

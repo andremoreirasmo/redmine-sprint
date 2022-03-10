@@ -44,7 +44,10 @@ export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values: LoginRequest) => {
-    (await api.post)<LoginRequest, AxiosResponse<AuthState>>('sessions', values)
+    (await api().post)<LoginRequest, AxiosResponse<AuthState>>(
+      'sessions',
+      values,
+    )
       .then(response => {
         dispatch(login(response.data));
         history.push('/dashboard');

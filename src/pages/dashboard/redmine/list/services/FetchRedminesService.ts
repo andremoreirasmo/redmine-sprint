@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { Redmine } from '../../types/';
 
 const FetchRedminesService = async () => {
-  const response = await api
+  const response = await api()
     .get<Redmine[]>('redmine')
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;

@@ -1,6 +1,5 @@
 import LogoImg from '@/assets/logo.png';
 import ListItemLink from '@/components/ListItemLink';
-import { useAuth } from '@/hooks/useAuth';
 import { RootState } from '@/store';
 import { logout } from '@/store/auth.store';
 import {
@@ -48,7 +47,7 @@ export default function Dashboard() {
   const isLoadingProcess = useSelector(
     (state: RootState) => state.app.isLoadingProcess,
   );
-  const userAuth = useAuth();
+  const userAuth = useSelector((state: RootState) => state.auth);
 
   const openIcon = Boolean(anchorEl);
   const id = openIcon ? 'simple-popover' : undefined;

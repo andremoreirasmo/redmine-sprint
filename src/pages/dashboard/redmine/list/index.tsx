@@ -4,8 +4,8 @@ import DialogConfirmation, {
 import If from '@/components/If';
 import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
-import { useAuth } from '@/hooks/useAuth';
 import AppError from '@/shared/errors/AppError';
+import { RootState } from '@/store';
 import { setIsLoadingProcess } from '@/store/app.store';
 import {
   Breadcrumbs,
@@ -29,7 +29,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
 import { useSnackbar, VariantType } from 'notistack';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Redmine } from '../types/';
@@ -45,7 +45,7 @@ import {
 } from './styles';
 
 export default function Index() {
-  const userAuth = useAuth();
+  const userAuth = useSelector((state: RootState) => state.auth);
   const [redmines, setRedmines] = useState<Redmine[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
