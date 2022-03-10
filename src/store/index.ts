@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import authReducer from './auth.store';
+import appReducer from './app.store';
 import { createBrowserHistory } from 'history';
 import { createReduxHistoryContext } from 'redux-first-history';
 
@@ -17,6 +18,7 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
 const rootReducer = combineReducers({
   router: routerReducer,
   auth: authReducer,
+  app: appReducer,
 });
 
 export const store = configureStore({

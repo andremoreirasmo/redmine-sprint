@@ -6,6 +6,7 @@ import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
 import { useAuth } from '@/hooks/useAuth';
 import AppError from '@/shared/errors/AppError';
+import { setIsLoadingProcess } from '@/store/app.store';
 import {
   Breadcrumbs,
   Button,
@@ -28,6 +29,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
 import { useSnackbar, VariantType } from 'notistack';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import EnumRoleRedmine from '../enums/EnumRoleRedmine';
 import { Redmine } from '../types/';
@@ -46,6 +48,7 @@ export default function Index() {
   const userAuth = useAuth();
   const [redmines, setRedmines] = useState<Redmine[]>([]);
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const [stateDeleteRedmine, setStateDeleteRedmine] = useState<
     DialogConfirmationState<Redmine>
@@ -107,6 +110,7 @@ export default function Index() {
   async function SyncRedmine() {
     setStateSyncRedmine({ open: false });
     const id = stateSyncRedmine.payload?.id as string;
+    dispatch(setIsLoadingProcess(true));
 
     SyncUsersRedmineService(id)
       .then(() => {
@@ -120,6 +124,9 @@ export default function Index() {
         enqueueSnackbar(error.message, {
           variant: error.type as VariantType,
         });
+      })
+      .finally(() => {
+        dispatch(setIsLoadingProcess(false));
       });
   }
 
