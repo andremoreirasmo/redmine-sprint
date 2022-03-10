@@ -5,6 +5,7 @@ import { SnackbarProvider } from 'notistack';
 
 import theme from './global/theme';
 import Routes from './routes';
+import { GlobalStyle } from './global/globalStyle';
 
 export default function App() {
   return (
@@ -13,7 +14,9 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={5}>
             <CssBaseline />
-            <Routes />
+            <GlobalStyle>
+              <Routes />
+            </GlobalStyle>
           </SnackbarProvider>
         </ThemeProvider>
       </MuiThemeProvider>
