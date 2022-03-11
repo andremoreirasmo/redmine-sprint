@@ -6,7 +6,7 @@ import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
 import AppError from '@/shared/errors/AppError';
 import { RootState } from '@/store';
-import { setIsLoadingProcess } from '@/store/app.store';
+import { setIsLoadingProcess, setRedmines } from '@/store/app.store';
 import {
   Breadcrumbs,
   Button,
@@ -46,7 +46,7 @@ import {
 
 export default function Index() {
   const userAuth = useSelector((state: RootState) => state.auth);
-  const [redmines, setRedmines] = useState<Redmine[]>([]);
+  const redmines = useSelector((state: RootState) => state.app.redmines);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -68,7 +68,7 @@ export default function Index() {
     FetchRedminesService()
       .then(redmines => {
         setRefresh(false);
-        setRedmines(redmines);
+        dispatch(setRedmines(redmines));
       })
       .catch(e => {
         const error = e as AppError;
@@ -76,8 +76,10 @@ export default function Index() {
         enqueueSnackbar(error.message, {
           variant: error.type as VariantType,
         });
+
+        dispatch(setRedmines([]));
       });
-  }, [enqueueSnackbar, refresh]);
+  }, [dispatch, enqueueSnackbar, refresh]);
 
   function getRoleUser(redmine: Redmine): number {
     const redmineUser = redmine.redmine_users.find(
