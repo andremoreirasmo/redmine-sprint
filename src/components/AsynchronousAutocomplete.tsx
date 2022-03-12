@@ -7,14 +7,14 @@ import { Field } from 'formik';
 import { useEffect, useState } from 'react';
 
 interface AsynchronousAutocompleteProps<T> {
-  error: boolean;
-  helperText: string | undefined;
+  error?: boolean;
+  helperText?: string | undefined;
   label: string;
-  refresh: boolean;
+  refresh?: boolean;
   options: T[];
   selected?: T;
   isLoading: boolean;
-  disabled: boolean;
+  disabled?: boolean;
   fetchData: () => Promise<void>;
   [x: string]: unknown;
 }

@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface AppState {
   isLoadingProcess: boolean;
   redmines: Redmine[];
+  redmineSelected: Redmine;
 }
 
 const initialState: AppState = {

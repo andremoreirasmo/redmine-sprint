@@ -1,14 +1,13 @@
-import { useSnackbar } from 'notistack';
-import { RootState } from '@/store';
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
-import FetchRedminesService from '../redmine/list/services/FetchRedminesService';
-import { setIsLoadingProcess, setRedmines } from '@/store/app.store';
 import AppError from '@/shared/errors/AppError';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { useCallback, useState } from 'react';
-import { Redmine } from '../redmine/types';
+import { RootState } from '@/store';
+import { setRedmines } from '@/store/app.store';
 import { useSnackbar, VariantType } from 'notistack';
+import { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import FetchRedminesService from '../redmine/list/services/FetchRedminesService';
+import { Redmine } from '../redmine/types';
+
 
 export default function AutocompleteRedmines() {
   const { enqueueSnackbar } = useSnackbar();
