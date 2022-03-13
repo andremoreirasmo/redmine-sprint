@@ -6,7 +6,8 @@ import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
 import AppError from '@/shared/errors/AppError';
 import { RootState } from '@/store';
-import { setIsLoadingProcess, setRedmines } from '@/store/app.store';
+import { setIsLoadingProcess } from '@/store/app.store';
+import { setIsLoadingRedmine, setRedmines } from '@/store/redmine.store';
 import {
   Breadcrumbs,
   Button,
@@ -46,7 +47,10 @@ import {
 
 export default function Index() {
   const userAuth = useSelector((state: RootState) => state.auth);
-  const redmines = useSelector((state: RootState) => state.app.redmines);
+  const redmines = useSelector((state: RootState) => state.redmine.redmines);
+  const isLoadingRedmine = useSelector(
+    (state: RootState) => state.redmine.isLoadingRedmine,
+  );
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -61,9 +65,11 @@ export default function Index() {
   const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
-    if (!refresh) {
+    if (!refresh || isLoadingRedmine) {
       return;
     }
+
+    dispatch(setIsLoadingRedmine(true));
 
     FetchRedminesService()
       .then(redmines => {
@@ -78,8 +84,9 @@ export default function Index() {
         });
 
         dispatch(setRedmines([]));
-      });
-  }, [dispatch, enqueueSnackbar, refresh]);
+      })
+      .finally(() => dispatch(setIsLoadingRedmine(false)));
+  }, [dispatch, enqueueSnackbar, isLoadingRedmine, refresh]);
 
   function getRoleUser(redmine: Redmine): number {
     const redmineUser = redmine.redmine_users.find(

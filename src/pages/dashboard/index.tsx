@@ -24,6 +24,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+import { AutocompleteRedmines } from './components/AutocompleteRedmines';
 import { allRoutes, routesMenu } from './routes';
 import {
   Content,
@@ -87,6 +88,7 @@ export default function Dashboard() {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
+            <AutocompleteRedmines />
             <IconButton
               edge="end"
               aria-haspopup="true"

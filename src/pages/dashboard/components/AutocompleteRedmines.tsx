@@ -1,24 +1,38 @@
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
 import AppError from '@/shared/errors/AppError';
 import { RootState } from '@/store';
-import { setRedmines } from '@/store/app.store';
+import {
+  setIsLoadingRedmine,
+  setRedmines,
+  setRedmineSelected,
+} from '@/store/redmine.store';
 import { useSnackbar, VariantType } from 'notistack';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FetchRedminesService from '../redmine/list/services/FetchRedminesService';
 import { Redmine } from '../redmine/types';
 
-
-export default function AutocompleteRedmines() {
+export function AutocompleteRedmines() {
   const { enqueueSnackbar } = useSnackbar();
-  const redmines = useSelector((state: RootState) => state.app.redmines);
-  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
 
+  const redmines = useSelector((state: RootState) => state.redmine.redmines);
+  const isLoadingRedmine = useSelector(
+    (state: RootState) => state.redmine.isLoadingRedmine,
+  );
+  const redmineSelected = useSelector(
+    (state: RootState) => state.redmine.redmineSelected,
+  );
+
   const fetchRedmines = useCallback(async () => {
+    if (isLoadingRedmine) {
+      return;
+    }
+
+    dispatch(setIsLoadingRedmine(true));
+
     FetchRedminesService()
       .then(redmines => {
-        setRefresh(false);
         dispatch(setRedmines(redmines));
       })
       .catch(e => {
@@ -29,24 +43,26 @@ export default function AutocompleteRedmines() {
         });
 
         dispatch(setRedmines([]));
+      })
+      .finally(() => {
+        dispatch(setIsLoadingRedmine(false));
       });
-  }, [dispatch, enqueueSnackbar]);
+  }, [dispatch, enqueueSnackbar, isLoadingRedmine]);
 
   return (
     <AsynchronousAutocomplete
-      name="autocomplete"
       getOptionLabel={(option: Redmine) => option.name}
       getOptionSelected={(option: Redmine, value: Redmine) =>
         option.id === value.id
       }
       onChange={(_: React.ChangeEvent<HTMLInputElement>, value: Redmine) =>
-        setFieldValue('autocomplete', value || initialValues.autocomplete)
+        setRedmineSelected(value)
       }
       label="Seleciona um redmine"
       fetchData={fetchRedmines}
       options={redmines}
-      selected={valueSelected}
-      isLoading={createRedmineContext.state.isLoadingProjects}
+      selected={redmineSelected}
+      isLoading={isLoadingRedmine}
     />
   );
 }

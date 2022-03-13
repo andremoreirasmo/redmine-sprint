@@ -4,11 +4,12 @@ import {
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
-import authReducer from './auth.store';
-import appReducer from './app.store';
 import { createBrowserHistory } from 'history';
+import { useDispatch } from 'react-redux';
 import { createReduxHistoryContext } from 'redux-first-history';
+import appReducer from './app.store';
+import authReducer from './auth.store';
+import redmineReducer from './redmine.store';
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   router: routerReducer,
   auth: authReducer,
   app: appReducer,
+  redmine: redmineReducer,
 });
 
 export const store = configureStore({

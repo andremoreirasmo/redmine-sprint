@@ -3,7 +3,6 @@ import MuiTextField from '@material-ui/core/TextField';
 import Autocomplete, {
   AutocompleteRenderInputParams,
 } from '@material-ui/lab/Autocomplete';
-import { Field } from 'formik';
 import { useEffect, useState } from 'react';
 
 interface AsynchronousAutocompleteProps<T> {
@@ -50,8 +49,7 @@ export default function AsynchronousAutocomplete<T>({
   }, [fetchData, isLoading, loading]);
 
   return (
-    <Field
-      component={Autocomplete}
+    <Autocomplete
       options={options}
       {...rest}
       loading={dataIsLoading()}

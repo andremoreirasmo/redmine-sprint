@@ -1,15 +1,11 @@
-import { Redmine } from '@/pages/dashboard/redmine/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AppState {
   isLoadingProcess: boolean;
-  redmines: Redmine[];
-  redmineSelected: Redmine;
 }
 
 const initialState: AppState = {
   isLoadingProcess: false,
-  redmines: [],
 };
 
 const app = createSlice({
@@ -19,11 +15,8 @@ const app = createSlice({
     setIsLoadingProcess(state, action: PayloadAction<boolean>) {
       state.isLoadingProcess = action.payload;
     },
-    setRedmines(state, action: PayloadAction<Redmine[]>) {
-      state.redmines = action.payload;
-    },
   },
 });
 
-export const { setIsLoadingProcess, setRedmines } = app.actions;
+export const { setIsLoadingProcess } = app.actions;
 export default app.reducer;
