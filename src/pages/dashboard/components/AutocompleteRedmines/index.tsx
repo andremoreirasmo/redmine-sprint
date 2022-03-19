@@ -8,7 +8,7 @@ import {
   setRedmineSelected,
 } from '@/store/redmine.store';
 import { useSnackbar, VariantType } from 'notistack';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FetchRedminesService from '../../redmine/list/services/FetchRedminesService';
 import { Redmine } from '../../redmine/types';
@@ -25,30 +25,12 @@ export function AutocompleteRedmines({ isVisible }: IProps) {
   const isLoadingRedmine = useSelector(
     (state: RootState) => state.redmine.isLoadingRedmine,
   );
-  const redmineSelected = useSelector(
-    (state: RootState) => state.redmine.redmineSelected,
+  const redmineSelectedId = useSelector(
+    (state: RootState) => state.redmine.redmineSelectedId,
   );
-
-  useEffect(() => {
-    const refreshSelectedRedmine = () => {
-      if (!redmineSelected) {
-        return;
-      }
-
-      const newSelectedRedmine = redmines.find(
-        redmine => redmine.id === redmineSelected.id,
-      );
-
-      if (
-        newSelectedRedmine &&
-        newSelectedRedmine.name != redmineSelected.name
-      ) {
-        dispatch(setRedmineSelected(newSelectedRedmine));
-      }
-    };
-
-    refreshSelectedRedmine();
-  }, [dispatch, redmineSelected, redmines]);
+  const redmineSelected = redmines.find(
+    redmine => redmine.id === redmineSelectedId,
+  );
 
   const fetchRedmines = useCallback(async () => {
     if (isLoadingRedmine) {
@@ -83,13 +65,14 @@ export function AutocompleteRedmines({ isVisible }: IProps) {
           getOptionSelected={(option: Redmine, value: Redmine) =>
             option.id === value.id
           }
-          onChange={(_: React.ChangeEvent<HTMLInputElement>, value: Redmine) =>
-            dispatch(setRedmineSelected(value))
-          }
+          onChange={(
+            _: React.ChangeEvent<HTMLInputElement>,
+            value: Redmine | null,
+          ) => dispatch(setRedmineSelected(value ? value.id : null))}
           label={redmineSelected ? 'Redmine' : 'Selecione um Redmine'}
           fetchData={fetchRedmines}
           options={redmines}
-          selected={redmineSelected}
+          selected={redmineSelected ? redmineSelected : null}
           isLoading={isLoadingRedmine}
           refresh={true}
           fullWidth={false}

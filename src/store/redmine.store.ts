@@ -3,19 +3,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface RedmineState {
   redmines: Redmine[];
-  redmineSelected: Redmine | null;
+  redmineSelectedId: string;
   isLoadingRedmine: boolean;
 }
 
 function getInitialState(): RedmineState {
-  const redmineSelectedStorage = localStorage.getItem('redmine_selected');
-  const redmineSelected = redmineSelectedStorage
-    ? (JSON.parse(redmineSelectedStorage) as Redmine)
-    : null;
+  const redmineSelected = localStorage.getItem('redmine_selected') ?? '';
 
   const initialState: RedmineState = {
     redmines: [],
-    redmineSelected: redmineSelected,
+    redmineSelectedId: redmineSelected,
     isLoadingRedmine: false,
   };
 
@@ -31,14 +28,11 @@ const redmine = createSlice({
     setRedmines(state, action: PayloadAction<Redmine[]>) {
       state.redmines = action.payload;
     },
-    setRedmineSelected(state, action: PayloadAction<Redmine | null>) {
-      state.redmineSelected = action.payload;
+    setRedmineSelected(state, action: PayloadAction<string | null>) {
+      state.redmineSelectedId = action.payload ?? '';
 
       if (action.payload) {
-        localStorage.setItem(
-          'redmine_selected',
-          JSON.stringify(action.payload),
-        );
+        localStorage.setItem('redmine_selected', action.payload);
       } else {
         localStorage.removeItem('redmine_selected');
       }
