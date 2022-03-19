@@ -12,10 +12,10 @@ export const Root = styled.div`
   display: flex;
 `;
 
-interface HeaderAppBarProps {
+type HeaderAppBarProps = {
   $drawerWidth: number;
   $drawerIsVisible: boolean;
-}
+};
 
 export const HeaderAppBar = styled(AppBar)<HeaderAppBarProps>`
   ${props =>
@@ -44,10 +44,10 @@ export const PopOverUser = styled(Box)`
   }
 `;
 
-interface SideBarAppBarProps {
+type SideBarAppBarProps = {
   $drawerWidth: number;
   $open: boolean;
-}
+};
 
 export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   .MuiDrawer-paper {
@@ -100,18 +100,18 @@ export const SideBar = styled(Drawer)<SideBarAppBarProps>`
   }
 `;
 
-interface ToolbarSidebarProps {
+type ToolbarSidebarProps = {
   $drawerIsVisible: boolean;
-}
+};
 
 export const ToolbarSidebar = styled.div<ToolbarSidebarProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 24px 10px 24px;
-  ${props => props.theme.mixins.toolbar}
+  ${props => props.theme.mixins.toolbar as unknown as string}
 
-  ${props =>
+  ${(props: ToolbarSidebarProps) =>
     props.$drawerIsVisible &&
     css`
       justify-content: space-between;
@@ -141,9 +141,9 @@ export const ListItemSidebar = styled(ListItemLink)`
   }
 `;
 
-interface ContentProps {
+type ContentProps = {
   $drawerWidth: number;
-}
+};
 
 export const Content = styled(Container)<ContentProps>`
   padding: 80px 16px 0px 16px;
