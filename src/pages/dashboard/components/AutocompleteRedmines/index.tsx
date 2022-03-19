@@ -8,7 +8,7 @@ import {
   setRedmineSelected,
 } from '@/store/redmine.store';
 import { useSnackbar, VariantType } from 'notistack';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FetchRedminesService from '../../redmine/list/services/FetchRedminesService';
 import { Redmine } from '../../redmine/types';
@@ -28,6 +28,27 @@ export function AutocompleteRedmines({ isVisible }: IProps) {
   const redmineSelected = useSelector(
     (state: RootState) => state.redmine.redmineSelected,
   );
+
+  useEffect(() => {
+    const refreshSelectedRedmine = () => {
+      if (!redmineSelected) {
+        return;
+      }
+
+      const newSelectedRedmine = redmines.find(
+        redmine => redmine.id === redmineSelected.id,
+      );
+
+      if (
+        newSelectedRedmine &&
+        newSelectedRedmine.name != redmineSelected.name
+      ) {
+        dispatch(setRedmineSelected(newSelectedRedmine));
+      }
+    };
+
+    refreshSelectedRedmine();
+  }, [dispatch, redmineSelected, redmines]);
 
   const fetchRedmines = useCallback(async () => {
     if (isLoadingRedmine) {

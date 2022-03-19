@@ -7,11 +7,22 @@ export interface RedmineState {
   isLoadingRedmine: boolean;
 }
 
-const initialState: RedmineState = {
-  redmines: [],
-  redmineSelected: null,
-  isLoadingRedmine: false,
-};
+function getInitialState(): RedmineState {
+  const redmineSelectedStorage = localStorage.getItem('redmine_selected');
+  const redmineSelected = redmineSelectedStorage
+    ? (JSON.parse(redmineSelectedStorage) as Redmine)
+    : null;
+
+  const initialState: RedmineState = {
+    redmines: [],
+    redmineSelected: redmineSelected,
+    isLoadingRedmine: false,
+  };
+
+  return initialState;
+}
+
+const initialState = getInitialState();
 
 const redmine = createSlice({
   name: 'redmine',
@@ -22,6 +33,15 @@ const redmine = createSlice({
     },
     setRedmineSelected(state, action: PayloadAction<Redmine | null>) {
       state.redmineSelected = action.payload;
+
+      if (action.payload) {
+        localStorage.setItem(
+          'redmine_selected',
+          JSON.stringify(action.payload),
+        );
+      } else {
+        localStorage.removeItem('redmine_selected');
+      }
     },
     setIsLoadingRedmine(state, action: PayloadAction<boolean>) {
       state.isLoadingRedmine = action.payload;
