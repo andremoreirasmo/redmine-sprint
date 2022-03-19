@@ -1,11 +1,10 @@
-import PollIcon from '@material-ui/icons/Poll';
 import GroupIcon from '@material-ui/icons/Group';
 import LanguageIcon from '@material-ui/icons/Language';
-
-import Sprints from './sprints';
-import Redmine from './redmine/list';
+import PollIcon from '@material-ui/icons/Poll';
 import CreateRedmine from './redmine/create';
-import Team from './team';
+import Redmine from './redmine/list';
+import Sprints from './sprints';
+import Team from './team/list';
 
 interface Routes {
   path: string;
@@ -26,7 +25,7 @@ const routesMenu: Routes[] = [
     isSetting: false,
   },
   {
-    path: '/dashboard/teams',
+    path: '/dashboard/team',
     exact: true,
     caption: 'Equipes',
     component: <Team />,
