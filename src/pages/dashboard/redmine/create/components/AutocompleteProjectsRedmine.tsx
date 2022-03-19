@@ -1,6 +1,6 @@
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
 import AppError from '@/shared/errors/AppError';
-import { useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 import { useSnackbar, VariantType } from 'notistack';
 import { useCallback, useContext } from 'react';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
@@ -78,30 +78,29 @@ export default function AutocompleteProjectsRedmine({
   ]);
 
   return (
-    <>
-      <AsynchronousAutocomplete
-        name="autocomplete"
-        getOptionLabel={(option: ProjectRedmine) => option.name}
-        getOptionSelected={(option: ProjectRedmine, value: ProjectRedmine) =>
-          option.id === value.id
-        }
-        onChange={(
-          _: React.ChangeEvent<HTMLInputElement>,
-          value: ProjectRedmine,
-        ) => setFieldValue('autocomplete', value || initialValues.autocomplete)}
-        onBlur={() => {
-          setFieldTouched('autocomplete', true, true);
-        }}
-        error={Boolean(touched.autocomplete && errors.autocomplete?.name)}
-        helperText={touched.autocomplete && errors.autocomplete?.name}
-        label="Projeto para importar usuarios"
-        fetchData={fetchRedmineProjects}
-        refresh={refreshProjects}
-        options={createRedmineContext.state.projects}
-        selected={valueSelected}
-        isLoading={createRedmineContext.state.isLoadingProjects}
-        disabled={isSubmitting}
-      />
-    </>
+    <Field
+      component={AsynchronousAutocomplete}
+      name="autocomplete"
+      getOptionLabel={(option: ProjectRedmine) => option.name}
+      getOptionSelected={(option: ProjectRedmine, value: ProjectRedmine) =>
+        option.id === value.id
+      }
+      onChange={(
+        _: React.ChangeEvent<HTMLInputElement>,
+        value: ProjectRedmine,
+      ) => setFieldValue('autocomplete', value || initialValues.autocomplete)}
+      onBlur={() => {
+        setFieldTouched('autocomplete', true, true);
+      }}
+      error={Boolean(touched.autocomplete && errors.autocomplete?.name)}
+      helperText={touched.autocomplete && errors.autocomplete?.name}
+      label="Projeto para importar usuarios"
+      fetchData={fetchRedmineProjects}
+      refresh={refreshProjects}
+      options={createRedmineContext.state.projects}
+      selected={valueSelected}
+      isLoading={createRedmineContext.state.isLoadingProjects}
+      disabled={isSubmitting}
+    />
   );
 }
