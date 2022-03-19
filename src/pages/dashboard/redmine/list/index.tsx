@@ -172,7 +172,7 @@ export default function Index() {
         </DivNoData>
       </If>
       <If test={!refresh && redmines.length > 0}>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} variant="outlined" square={true}>
           <Table aria-label="list redmine">
             <TableHead>
               <TableRow>
