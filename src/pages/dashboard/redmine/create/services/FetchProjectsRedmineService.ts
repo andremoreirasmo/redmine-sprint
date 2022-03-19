@@ -1,5 +1,5 @@
-import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AxiosError } from 'axios';
 import { ProjectRedmine } from '../types';
 
@@ -12,7 +12,7 @@ const FetchProjectsRedmineService = async ({
   url_redmine,
   api_key_redmine,
 }: Props) => {
-  const projects = await api()
+  const projects = await getApi()
     .get<ProjectRedmine[]>('apiredmine/projects', {
       headers: {
         url_redmine,

@@ -1,5 +1,5 @@
-import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AxiosError } from 'axios';
 
 export interface CreateRedmineRequest {
@@ -10,7 +10,7 @@ export interface CreateRedmineRequest {
 }
 
 const CreateRedmineService = async (redmine: CreateRedmineRequest) => {
-  await api()
+  await getApi()
     .post('redmine', redmine)
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;

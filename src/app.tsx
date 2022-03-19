@@ -1,11 +1,10 @@
-import { ThemeProvider } from 'styled-components';
-import { MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { SnackbarProvider } from 'notistack';
-
-import theme from './global/theme';
+import { ThemeProvider } from 'styled-components';
 import Routes from './routes';
-import { GlobalStyle } from './global/globalStyle';
+import { GlobalStyle } from './shared/global/globalStyle';
+import theme from './shared/global/theme';
 
 export default function App() {
   return (

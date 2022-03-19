@@ -1,9 +1,9 @@
-import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AxiosError } from 'axios';
 
 const DeleteRedminesService = async (idDelete: string) => {
-  await api()
+  await getApi()
     .delete(`redmine/${idDelete}`)
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;

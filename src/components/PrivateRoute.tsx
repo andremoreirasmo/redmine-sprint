@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/shared/hooks/useAuth';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 export default function PrivateRoute({ children, ...rest }: RouteProps) {

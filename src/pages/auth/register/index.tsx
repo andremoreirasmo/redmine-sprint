@@ -2,8 +2,8 @@ import googleIcon from '@/assets/google_icon.svg';
 import DividerWithText from '@/components/DividerWithText';
 import LoadingButton from '@/components/LoadingButton/';
 import TextFieldPassword from '@/components/TextFieldPassword';
-import Yup from '@/global/YupDictionary';
-import api, { ErrorResponse } from '@/services/api';
+import Yup from '@/shared/global/YupDictionary';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { Button, Container, Typography } from '@material-ui/core';
 import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
@@ -39,10 +39,11 @@ const schema = Yup.object().shape({
 export default function Register() {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const api = getApi();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values: RegisterRequest) => {
-    await api()
+    await api
       .post('user', values)
       .then(() => {
         history.push('/auth/login');

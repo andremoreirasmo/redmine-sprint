@@ -1,5 +1,5 @@
-import api, { ErrorResponse } from '@/services/api';
 import AppError from '@/shared/errors/AppError';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AxiosError } from 'axios';
 import { CreateRedmineRequest } from './CreateRedmineService';
 
@@ -12,7 +12,7 @@ const UpdateRedmineService = async ({ id, redmineProps }: Props) => {
   const { project_import, name, url, apiKey } = redmineProps;
   const redmine = { project_import, name, url, apiKey };
 
-  await api()
+  await getApi()
     .put(`redmine/${id}`, redmine)
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;

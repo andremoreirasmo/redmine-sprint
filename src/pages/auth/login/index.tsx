@@ -2,8 +2,8 @@ import googleIcon from '@/assets/google_icon.svg';
 import DividerWithText from '@/components/DividerWithText';
 import LoadingButton from '@/components/LoadingButton/';
 import TextFieldPassword from '@/components/TextFieldPassword';
-import Yup from '@/global/YupDictionary';
-import api, { ErrorResponse } from '@/services/api';
+import Yup from '@/shared/global/YupDictionary';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AuthState, login } from '@/store/auth.store';
 import { Button, Container, Link, Typography } from '@material-ui/core';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -41,13 +41,12 @@ const schema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
+  const api = getApi();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values: LoginRequest) => {
-    (await api().post)<LoginRequest, AxiosResponse<AuthState>>(
-      'sessions',
-      values,
-    )
+    await api
+      .post<LoginRequest, AxiosResponse<AuthState>>('sessions', values)
       .then(response => {
         dispatch(login(response.data));
         history.push('/dashboard');

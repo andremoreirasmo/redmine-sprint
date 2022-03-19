@@ -1,6 +1,6 @@
 import LoadingButton from '@/components/LoadingButton/';
-import Yup from '@/global/YupDictionary';
-import api, { ErrorResponse } from '@/services/api';
+import Yup from '@/shared/global/YupDictionary';
+import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { Button, Container, Typography } from '@material-ui/core';
 import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
@@ -31,9 +31,10 @@ interface State {
 export default function Forgot() {
   const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState<State>({ isSubmit: false, email: '' });
+  const api = getApi();
 
   const handleSubmit = async (values: ForgotRequest) => {
-    await api()
+    await api
       .post('password/forgot', values)
       .then(() => {
         setState({

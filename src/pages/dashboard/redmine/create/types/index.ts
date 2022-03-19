@@ -1,4 +1,4 @@
-import Yup from '../../../../../global/YupDictionary';
+import Yup from '@/shared/global/YupDictionary';
 
 interface CreateRedmine {
   name: string;
