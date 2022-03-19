@@ -1,12 +1,11 @@
 import { Button } from '@material-ui/core';
-import { DivButton, LinearProgressBordeRadius } from './style';
+import { CircularProgressButton, DivButton } from './styles';
 
 interface Props {
   label: string;
   isLoading: boolean;
   fullWidth?: boolean;
   [x: string]: unknown;
-  onClick?: () => void;
 }
 
 const defaultProps = {
@@ -15,21 +14,20 @@ const defaultProps = {
 
 export default function LoadingButton(props: Props) {
   props = { ...defaultProps, ...props };
-  const { label, isLoading, onClick, fullWidth, ...rest } = props;
+  const { label, isLoading, fullWidth, ...rest } = props;
 
   return (
-    <DivButton>
+    <DivButton $isLoading={isLoading}>
       <Button
         {...rest}
         variant="contained"
-        onClick={onClick}
         disabled={isLoading}
         fullWidth={fullWidth}
         color="primary"
       >
+        {isLoading && <CircularProgressButton size={25} />}
         {label}
       </Button>
-      {isLoading && <LinearProgressBordeRadius />}
     </DivButton>
   );
 }
