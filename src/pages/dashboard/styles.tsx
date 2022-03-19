@@ -149,3 +149,7 @@ export const Content = styled(Container)<ContentProps>`
   padding: 80px 16px 0px 16px;
   margin-left: ${props => props.$drawerWidth}px;
 `;
+
+export const DivButtonsToolbar = styled.div`
+  display: flex;
+`;

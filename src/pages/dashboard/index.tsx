@@ -2,6 +2,7 @@ import LogoImg from '@/assets/logo.png';
 import ListItemLink from '@/components/ListItemLink';
 import useLocalStorage from '@/shared/hooks/useLocalStorage';
 import { RootState } from '@/store';
+import { setDarkMode } from '@/store/app.store';
 import { logout } from '@/store/auth.store';
 import {
   Box,
@@ -19,6 +20,8 @@ import {
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Radio from '@material-ui/core/Radio';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -29,6 +32,7 @@ import { AutocompleteRedmines } from './components/AutocompleteRedmines';
 import { allRoutes, routesMenu } from './routes';
 import {
   Content,
+  DivButtonsToolbar,
   HeaderAppBar,
   ListItemSidebar,
   Logo,
@@ -53,6 +57,7 @@ export default function Dashboard() {
     (state: RootState) => state.app.isLoadingProcess,
   );
   const userAuth = useSelector((state: RootState) => state.auth);
+  const darkMode = useSelector((state: RootState) => state.app.darkMode);
 
   const openIcon = Boolean(anchorEl);
   const id = openIcon ? 'simple-popover' : undefined;
@@ -61,7 +66,7 @@ export default function Dashboard() {
     setOpenFixedDrawer(!openFixedDrawer);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickUser = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -92,14 +97,24 @@ export default function Dashboard() {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
-            <IconButton
-              edge="end"
-              aria-haspopup="true"
-              onClick={handleClick}
-              color="default"
-            >
-              <AccountCircleIcon fontSize="large" />
-            </IconButton>
+            <DivButtonsToolbar>
+              <IconButton
+                edge="end"
+                color="default"
+                onClick={() => dispatch(setDarkMode(!darkMode))}
+              >
+                {darkMode && <BrightnessHighIcon fontSize="large" />}
+                {!darkMode && <Brightness4Icon fontSize="large" />}
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-haspopup="true"
+                onClick={handleClickUser}
+                color="default"
+              >
+                <AccountCircleIcon fontSize="large" />
+              </IconButton>
+            </DivButtonsToolbar>
             <Popover
               id={id}
               open={openIcon}
