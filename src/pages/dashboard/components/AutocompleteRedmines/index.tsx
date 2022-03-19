@@ -1,4 +1,5 @@
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
+import If from '@/components/If';
 import AppError from '@/shared/errors/AppError';
 import { RootState } from '@/store';
 import {
@@ -9,13 +10,17 @@ import {
 import { useSnackbar, VariantType } from 'notistack';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FetchRedminesService from '../redmine/list/services/FetchRedminesService';
-import { Redmine } from '../redmine/types';
+import FetchRedminesService from '../../redmine/list/services/FetchRedminesService';
+import { Redmine } from '../../redmine/types';
+import { Root } from './styles';
 
-export function AutocompleteRedmines() {
+interface IProps {
+  isVisible: boolean;
+}
+
+export function AutocompleteRedmines({ isVisible }: IProps) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-
   const redmines = useSelector((state: RootState) => state.redmine.redmines);
   const isLoadingRedmine = useSelector(
     (state: RootState) => state.redmine.isLoadingRedmine,
@@ -50,19 +55,25 @@ export function AutocompleteRedmines() {
   }, [dispatch, enqueueSnackbar, isLoadingRedmine]);
 
   return (
-    <AsynchronousAutocomplete
-      getOptionLabel={(option: Redmine) => option.name}
-      getOptionSelected={(option: Redmine, value: Redmine) =>
-        option.id === value.id
-      }
-      onChange={(_: React.ChangeEvent<HTMLInputElement>, value: Redmine) =>
-        setRedmineSelected(value)
-      }
-      label="Seleciona um redmine"
-      fetchData={fetchRedmines}
-      options={redmines}
-      selected={redmineSelected}
-      isLoading={isLoadingRedmine}
-    />
+    <If test={isVisible}>
+      <Root>
+        <AsynchronousAutocomplete
+          getOptionLabel={(option: Redmine) => option.name}
+          getOptionSelected={(option: Redmine, value: Redmine) =>
+            option.id === value.id
+          }
+          onChange={(_: React.ChangeEvent<HTMLInputElement>, value: Redmine) =>
+            dispatch(setRedmineSelected(value))
+          }
+          label={redmineSelected ? 'Redmine' : 'Selecione um Redmine'}
+          fetchData={fetchRedmines}
+          options={redmines}
+          selected={redmineSelected}
+          isLoading={isLoadingRedmine}
+          refresh={true}
+          fullWidth={false}
+        />
+      </Root>
+    </If>
   );
 }

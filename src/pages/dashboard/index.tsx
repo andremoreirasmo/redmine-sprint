@@ -88,7 +88,6 @@ export default function Dashboard() {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
-            <AutocompleteRedmines />
             <IconButton
               edge="end"
               aria-haspopup="true"
@@ -193,6 +192,7 @@ export default function Dashboard() {
               />
             ))}
         </List>
+        <AutocompleteRedmines isVisible={drawerIsVisible()} />
       </SideBar>
       <Content
         maxWidth="xl"
