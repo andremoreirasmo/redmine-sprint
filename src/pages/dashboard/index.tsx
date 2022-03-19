@@ -1,5 +1,6 @@
 import LogoImg from '@/assets/logo.png';
 import ListItemLink from '@/components/ListItemLink';
+import useLocalStorage from '@/shared/hooks/useLocalStorage';
 import { RootState } from '@/store';
 import { logout } from '@/store/auth.store';
 import {
@@ -39,7 +40,10 @@ import {
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const [openFixedDrawer, setOpenFixedDrawer] = useState(false);
+  const [openFixedDrawer, setOpenFixedDrawer] = useLocalStorage(
+    'FixedDrawer',
+    false,
+  );
   const [showDrawer, setShowDrawer] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
