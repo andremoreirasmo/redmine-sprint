@@ -7,7 +7,7 @@ export interface AppState {
 
 const initialState: AppState = {
   isLoadingProcess: false,
-  darkMode: localStorage.getItem('dark_mode') ? true : false,
+  darkMode: localStorage.getItem('dark_mode') === 'true',
 };
 
 const app = createSlice({
@@ -20,11 +20,7 @@ const app = createSlice({
     setDarkMode(state, action: PayloadAction<boolean>) {
       state.darkMode = action.payload;
 
-      localStorage.setItem('dark_mode', '');
-
-      if (!state.darkMode) {
-        localStorage.removeItem('dark_mode');
-      }
+      localStorage.setItem('dark_mode', action.payload.toString());
     },
   },
 });
