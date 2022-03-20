@@ -4,6 +4,7 @@ import PollIcon from '@material-ui/icons/Poll';
 import CreateRedmine from './redmine/create';
 import Redmine from './redmine/list';
 import Sprints from './sprints';
+import CreateTeam from './team/create';
 import Team from './team/list';
 
 interface Routes {
@@ -52,6 +53,16 @@ const generalRoutes: Routes[] = [
     path: '/dashboard/redmine/edit/:idRedmine',
     exact: true,
     component: <CreateRedmine />,
+  },
+  {
+    path: '/dashboard/team/create',
+    exact: true,
+    component: <CreateTeam />,
+  },
+  {
+    path: '/dashboard/team/edit/:idTeam',
+    exact: true,
+    component: <CreateTeam />,
   },
 ];
 

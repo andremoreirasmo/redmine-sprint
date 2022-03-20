@@ -12,7 +12,7 @@ const GetTheme = (darkMode: boolean) =>
       },
     },
     shape: {
-      borderRadius: 14,
+      borderRadius: 8,
     },
     overrides: {
       MuiButton: {
