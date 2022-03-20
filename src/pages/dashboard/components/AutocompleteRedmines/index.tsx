@@ -1,6 +1,7 @@
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
 import If from '@/components/If';
 import AppError from '@/shared/errors/AppError';
+import useMountEffect from '@/shared/hooks/useMountEffect';
 import { RootState } from '@/store';
 import {
   setIsLoadingRedmine,
@@ -56,6 +57,12 @@ export function AutocompleteRedmines({ isVisible }: IProps) {
         dispatch(setIsLoadingRedmine(false));
       });
   }, [dispatch, enqueueSnackbar, isLoadingRedmine]);
+
+  useMountEffect(() => {
+    if (redmines.length === 0) {
+      fetchRedmines();
+    }
+  });
 
   return (
     <If test={isVisible}>
