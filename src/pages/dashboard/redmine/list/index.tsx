@@ -28,7 +28,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
-import { useSnackbar, VariantType } from 'notistack';
+import { toast, TypeOptions } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -51,7 +51,6 @@ export default function Index() {
   const isLoadingRedmine = useSelector(
     (state: RootState) => state.redmine.isLoadingRedmine,
   );
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const [stateDeleteRedmine, setStateDeleteRedmine] = useState<
@@ -79,14 +78,12 @@ export default function Index() {
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
-        });
+        toast(error.message, { type: error.type as TypeOptions });
 
         dispatch(setRedmines([]));
       })
       .finally(() => dispatch(setIsLoadingRedmine(false)));
-  }, [dispatch, enqueueSnackbar, isLoadingRedmine, refresh]);
+  }, [dispatch, isLoadingRedmine, refresh]);
 
   function getRoleUser(redmine: Redmine): number {
     const redmineUser = redmine.redmine_users.find(
@@ -101,18 +98,14 @@ export default function Index() {
 
     DeleteRedminesService(idDelete)
       .then(() => {
-        enqueueSnackbar('Sucesso', {
-          variant: 'success',
-        });
+        toast.success('Sucesso');
         setStateDeleteRedmine({ open: false });
         setRefresh(true);
       })
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
-        });
+        toast(error.message, { type: error.type as TypeOptions });
       });
   }
 
@@ -123,16 +116,12 @@ export default function Index() {
 
     SyncUsersRedmineService(id)
       .then(() => {
-        enqueueSnackbar('Sucesso', {
-          variant: 'success',
-        });
+        toast.success('Sucesso');
       })
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
-        });
+        toast(error.message, { type: error.type as TypeOptions });
       })
       .finally(() => {
         dispatch(setIsLoadingProcess(false));

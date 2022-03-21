@@ -3,7 +3,7 @@ import TextFieldPassword from '@/components/TextFieldPassword';
 import AppError from '@/shared/errors/AppError';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useSnackbar, VariantType } from 'notistack';
+import { toast, TypeOptions } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Redmine } from '../../types';
@@ -23,7 +23,6 @@ interface Props {
 
 export default function FormCreate({ isEditMode, idRedmine }: Props) {
   const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
 
   const createRedmineContext = useContext(CreateRedmineContext);
 
@@ -41,16 +40,12 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
         await UpdateRedmineService({ id: idRedmine, redmineProps: redmine });
       }
 
-      enqueueSnackbar('Sucesso', {
-        variant: 'success',
-      });
+      toast.success('Sucesso');
       history.push('/dashboard/redmine/');
     } catch (e) {
       const error = e as AppError;
 
-      enqueueSnackbar(error.message, {
-        variant: error.type as VariantType,
-      });
+      toast('Sucesso', { type: error.type as TypeOptions });
     }
   };
 
@@ -92,9 +87,7 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
             } catch (e) {
               const error = e as AppError;
 
-              enqueueSnackbar(error.message, {
-                variant: error.type as VariantType,
-              });
+              toast(error.message, { type: error.type as TypeOptions });
               history.push('/dashboard/redmine/');
             }
           }

@@ -1,7 +1,7 @@
 import AsynchronousAutocomplete from '@/components/AsynchronousAutocomplete';
 import AppError from '@/shared/errors/AppError';
 import { Field, useFormikContext } from 'formik';
-import { useSnackbar, VariantType } from 'notistack';
+import { toast, TypeOptions } from 'react-toastify';
 import { useCallback, useContext } from 'react';
 import { CreateRedmineContext } from '../context/CreateRedmineContext';
 import FetchProjectsRedmineService from '../services/FetchProjectsRedmineService';
@@ -16,7 +16,6 @@ export default function AutocompleteProjectsRedmine({
   refreshProjects,
   setRefreshProjects,
 }: Props) {
-  const { enqueueSnackbar } = useSnackbar();
   const {
     setFieldValue,
     setFieldTouched,
@@ -37,9 +36,7 @@ export default function AutocompleteProjectsRedmine({
       values.url === initialValues.url ||
       values.apiKey === initialValues.apiKey
     ) {
-      enqueueSnackbar('Informe os campos URL e Api Key', {
-        variant: 'warning',
-      });
+      toast.warn('Informe os campos URL e Api Key');
 
       createRedmineContext.actions.setProjects([]);
       return;
@@ -61,17 +58,13 @@ export default function AutocompleteProjectsRedmine({
 
       if (e instanceof AppError) {
         const error = e as AppError;
-
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
-        });
+        toast(error.message, { type: error.type as TypeOptions });
 
         return;
       }
     }
   }, [
     createRedmineContext.actions,
-    enqueueSnackbar,
     setRefreshProjects,
     values.apiKey,
     values.url,

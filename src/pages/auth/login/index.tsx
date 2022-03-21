@@ -9,7 +9,7 @@ import { Button, Container, Link, Typography } from '@material-ui/core';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { CheckboxWithLabel, TextField } from 'formik-material-ui';
-import { useSnackbar } from 'notistack';
+import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
@@ -42,7 +42,6 @@ export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
   const api = getApi();
-  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values: LoginRequest) => {
     await api
@@ -56,21 +55,15 @@ export default function Login() {
 
         switch (e.response?.status) {
           case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
+            toast.warning(serverError.response?.data.message);
             break;
 
           case 401:
-            enqueueSnackbar('Email ou senha incorretos', {
-              variant: 'warning',
-            });
+            toast.warning('Email ou senha incorretos');
             break;
 
           default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
+            toast.error('Erro inesperado');
             break;
         }
       });

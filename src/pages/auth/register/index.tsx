@@ -8,7 +8,7 @@ import { Button, Container, Typography } from '@material-ui/core';
 import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useSnackbar } from 'notistack';
+import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { DivBackLogin, DivInformation, DivTextField, Root } from './styles';
@@ -38,7 +38,6 @@ const schema = Yup.object().shape({
 
 export default function Register() {
   const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const api = getApi();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -53,15 +52,11 @@ export default function Register() {
 
         switch (e.response?.status) {
           case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
+            toast.warning(serverError.response?.data.message);
             break;
 
           default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
+            toast.error('Erro inesperado');
             break;
         }
       });

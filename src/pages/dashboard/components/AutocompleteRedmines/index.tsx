@@ -8,7 +8,7 @@ import {
   setRedmines,
   setRedmineSelected,
 } from '@/store/redmine.store';
-import { useSnackbar, VariantType } from 'notistack';
+import { toast, TypeOptions } from 'react-toastify';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FetchRedminesService from '../../redmine/list/services/FetchRedminesService';
@@ -20,7 +20,6 @@ interface IProps {
 }
 
 export function AutocompleteRedmines({ isVisible }: IProps) {
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const redmines = useSelector((state: RootState) => state.redmine.redmines);
   const isLoadingRedmine = useSelector(
@@ -47,16 +46,14 @@ export function AutocompleteRedmines({ isVisible }: IProps) {
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
-        });
+        toast(error.message, { type: error.type as TypeOptions });
 
         dispatch(setRedmines([]));
       })
       .finally(() => {
         dispatch(setIsLoadingRedmine(false));
       });
-  }, [dispatch, enqueueSnackbar, isLoadingRedmine]);
+  }, [dispatch, isLoadingRedmine]);
 
   useMountEffect(() => {
     if (redmines.length === 0) {

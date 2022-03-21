@@ -5,11 +5,11 @@ import { Button, Container, Typography } from '@material-ui/core';
 import { AxiosError } from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { DivBack, DivInformation, DivTextField, Root } from './styles';
 import Successfull from './successfull';
+import { toast } from 'react-toastify';
 
 interface ForgotRequest {
   email: string;
@@ -29,7 +29,6 @@ interface State {
 }
 
 export default function Forgot() {
-  const { enqueueSnackbar } = useSnackbar();
   const [state, setState] = useState<State>({ isSubmit: false, email: '' });
   const api = getApi();
 
@@ -47,15 +46,11 @@ export default function Forgot() {
 
         switch (e.response?.status) {
           case 400:
-            enqueueSnackbar(serverError.response?.data.message, {
-              variant: 'warning',
-            });
+            toast.warn(serverError.response?.data.message);
             break;
 
           default:
-            enqueueSnackbar('Erro inesperado', {
-              variant: 'error',
-            });
+            toast.error('Erro inesperado');
             break;
         }
       });

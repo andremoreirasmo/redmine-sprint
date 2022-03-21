@@ -24,7 +24,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { useSnackbar, VariantType } from 'notistack';
+import { toast, TypeOptions } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -40,7 +40,6 @@ import {
 } from './styles';
 
 export default function Index() {
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const redmineSelectedId = useSelector(
@@ -66,31 +65,30 @@ export default function Index() {
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
+        toast(error.message, {
+          type: error.type as TypeOptions,
         });
 
         setRefresh(false);
         setTeams([]);
       });
-  }, [dispatch, enqueueSnackbar, redmineSelectedId, refresh]);
+  }, [dispatch, redmineSelectedId, refresh]);
 
   async function DeleteTeam() {
     const idDelete = stateDeleteTeam.payload?.id as string;
 
     DeleteTeamService(idDelete)
       .then(() => {
-        enqueueSnackbar('Sucesso', {
-          variant: 'success',
-        });
+        toast.success('Sucesso');
+
         setStateDeleteTeam({ open: false });
         setRefresh(true);
       })
       .catch(e => {
         const error = e as AppError;
 
-        enqueueSnackbar(error.message, {
-          variant: error.type as VariantType,
+        toast(error.message, {
+          type: error.type as TypeOptions,
         });
       });
   }
