@@ -10,7 +10,6 @@ import CreateRedmineService from '../services/CreateRedmineService';
 import UpdateRedmineService from '../services/UpdateRedmineService';
 import { DivBtnCreate, PaperForm } from '../styles';
 import { CreateRedmineForm, initialValues, schema } from '../types';
-import Activies from './Activities';
 
 interface Props {
   idTeam: string;
@@ -60,13 +59,6 @@ export default function FormCreate({ isEditMode, idTeam }: Props) {
         return (
           <Form>
             <PaperForm elevation={3}>
-              <Field component={TextField} label="Nome" name="name" />
-              <Field
-                component={TextField}
-                label="Horas por ponto"
-                name="hours_per_point"
-              />
-              <Activies />
               <DivBtnCreate>
                 <LoadingButton
                   label={isEditMode ? 'Salvar' : 'Criar Equipe'}
