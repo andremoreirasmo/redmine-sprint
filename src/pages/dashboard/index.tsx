@@ -10,7 +10,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  LinearProgress,
   List,
   Popover,
   Toolbar,
@@ -52,9 +51,6 @@ export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const pathActive = useSelector(
     (state: RootState) => state.router.location.pathname,
-  );
-  const isLoadingProcess = useSelector(
-    (state: RootState) => state.app.isLoadingProcess,
   );
   const userAuth = useSelector((state: RootState) => state.auth);
   const darkMode = useSelector((state: RootState) => state.app.darkMode);
@@ -166,7 +162,6 @@ export default function Dashboard() {
             </Popover>
           </Grid>
         </Toolbar>
-        {isLoadingProcess && <LinearProgress />}
       </HeaderAppBar>
       <SideBar
         variant="permanent"

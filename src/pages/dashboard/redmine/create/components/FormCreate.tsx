@@ -45,7 +45,7 @@ export default function FormCreate({ isEditMode, idRedmine }: Props) {
     } catch (e) {
       const error = e as AppError;
 
-      toast('Sucesso', { type: error.type as TypeOptions });
+      toast(error.message, { type: error.type as TypeOptions });
     }
   };
 

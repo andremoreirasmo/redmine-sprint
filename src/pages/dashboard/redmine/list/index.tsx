@@ -6,7 +6,6 @@ import LinkRouter from '@/components/LinkRouter';
 import NoDataSvg from '@/components/NoDataSvg';
 import AppError from '@/shared/errors/AppError';
 import { RootState } from '@/store';
-import { setIsLoadingProcess } from '@/store/app.store';
 import { setIsLoadingRedmine, setRedmines } from '@/store/redmine.store';
 import {
   Breadcrumbs,
@@ -28,7 +27,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SyncIcon from '@material-ui/icons/Sync';
-import { toast, TypeOptions } from 'react-toastify';
+import { toast, ToastContentProps, TypeOptions } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -112,20 +111,18 @@ export default function Index() {
   async function SyncRedmine() {
     setStateSyncRedmine({ open: false });
     const id = stateSyncRedmine.payload?.id as string;
-    dispatch(setIsLoadingProcess(true));
 
-    SyncUsersRedmineService(id)
-      .then(() => {
-        toast.success('Sucesso');
-      })
-      .catch(e => {
-        const error = e as AppError;
+    toast.promise(() => SyncUsersRedmineService(id), {
+      pending: 'Importando usuários do Redmine',
+      success: 'Importado usuários com sucesso',
+      error: {
+        render({ data }: ToastContentProps) {
+          const error = data as AppError;
 
-        toast(error.message, { type: error.type as TypeOptions });
-      })
-      .finally(() => {
-        dispatch(setIsLoadingProcess(false));
-      });
+          return error.message;
+        },
+      },
+    });
   }
 
   return (
