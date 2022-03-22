@@ -2,6 +2,7 @@ import {
   Breadcrumbs,
   Button,
   CircularProgress,
+  Paper,
   Step,
   StepLabel,
   Stepper,
@@ -11,7 +12,13 @@ import { useParams } from 'react-router-dom';
 import LinkRouter from '@/components/LinkRouter';
 import FormCreate from './components/FormCreate';
 import CreateRedmineProvider from './context/CreateRedmineContext';
-import { DivHeaderPage, HeaderPage, Root } from './styles';
+import {
+  DivHeaderPage,
+  HeaderPage,
+  Root,
+  PaperForm,
+  DivBtnCreate,
+} from './styles';
 import BasicForm from './components/Forms/BasicForm';
 import ActivitiesForm from './components/Forms/ActivitiesForm';
 import { useState } from 'react';
@@ -37,6 +44,7 @@ export default function Index() {
   const { idTeam } = useParams<RouteParams>();
   const isEditMode = idTeam != null;
   const caption = isEditMode ? 'Editar' : 'Nova';
+  const captionBtnSave = isEditMode ? 'Salvar' : 'Criar';
 
   const [activeStep, setActiveStep] = useState(0);
   const isLastStep = activeStep === steps.length - 1;
@@ -84,51 +92,52 @@ export default function Index() {
             <LinkRouter to="/dashboard" color="inherit">
               Dashboard
             </LinkRouter>
-            <LinkRouter to="/dashboard/redmine/" color="inherit">
+            <LinkRouter to="/dashboard/team/" color="inherit">
               Equipe
             </LinkRouter>
             <Typography color="textPrimary">{caption} Equipe</Typography>
           </Breadcrumbs>
         </DivHeaderPage>
+        <PaperForm>
+          <Stepper activeStep={activeStep}>
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <Formik
+            initialValues={{ id: 1 }}
+            // initialValues={formInitialValues}
+            // validationSchema={currentValidationSchema}
+            onSubmit={_handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form
+              // id={formId}
+              >
+                {_renderStepContent(activeStep)}
 
-        <Stepper activeStep={activeStep}>
-          {steps.map(label => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Formik
-          initialValues={{ id: 1 }}
-          // initialValues={formInitialValues}
-          // validationSchema={currentValidationSchema}
-          onSubmit={_handleSubmit}
-        >
-          {({ isSubmitting }) => (
-            <Form
-            // id={formId}
-            >
-              {_renderStepContent(activeStep)}
-
-              <div>
-                {activeStep !== 0 && (
-                  <Button onClick={_handleBack}>Back</Button>
-                )}
-                <div>
-                  <Button
-                    disabled={isSubmitting}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                  >
-                    {isLastStep ? 'Place order' : 'Next'}
-                  </Button>
-                  {isSubmitting && <CircularProgress size={24} />}
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+                <DivBtnCreate>
+                  {activeStep !== 0 && (
+                    <Button onClick={_handleBack}>Voltar</Button>
+                  )}
+                  <div>
+                    <Button
+                      disabled={isSubmitting}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                    >
+                      {isLastStep ? `${captionBtnSave} equipe` : 'Próximo'}
+                    </Button>
+                    {isSubmitting && <CircularProgress size={24} />}
+                  </div>
+                </DivBtnCreate>
+              </Form>
+            )}
+          </Formik>
+        </PaperForm>
       </Root>
     </CreateRedmineProvider>
   );
