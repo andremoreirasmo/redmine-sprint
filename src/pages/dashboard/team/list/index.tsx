@@ -57,6 +57,12 @@ export default function Index() {
       return;
     }
 
+    if (redmineSelectedId === '') {
+      toast.warn('Selecione um Redmine');
+      setRefresh(false);
+      return;
+    }
+
     FetchTeamsService(redmineSelectedId)
       .then(teams => {
         setRefresh(false);
