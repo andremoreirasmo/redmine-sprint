@@ -14,6 +14,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { DivHeader } from './styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import DialogAddActvity from './components/DialogAddActvity';
+import { useState } from 'react';
 
 function createData(
   name: string,
@@ -31,18 +33,28 @@ const rows = [
   createData('Eclair', 262, 16.0, 24, 6.0),
   createData('Cupcake', 305, 3.7, 67, 4.3),
   createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 export default function ActivitiesForm() {
+  const [openDialogAddActiviy, setOpenDialogAddActiviy] = useState(false);
+
   return (
     <>
       <DivHeader>
         <Tooltip title="Adicionar">
-          <IconButton aria-label="add">
-            <AddIcon />
+          <IconButton
+            aria-label="add"
+            onClick={() => setOpenDialogAddActiviy(true)}
+          >
+            <AddIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Typography variant="h6" id="tableTitle">
+        <Typography variant="h6" gutterBottom>
           Atividades
         </Typography>
       </DivHeader>
@@ -79,6 +91,10 @@ export default function ActivitiesForm() {
           </TableBody>
         </Table>
       </TableContainer>
+      <DialogAddActvity
+        open={openDialogAddActiviy}
+        handleClose={() => setOpenDialogAddActiviy(false)}
+      />
     </>
   );
 }

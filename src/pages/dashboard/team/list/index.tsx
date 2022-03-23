@@ -53,13 +53,14 @@ export default function Index() {
   const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
-    if (!refresh) {
+    if (redmineSelectedId === '') {
+      toast.warn('Selecione um Redmine');
+      setTeams([]);
+      setRefresh(false);
       return;
     }
 
-    if (redmineSelectedId === '') {
-      toast.warn('Selecione um Redmine');
-      setRefresh(false);
+    if (!refresh) {
       return;
     }
 
@@ -110,6 +111,7 @@ export default function Index() {
             startIcon={<AddIcon />}
             component={RouterLink}
             to="/dashboard/team/create"
+            disabled={redmineSelectedId === ''}
           >
             Nova Equipe
           </Button>

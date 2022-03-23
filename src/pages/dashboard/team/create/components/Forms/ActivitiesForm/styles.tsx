@@ -2,5 +2,5 @@ import styled from 'styled-components';
 
 export const DivHeader = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 `;
