@@ -14,7 +14,7 @@ const FetchProjectsRedmineService = async ({
 }: Props) => {
   const projects = await getApi()
     .get<ProjectRedmine[]>('apiredmine/projects', {
-      headers: {
+      params: {
         url_redmine,
         api_key_redmine,
       },
