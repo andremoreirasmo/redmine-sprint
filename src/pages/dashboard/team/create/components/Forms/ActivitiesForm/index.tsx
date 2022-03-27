@@ -1,3 +1,5 @@
+import If from '@/components/If';
+import NoDataSvg from '@/components/NoDataSvg';
 import {
   IconButton,
   Paper,
@@ -18,7 +20,7 @@ import {
   CreateTeamContextType,
 } from '../../../context/CreateTeamContext';
 import DialogAddActvity from './components/DialogAddActvity';
-import { DivHeader } from './styles';
+import { DivHeader, DivNoData } from './styles';
 
 export default function ActivitiesForm() {
   const createTeamContext = useContext(
@@ -44,39 +46,46 @@ export default function ActivitiesForm() {
           Atividades
         </Typography>
       </DivHeader>
-      <TableContainer component={Paper} variant="outlined" square={true}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell>Atividades Redmine</TableCell>
-              <TableCell align="right">Ações</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {activities.map(activity => (
-              <TableRow key={activity.name}>
-                <TableCell component="th" scope="row">
-                  {activity.name}
-                </TableCell>
-                <TableCell>
-                  {activity.activities_redmine.map(e => e.name).join(', ')}
-                </TableCell>
-                <TableCell align="right">
-                  <Tooltip title="Excluir" aria-label="Delete">
-                    <IconButton
-                      color="inherit"
-                      onClick={() => removeActivity(activity)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
+      <If test={activities.length === 0}>
+        <DivNoData>
+          <NoDataSvg />
+        </DivNoData>
+      </If>
+      <If test={activities.length > 0}>
+        <TableContainer component={Paper} variant="outlined" square={true}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome</TableCell>
+                <TableCell>Atividades Redmine</TableCell>
+                <TableCell align="right">Ações</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {activities.map(activity => (
+                <TableRow key={activity.name}>
+                  <TableCell component="th" scope="row">
+                    {activity.name}
+                  </TableCell>
+                  <TableCell>
+                    {activity.activities_redmine.map(e => e.name).join(', ')}
+                  </TableCell>
+                  <TableCell align="right">
+                    <Tooltip title="Excluir" aria-label="Delete">
+                      <IconButton
+                        color="inherit"
+                        onClick={() => removeActivity(activity)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </If>
       <DialogAddActvity
         open={openDialogAddActivity}
         handleClose={() => setOpenDialogAddActivity(false)}
