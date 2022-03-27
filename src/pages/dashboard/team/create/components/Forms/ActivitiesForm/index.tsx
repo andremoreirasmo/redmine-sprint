@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { useContext, useState } from 'react';
 import {
   CreateTeamContext,
@@ -30,6 +31,7 @@ export default function ActivitiesForm() {
   const { activities } = createTeamContext.state;
   const { removeActivity } = createTeamContext.actions;
   const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
+  const [indexEditActivity, setIndexEditActivity] = useState(-1);
 
   return (
     <>
@@ -62,7 +64,7 @@ export default function ActivitiesForm() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {activities.map(activity => (
+              {activities.map((activity, index) => (
                 <TableRow key={activity.name}>
                   <TableCell component="th" scope="row">
                     {activity.name}
@@ -71,6 +73,17 @@ export default function ActivitiesForm() {
                     {activity.activities_redmine.map(e => e.name).join(', ')}
                   </TableCell>
                   <TableCell align="right">
+                    <Tooltip title="Editar" aria-label="Edit">
+                      <IconButton
+                        color="inherit"
+                        onClick={() => {
+                          setIndexEditActivity(index);
+                          setOpenDialogAddActivity(true);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip title="Excluir" aria-label="Delete">
                       <IconButton
                         color="inherit"
@@ -88,7 +101,11 @@ export default function ActivitiesForm() {
       </If>
       <DialogAddActvity
         open={openDialogAddActivity}
-        handleClose={() => setOpenDialogAddActivity(false)}
+        indexEditActivity={indexEditActivity}
+        handleClose={() => {
+          setOpenDialogAddActivity(false);
+          setIndexEditActivity(-1);
+        }}
       />
     </>
   );

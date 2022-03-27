@@ -23,7 +23,7 @@ import {
   FormikTouched,
 } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, TypeOptions } from 'react-toastify';
 import FetchActivitiesService from './services/FetchActivitiesService';
@@ -31,6 +31,7 @@ import { FormActivities } from './styles';
 
 interface Props {
   open: boolean;
+  indexEditActivity: number;
   handleClose: () => void;
 }
 
@@ -52,19 +53,25 @@ const initialValues: IActivity = {
   activities_redmine: [],
 };
 
-export default function DialogAddActvity({ open, handleClose }: Props) {
+export default function DialogAddActvity({
+  open,
+  handleClose,
+  indexEditActivity,
+}: Props) {
   const redmineSelectedId = useSelector(
     (state: RootState) => state.redmine.redmineSelectedId,
   );
   const createTeamContext = useCreateTeamContext();
 
   const { activities } = createTeamContext.state;
-  const { addActivity } = createTeamContext.actions;
+  const { addActivity, editActivity } = createTeamContext.actions;
 
   const [isLoadingActivities, setIsLoadingActivities] = useState(false);
   const [activitiesRedmine, setActivitiesRedmine] = useState<
     IApiRedmineActivity[]
   >([]);
+
+  const isEditMode = indexEditActivity != -1;
 
   const fetchActivities = useCallback(async () => {
     if (isLoadingActivities) {
@@ -97,15 +104,18 @@ export default function DialogAddActvity({ open, handleClose }: Props) {
     values: IActivity,
     { setSubmitting }: FormikHelpers<IActivity>,
   ) => {
-    const existingActivities = activities.find(e => e.name === values.name);
+    const existingActivities = activities.findIndex(
+      e => e.name === values.name,
+    );
 
-    if (existingActivities) {
+    if (existingActivities >= 0 && existingActivities != indexEditActivity) {
       toast.warn('Já existe uma atividade com esse nome.');
       setSubmitting(false);
       return;
     }
 
     const existsActivityRedmine = activities
+      .filter((e, index) => index != indexEditActivity)
       .flatMap(e => e.activities_redmine)
       .find(e =>
         values.activities_redmine.find(activity => e.id === activity.id),
@@ -116,8 +126,12 @@ export default function DialogAddActvity({ open, handleClose }: Props) {
       setSubmitting(false);
       return;
     }
+    if (indexEditActivity === -1) {
+      addActivity(values);
+    } else {
+      editActivity(values, indexEditActivity);
+    }
 
-    addActivity(values);
     handleClose();
   };
 
@@ -127,10 +141,23 @@ export default function DialogAddActvity({ open, handleClose }: Props) {
       onSubmit={handleSubmit}
       validationSchema={schema}
     >
-      {function Render({ submitForm, isSubmitting }) {
+      {function Render({ submitForm, isSubmitting, setFieldValue }) {
+        useEffect(() => {
+          if (indexEditActivity >= 0) {
+            const activity = activities[indexEditActivity];
+
+            let k: keyof IActivity;
+            for (k in activity) {
+              setFieldValue(k, activity[k], false);
+            }
+          }
+        }, [setFieldValue]);
+
         return (
           <Dialog open={open} onClose={handleClose} fullWidth>
-            <DialogTitle>Adicionar atividade</DialogTitle>
+            <DialogTitle>
+              {isEditMode ? 'Editar' : 'Adicionar'} atividade
+            </DialogTitle>
             <DialogContent>
               <FormActivities>
                 <Field
@@ -171,7 +198,7 @@ export default function DialogAddActvity({ open, handleClose }: Props) {
                 Cancelar
               </Button>
               <LoadingButton
-                label="Adicionar"
+                label={isEditMode ? 'Editar' : 'Adicionar'}
                 isLoading={isSubmitting}
                 onClick={submitForm}
                 size="medium"
