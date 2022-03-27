@@ -1,11 +1,13 @@
 import { createContext, useContext, useState } from 'react';
-import { IActivity } from '../types';
+import { IActivity, ICategory } from '../types';
 
 export type CreateTeamContextType = {
-  state: { activities: IActivity[] };
+  state: { activities: IActivity[]; categories: ICategory[] };
   actions: {
     addActivity: (activity: IActivity) => void;
     removeActivity: (activity: IActivity) => void;
+    addCategory: (category: ICategory) => void;
+    removeCategory: (category: ICategory) => void;
   };
 };
 
@@ -16,6 +18,7 @@ export const CreateTeamContext = createContext<CreateTeamContextType | null>(
 const CreateTeamProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [stateContextCreate, setStateContextCreate] = useState({
     activities: [] as IActivity[],
+    categories: [] as ICategory[],
   });
 
   const addActivity = (activity: IActivity) => {
@@ -29,7 +32,26 @@ const CreateTeamProvider: React.FC<React.ReactNode> = ({ children }) => {
   const removeActivity = (activity: IActivity) => {
     const index = stateContextCreate.activities.indexOf(activity);
     if (index > -1) {
-      stateContextCreate.activities.splice(index, 1); // 2nd parameter means remove one item only
+      stateContextCreate.activities.splice(index, 1);
+    }
+
+    setStateContextCreate({
+      ...stateContextCreate,
+    });
+  };
+
+  const addCategory = (category: ICategory) => {
+    stateContextCreate.categories.push(category);
+
+    setStateContextCreate({
+      ...stateContextCreate,
+    });
+  };
+
+  const removeCategory = (category: ICategory) => {
+    const index = stateContextCreate.categories.indexOf(category);
+    if (index > -1) {
+      stateContextCreate.categories.splice(index, 1);
     }
 
     setStateContextCreate({
@@ -41,7 +63,7 @@ const CreateTeamProvider: React.FC<React.ReactNode> = ({ children }) => {
     <CreateTeamContext.Provider
       value={{
         state: stateContextCreate,
-        actions: { addActivity, removeActivity },
+        actions: { addActivity, removeActivity, addCategory, removeCategory },
       }}
     >
       {children}

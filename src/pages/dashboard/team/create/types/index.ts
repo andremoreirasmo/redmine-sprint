@@ -40,9 +40,23 @@ interface IApiRedmineActivity {
   name: string;
 }
 
+interface IApiCategoryRedmine {
+  id: number;
+  name: string;
+  project: {
+    id: number;
+    name: string;
+  };
+}
+
 interface IActivity {
   name: string;
   activities_redmine: IApiRedmineActivity[];
+}
+
+interface ICategory {
+  name: string;
+  categories_redmine: IApiCategoryRedmine[];
 }
 
 export { initialValues, schema };
@@ -51,4 +65,6 @@ export type {
   ProjectRedmine,
   IApiRedmineActivity,
   IActivity,
+  IApiCategoryRedmine,
+  ICategory,
 };

@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ActivitiesForm from './components/Forms/ActivitiesForm';
 import BasicForm from './components/Forms/BasicForm';
+import CategoriesForm from './components/Forms/CategoriesForm';
 import CreateTeamProvider from './context/CreateTeamContext';
 import {
   DivBtnCreate,
@@ -26,13 +27,15 @@ interface RouteParams {
   idTeam: string;
 }
 
-const steps = ['Básico', 'Atividades'];
+const steps = ['Básico', 'Atividades', 'Categorias'];
 function _renderStepContent(step: number) {
   switch (step) {
     case 0:
       return <BasicForm />;
     case 1:
       return <ActivitiesForm />;
+    case 2:
+      return <CategoriesForm />;
     default:
       return <div>Not Found</div>;
   }
