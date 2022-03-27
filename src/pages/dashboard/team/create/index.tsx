@@ -1,28 +1,26 @@
+import LinkRouter from '@/components/LinkRouter';
 import {
   Breadcrumbs,
   Button,
   CircularProgress,
-  Paper,
   Step,
   StepLabel,
   Stepper,
   Typography,
 } from '@material-ui/core';
+import { Form, Formik } from 'formik';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LinkRouter from '@/components/LinkRouter';
-import FormCreate from './components/FormCreate';
-import CreateRedmineProvider from './context/CreateRedmineContext';
+import ActivitiesForm from './components/Forms/ActivitiesForm';
+import BasicForm from './components/Forms/BasicForm';
+import CreateTeamProvider from './context/CreateTeamContext';
 import {
+  DivBtnCreate,
   DivHeaderPage,
   HeaderPage,
-  Root,
   PaperForm,
-  DivBtnCreate,
+  Root,
 } from './styles';
-import BasicForm from './components/Forms/BasicForm';
-import ActivitiesForm from './components/Forms/ActivitiesForm';
-import { useState } from 'react';
-import { Field, Form, Formik } from 'formik';
 
 interface RouteParams {
   idTeam: string;
@@ -82,7 +80,7 @@ export default function Index() {
   }
 
   return (
-    <CreateRedmineProvider>
+    <CreateTeamProvider>
       <Root maxWidth="lg">
         <DivHeaderPage>
           <HeaderPage>
@@ -139,6 +137,6 @@ export default function Index() {
           </Formik>
         </PaperForm>
       </Root>
-    </CreateRedmineProvider>
+    </CreateTeamProvider>
   );
 }

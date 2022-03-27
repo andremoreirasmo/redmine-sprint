@@ -11,37 +11,23 @@ import {
   Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { DivHeader } from './styles';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { useContext, useState } from 'react';
+import {
+  CreateTeamContext,
+  CreateTeamContextType,
+} from '../../../context/CreateTeamContext';
 import DialogAddActvity from './components/DialogAddActvity';
-import { useState } from 'react';
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+import { DivHeader } from './styles';
 
 export default function ActivitiesForm() {
-  const [openDialogAddActiviy, setOpenDialogAddActiviy] = useState(false);
+  const createTeamContext = useContext(
+    CreateTeamContext,
+  ) as CreateTeamContextType;
+
+  const { activities } = createTeamContext.state;
+  const { removeActivity } = createTeamContext.actions;
+  const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
 
   return (
     <>
@@ -49,7 +35,7 @@ export default function ActivitiesForm() {
         <Tooltip title="Adicionar">
           <IconButton
             aria-label="add"
-            onClick={() => setOpenDialogAddActiviy(true)}
+            onClick={() => setOpenDialogAddActivity(true)}
           >
             <AddIcon fontSize="small" />
           </IconButton>
@@ -68,20 +54,20 @@ export default function ActivitiesForm() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.name}>
+            {activities.map(activity => (
+              <TableRow key={activity.name}>
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {activity.name}
                 </TableCell>
-                <TableCell>{row.calories}</TableCell>
+                <TableCell>
+                  {activity.activities_redmine.map(e => e.name).join(', ')}
+                </TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Editar" aria-label="Edit">
-                    <IconButton color="inherit">
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title="Excluir" aria-label="Delete">
-                    <IconButton color="inherit">
+                    <IconButton
+                      color="inherit"
+                      onClick={() => removeActivity(activity)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
@@ -92,8 +78,8 @@ export default function ActivitiesForm() {
         </Table>
       </TableContainer>
       <DialogAddActvity
-        open={openDialogAddActiviy}
-        handleClose={() => setOpenDialogAddActiviy(false)}
+        open={openDialogAddActivity}
+        handleClose={() => setOpenDialogAddActivity(false)}
       />
     </>
   );

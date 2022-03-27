@@ -35,5 +35,20 @@ const schema = Yup.object().shape({
     .required(),
 });
 
+interface IApiRedmineActivity {
+  id: number;
+  name: string;
+}
+
+interface IActivity {
+  name: string;
+  activities_redmine: IApiRedmineActivity[];
+}
+
 export { initialValues, schema };
-export type { CreateRedmineForm, ProjectRedmine };
+export type {
+  CreateRedmineForm,
+  ProjectRedmine,
+  IApiRedmineActivity,
+  IActivity,
+};

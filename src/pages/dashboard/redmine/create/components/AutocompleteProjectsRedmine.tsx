@@ -7,7 +7,7 @@ import { CreateRedmineContext } from '../context/CreateRedmineContext';
 import FetchProjectsRedmineService from '../services/FetchProjectsRedmineService';
 import { CreateRedmineForm, initialValues, ProjectRedmine } from '../types/';
 
-interface Props {
+interface PropsAutocompleteProjectsRedmine {
   refreshProjects: boolean;
   setRefreshProjects: (value: boolean) => void;
 }
@@ -15,7 +15,7 @@ interface Props {
 export default function AutocompleteProjectsRedmine({
   refreshProjects,
   setRefreshProjects,
-}: Props) {
+}: PropsAutocompleteProjectsRedmine) {
   const {
     setFieldValue,
     setFieldTouched,

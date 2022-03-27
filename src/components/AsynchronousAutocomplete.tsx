@@ -5,7 +5,7 @@ import Autocomplete, {
 } from '@material-ui/lab/Autocomplete';
 import { useEffect, useState } from 'react';
 
-interface AsynchronousAutocompleteProps<T> {
+export interface AsynchronousAutocompleteProps<T> {
   error?: boolean;
   helperText?: string | undefined;
   label: string;

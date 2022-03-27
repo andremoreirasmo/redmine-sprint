@@ -1,21 +1,7 @@
-import { Paper } from '@material-ui/core';
 import styled from 'styled-components';
 
-export const PaperForm = styled(Paper)`
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-
-  .MuiTextField-root {
-    margin: 10px;
-  }
-
+export const FormActivities = styled.form`
   .MuiAutocomplete-root {
-    margin-right: 20px;
+    margin-top: 10px;
   }
-`;
-
-export const DivBtnCreate = styled.div`
-  display: flex;
-  justify-content: flex-end;
 `;
