@@ -7,6 +7,7 @@ export type CreateTeamContextType = {
     addActivity: (activity: IActivity) => void;
     removeActivity: (activity: IActivity) => void;
     addCategory: (category: ICategory) => void;
+    editCategory: (category: ICategory, index: number) => void;
     removeCategory: (category: ICategory) => void;
   };
 };
@@ -48,6 +49,14 @@ const CreateTeamProvider: React.FC<React.ReactNode> = ({ children }) => {
     });
   };
 
+  const editCategory = (category: ICategory, index: number) => {
+    stateContextCreate.categories[index] = category;
+
+    setStateContextCreate({
+      ...stateContextCreate,
+    });
+  };
+
   const removeCategory = (category: ICategory) => {
     const index = stateContextCreate.categories.indexOf(category);
     if (index > -1) {
@@ -63,7 +72,13 @@ const CreateTeamProvider: React.FC<React.ReactNode> = ({ children }) => {
     <CreateTeamContext.Provider
       value={{
         state: stateContextCreate,
-        actions: { addActivity, removeActivity, addCategory, removeCategory },
+        actions: {
+          addActivity,
+          removeActivity,
+          addCategory,
+          editCategory,
+          removeCategory,
+        },
       }}
     >
       {children}

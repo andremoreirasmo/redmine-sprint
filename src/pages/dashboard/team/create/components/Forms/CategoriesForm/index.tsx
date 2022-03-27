@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { useContext, useState } from 'react';
 import {
   CreateTeamContext,
@@ -30,6 +31,7 @@ export default function CategoriesForm() {
   const { categories } = createTeamContext.state;
   const { removeCategory } = createTeamContext.actions;
   const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
+  const [indexEditCategory, setIndexEditCategory] = useState(-1);
 
   return (
     <>
@@ -62,7 +64,7 @@ export default function CategoriesForm() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {categories.map(category => (
+              {categories.map((category, index) => (
                 <TableRow key={category.name}>
                   <TableCell component="th" scope="row">
                     {category.name}
@@ -71,6 +73,17 @@ export default function CategoriesForm() {
                     {category.categories_redmine.map(e => e.name).join(', ')}
                   </TableCell>
                   <TableCell align="right">
+                    <Tooltip title="Editar" aria-label="Edit">
+                      <IconButton
+                        color="inherit"
+                        onClick={() => {
+                          setIndexEditCategory(index);
+                          setOpenDialogAddActivity(true);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip title="Excluir" aria-label="Delete">
                       <IconButton
                         color="inherit"
@@ -88,7 +101,11 @@ export default function CategoriesForm() {
       </If>
       <DialogAddCategory
         open={openDialogAddActivity}
-        handleClose={() => setOpenDialogAddActivity(false)}
+        indexEditCategory={indexEditCategory}
+        handleClose={() => {
+          setOpenDialogAddActivity(false);
+          setIndexEditCategory(-1);
+        }}
       />
     </>
   );

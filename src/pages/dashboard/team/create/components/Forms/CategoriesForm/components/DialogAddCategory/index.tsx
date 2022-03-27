@@ -23,7 +23,7 @@ import {
   FormikTouched,
 } from 'formik';
 import { TextField } from 'formik-material-ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, TypeOptions } from 'react-toastify';
 import FetchCategoriesService from './services/FetchCategoriesService';
@@ -31,6 +31,7 @@ import { FormActivities } from './styles';
 
 interface Props {
   open: boolean;
+  indexEditCategory: number;
   handleClose: () => void;
 }
 
@@ -52,19 +53,25 @@ const initialValues: ICategory = {
   categories_redmine: [],
 };
 
-export default function DialogAddCategory({ open, handleClose }: Props) {
+export default function DialogAddCategory({
+  open,
+  handleClose,
+  indexEditCategory,
+}: Props) {
   const redmineSelectedId = useSelector(
     (state: RootState) => state.redmine.redmineSelectedId,
   );
   const createTeamContext = useCreateTeamContext();
 
   const { categories } = createTeamContext.state;
-  const { addCategory } = createTeamContext.actions;
+  const { addCategory, editCategory } = createTeamContext.actions;
 
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
   const [categoriesRedmine, setCategoriesRedmine] = useState<
     IApiCategoryRedmine[]
   >([]);
+
+  const isEditMode = indexEditCategory != -1;
 
   const fetchCategories = useCallback(async () => {
     if (isLoadingCategories) {
@@ -97,15 +104,18 @@ export default function DialogAddCategory({ open, handleClose }: Props) {
     values: ICategory,
     { setSubmitting }: FormikHelpers<ICategory>,
   ) => {
-    const existingActivities = categories.find(e => e.name === values.name);
+    const existingActivities = categories.findIndex(
+      e => e.name === values.name,
+    );
 
-    if (existingActivities) {
+    if (existingActivities >= 0 && existingActivities != indexEditCategory) {
       toast.warn('Já existe uma categoria com esse nome.');
       setSubmitting(false);
       return;
     }
 
     const existsActivityRedmine = categories
+      .filter((e, index) => index != indexEditCategory)
       .flatMap(e => e.categories_redmine)
       .find(e =>
         values.categories_redmine.find(category => e.id === category.id),
@@ -117,7 +127,12 @@ export default function DialogAddCategory({ open, handleClose }: Props) {
       return;
     }
 
-    addCategory(values);
+    if (indexEditCategory === -1) {
+      addCategory(values);
+    } else {
+      editCategory(values, indexEditCategory);
+    }
+
     handleClose();
   };
 
@@ -127,10 +142,23 @@ export default function DialogAddCategory({ open, handleClose }: Props) {
       onSubmit={handleSubmit}
       validationSchema={schema}
     >
-      {function Render({ submitForm, isSubmitting }) {
+      {function Render({ submitForm, isSubmitting, setFieldValue }) {
+        useEffect(() => {
+          if (indexEditCategory >= 0) {
+            const category = categories[indexEditCategory];
+
+            let k: keyof ICategory;
+            for (k in category) {
+              setFieldValue(k, category[k], false);
+            }
+          }
+        }, [setFieldValue]);
+
         return (
           <Dialog open={open} onClose={handleClose} fullWidth>
-            <DialogTitle>Adicionar categoria</DialogTitle>
+            <DialogTitle>
+              {isEditMode ? 'Editar' : 'Adicionar'} categoria
+            </DialogTitle>
             <DialogContent>
               <FormActivities>
                 <Field
@@ -174,7 +202,7 @@ export default function DialogAddCategory({ open, handleClose }: Props) {
                 Cancelar
               </Button>
               <LoadingButton
-                label="Adicionar"
+                label={isEditMode ? 'Editar' : 'Adicionar'}
                 isLoading={isSubmitting}
                 onClick={submitForm}
                 size="medium"
