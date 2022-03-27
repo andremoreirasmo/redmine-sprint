@@ -30,7 +30,7 @@ export default function CategoriesForm() {
 
   const { categories } = createTeamContext.state;
   const { removeCategory } = createTeamContext.actions;
-  const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
+  const [openDialogAddCategory, setOpenDialogAddCategory] = useState(false);
   const [indexEditCategory, setIndexEditCategory] = useState(-1);
 
   return (
@@ -39,7 +39,7 @@ export default function CategoriesForm() {
         <Tooltip title="Adicionar">
           <IconButton
             aria-label="add"
-            onClick={() => setOpenDialogAddActivity(true)}
+            onClick={() => setOpenDialogAddCategory(true)}
           >
             <AddIcon fontSize="small" />
           </IconButton>
@@ -78,7 +78,7 @@ export default function CategoriesForm() {
                         color="inherit"
                         onClick={() => {
                           setIndexEditCategory(index);
-                          setOpenDialogAddActivity(true);
+                          setOpenDialogAddCategory(true);
                         }}
                       >
                         <EditIcon />
@@ -100,10 +100,10 @@ export default function CategoriesForm() {
         </TableContainer>
       </If>
       <DialogAddCategory
-        open={openDialogAddActivity}
+        open={openDialogAddCategory}
         indexEditCategory={indexEditCategory}
         handleClose={() => {
-          setOpenDialogAddActivity(false);
+          setOpenDialogAddCategory(false);
           setIndexEditCategory(-1);
         }}
       />
