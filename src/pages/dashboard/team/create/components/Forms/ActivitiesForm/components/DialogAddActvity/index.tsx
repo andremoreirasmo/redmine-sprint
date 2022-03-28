@@ -198,7 +198,7 @@ export default function DialogAddActvity({
                 Cancelar
               </Button>
               <LoadingButton
-                label={isEditMode ? 'Editar' : 'Adicionar'}
+                label="Salvar"
                 isLoading={isSubmitting}
                 onClick={submitForm}
                 size="medium"

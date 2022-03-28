@@ -12,7 +12,7 @@ import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ActivitiesForm from './components/Forms/ActivitiesForm';
-import BasicForm from './components/Forms/BasicForm';
+import BasicForm from './components/Forms/BasicForm/';
 import CategoriesForm from './components/Forms/CategoriesForm';
 import CreateTeamProvider from './context/CreateTeamContext';
 import {
