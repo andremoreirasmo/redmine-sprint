@@ -28,10 +28,17 @@ interface IUserRedmine {
   name: string;
 }
 
+interface IBasicTeam {
+  name: string;
+  hours_per_point: number;
+  users_redmine: IUserRedmine[];
+}
+
 export type {
   IApiRedmineActivity,
   IActivity,
   IApiCategoryRedmine,
   ICategory,
   IUserRedmine,
+  IBasicTeam,
 };
