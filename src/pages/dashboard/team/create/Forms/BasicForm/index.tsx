@@ -1,21 +1,18 @@
 import FieldAsynchronousAutocomplete from '@/components/FieldAsynchronousAutocomplete';
 import OptionAutompleteAvatar from '@/components/OptionAutompleteAvatar';
 import AppError from '@/shared/errors/AppError';
-import { RootState } from '@/store';
+import useRedmineSelected from '@/shared/hooks/useRedmineSelected';
 import { Avatar, Chip, Grid, Typography } from '@material-ui/core';
 import { Field, FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { toast, TypeOptions } from 'react-toastify';
+import { initialValuesBasicForm } from '../../FormModel/initialValue';
 import { IBasicTeam, IUserRedmine } from '../../types';
 import FetchUsersRedmineService from './services/FetchUsersRedmineService';
-import { initialValuesBasicForm } from '../../FormModel/initialValue';
 
 export default function BasicForm() {
-  const redmineSelectedId = useSelector(
-    (state: RootState) => state.redmine.redmineSelectedId,
-  );
+  const redmine = useRedmineSelected();
   const [isLoadingUsersRedmine, setIsLoadingUsersRedmine] = useState(false);
   const [usersRedmine, setUsersRedmine] = useState<IUserRedmine[]>([]);
   const { setFieldValue, values } = useFormikContext<IBasicTeam>();
@@ -27,7 +24,7 @@ export default function BasicForm() {
 
     setIsLoadingUsersRedmine(true);
 
-    FetchUsersRedmineService(redmineSelectedId)
+    FetchUsersRedmineService(redmine.id)
       .then(users => {
         setUsersRedmine(users);
       })
@@ -41,7 +38,7 @@ export default function BasicForm() {
       .finally(() => {
         setIsLoadingUsersRedmine(false);
       });
-  }, [isLoadingUsersRedmine, redmineSelectedId]);
+  }, [isLoadingUsersRedmine, redmine.id]);
 
   return (
     <>
@@ -74,7 +71,7 @@ export default function BasicForm() {
             renderOption={(user: IUserRedmine) => (
               <OptionAutompleteAvatar
                 label={user.name}
-                src={`https://redmine.sysmo.com.br:1000/account/get_avatar/${user.id_user_redmine}`}
+                src={`${redmine.url}/account/get_avatar/${user.id_user_redmine}`}
               />
             )}
             renderTags={(users: IUserRedmine[]) => {
@@ -83,7 +80,7 @@ export default function BasicForm() {
                   key={user.id}
                   avatar={
                     <Avatar
-                      src={`https://redmine.sysmo.com.br:1000/account/get_avatar/${user.id_user_redmine}`}
+                      src={`${redmine.url}/account/get_avatar/${user.id_user_redmine}`}
                     />
                   }
                   label={user.name}
