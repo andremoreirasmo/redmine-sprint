@@ -5,7 +5,7 @@ export interface AppState {
 }
 
 const initialState: AppState = {
-  darkMode: localStorage.getItem('dark_mode') === 'true',
+  darkMode: localStorage.getItem('dark_mode') != 'false',
 };
 
 const app = createSlice({
