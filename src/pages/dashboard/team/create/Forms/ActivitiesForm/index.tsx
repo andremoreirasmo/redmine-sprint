@@ -19,19 +19,19 @@ import { useContext, useState } from 'react';
 import {
   CreateTeamContext,
   CreateTeamContextType,
-} from '../../../context/CreateTeamContext';
-import DialogAddCategory from './components/DialogAddCategory';
+} from '../../context/CreateTeamContext';
+import DialogAddActvity from './components/DialogAddActvity';
 import { DivHeader, DivNoData } from './styles';
 
-export default function CategoriesForm() {
+export default function ActivitiesForm() {
   const createTeamContext = useContext(
     CreateTeamContext,
   ) as CreateTeamContextType;
 
-  const { categories } = createTeamContext.state;
-  const { removeCategory } = createTeamContext.actions;
-  const [openDialogAddCategory, setOpenDialogAddCategory] = useState(false);
-  const [indexEditCategory, setIndexEditCategory] = useState(-1);
+  const { activities } = createTeamContext.state;
+  const { removeActivity } = createTeamContext.actions;
+  const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
+  const [indexEditActivity, setIndexEditActivity] = useState(-1);
 
   return (
     <>
@@ -39,46 +39,46 @@ export default function CategoriesForm() {
         <Tooltip title="Adicionar">
           <IconButton
             aria-label="add"
-            onClick={() => setOpenDialogAddCategory(true)}
+            onClick={() => setOpenDialogAddActivity(true)}
           >
             <AddIcon fontSize="small" />
           </IconButton>
         </Tooltip>
         <Typography variant="h6" gutterBottom>
-          Categorias
+          Atividades
         </Typography>
       </DivHeader>
-      <If test={categories.length === 0}>
+      <If test={activities.length === 0}>
         <DivNoData>
           <NoDataSvg />
         </DivNoData>
       </If>
-      <If test={categories.length > 0}>
+      <If test={activities.length > 0}>
         <TableContainer component={Paper} variant="outlined" square={true}>
           <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Nome</TableCell>
-                <TableCell>Categorias Redmine</TableCell>
+                <TableCell>Atividades Redmine</TableCell>
                 <TableCell align="right">Ações</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {categories.map((category, index) => (
-                <TableRow key={category.name}>
+              {activities.map((activity, index) => (
+                <TableRow key={activity.name}>
                   <TableCell component="th" scope="row">
-                    {category.name}
+                    {activity.name}
                   </TableCell>
                   <TableCell>
-                    {category.categories_redmine.map(e => e.name).join(', ')}
+                    {activity.activities_redmine.map(e => e.name).join(', ')}
                   </TableCell>
                   <TableCell align="right">
                     <Tooltip title="Editar" aria-label="Edit">
                       <IconButton
                         color="inherit"
                         onClick={() => {
-                          setIndexEditCategory(index);
-                          setOpenDialogAddCategory(true);
+                          setIndexEditActivity(index);
+                          setOpenDialogAddActivity(true);
                         }}
                       >
                         <EditIcon />
@@ -87,7 +87,7 @@ export default function CategoriesForm() {
                     <Tooltip title="Excluir" aria-label="Delete">
                       <IconButton
                         color="inherit"
-                        onClick={() => removeCategory(category)}
+                        onClick={() => removeActivity(activity)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -99,12 +99,12 @@ export default function CategoriesForm() {
           </Table>
         </TableContainer>
       </If>
-      <DialogAddCategory
-        open={openDialogAddCategory}
-        indexEditCategory={indexEditCategory}
+      <DialogAddActvity
+        open={openDialogAddActivity}
+        indexEditActivity={indexEditActivity}
         handleClose={() => {
-          setOpenDialogAddCategory(false);
-          setIndexEditCategory(-1);
+          setOpenDialogAddActivity(false);
+          setIndexEditActivity(-1);
         }}
       />
     </>

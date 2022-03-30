@@ -1,36 +1,16 @@
 import FieldAsynchronousAutocomplete from '@/components/FieldAsynchronousAutocomplete';
 import OptionAutompleteAvatar from '@/components/OptionAutompleteAvatar';
 import AppError from '@/shared/errors/AppError';
-import Yup from '@/shared/global/YupDictionary';
 import { RootState } from '@/store';
 import { Avatar, Chip, Grid, Typography } from '@material-ui/core';
-import { Field, FormikErrors, FormikTouched } from 'formik';
+import { Field, FormikErrors, FormikTouched, useFormikContext } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, TypeOptions } from 'react-toastify';
-import { IBasicTeam, IUserRedmine } from '../../../types';
+import { IBasicTeam, IUserRedmine } from '../../types';
 import FetchUsersRedmineService from './services/FetchUsersRedmineService';
-
-const schema = Yup.object().shape({
-  name: Yup.string().required(),
-  hours_per_point: Yup.number().required(),
-  users_redmine: Yup.array()
-    .of(
-      Yup.object().shape({
-        id: Yup.number().required(),
-        name: Yup.string().required(),
-      }),
-    )
-    .min(1, 'Selecione pelo menos um colaborador')
-    .required(),
-});
-
-const initialValues: IBasicTeam = {
-  name: '',
-  hours_per_point: 0,
-  users_redmine: [],
-};
+import { initialValuesBasicForm } from '../../FormModel/initialValue';
 
 export default function BasicForm() {
   const redmineSelectedId = useSelector(
@@ -38,6 +18,7 @@ export default function BasicForm() {
   );
   const [isLoadingUsersRedmine, setIsLoadingUsersRedmine] = useState(false);
   const [usersRedmine, setUsersRedmine] = useState<IUserRedmine[]>([]);
+  const { setFieldValue, values } = useFormikContext<IBasicTeam>();
 
   const fetchUsers = useCallback(async () => {
     if (isLoadingUsersRedmine) {
@@ -76,6 +57,7 @@ export default function BasicForm() {
             component={TextField}
             label="Horas por ponto"
             name="hours_per_point"
+            type="number"
             fullWidth
           />
         </Grid>
@@ -105,16 +87,21 @@ export default function BasicForm() {
                     />
                   }
                   label={user.name}
-                  // onDelete={() => {
-                  //   setVal(val.filter(entry => entry !== option));
-                  // }}
+                  onDelete={() => {
+                    setFieldValue(
+                      'users_redmine',
+                      values.users_redmine.filter(
+                        entry => entry.id !== user.id,
+                      ),
+                    );
+                  }}
                 />
               ));
             }}
             getOptionSelected={(option: IUserRedmine, value: IUserRedmine) =>
               option.id === value.id
             }
-            defaultValue={initialValues.users_redmine}
+            defaultValue={initialValuesBasicForm.users_redmine}
             wasTouched={(touched: FormikTouched<IBasicTeam>) =>
               touched.users_redmine != undefined
             }

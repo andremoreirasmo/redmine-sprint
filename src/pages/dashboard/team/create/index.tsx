@@ -11,9 +11,9 @@ import {
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ActivitiesForm from './components/Forms/ActivitiesForm';
-import BasicForm from './components/Forms/BasicForm/';
-import CategoriesForm from './components/Forms/CategoriesForm';
+import ActivitiesForm from './Forms/ActivitiesForm';
+import BasicForm from './Forms/BasicForm/';
+import CategoriesForm from './Forms/CategoriesForm';
 import CreateTeamProvider from './context/CreateTeamContext';
 import {
   DivBtnCreate,
@@ -22,6 +22,8 @@ import {
   PaperForm,
   Root,
 } from './styles';
+import validationSchema from './FormModel/validationSchema';
+import initialValue from './FormModel/initialValue';
 
 interface RouteParams {
   idTeam: string;
@@ -48,6 +50,8 @@ export default function Index() {
   const captionBtnSave = isEditMode ? 'Salvar' : 'Criar';
 
   const [activeStep, setActiveStep] = useState(0);
+  const currentValidationSchema = validationSchema[activeStep];
+  const currentInitialValue = initialValue[activeStep];
   const isLastStep = activeStep === steps.length - 1;
 
   function _sleep(ms: number | undefined) {
@@ -108,9 +112,8 @@ export default function Index() {
             ))}
           </Stepper>
           <Formik
-            initialValues={{ id: 1 }}
-            // initialValues={formInitialValues}
-            // validationSchema={currentValidationSchema}
+            initialValues={currentInitialValue}
+            validationSchema={currentValidationSchema}
             onSubmit={_handleSubmit}
           >
             {({ isSubmitting }) => (
