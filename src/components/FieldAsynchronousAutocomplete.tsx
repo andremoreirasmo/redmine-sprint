@@ -43,7 +43,7 @@ export default function FieldAsynchronousAutocomplete<T, F>({
       onBlur={() => {
         setFieldTouched(name, true, true);
       }}
-      error={wasTouched(touched) && errorMessage(errors)}
+      error={Boolean(wasTouched(touched) && errorMessage(errors))}
       helperText={wasTouched(touched) && errorMessage(errors)}
       disabled={isSubmitting}
       selected={selectedValue}
