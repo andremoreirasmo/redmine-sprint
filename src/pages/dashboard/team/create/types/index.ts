@@ -17,9 +17,17 @@ interface IActivity {
   activities_redmine: IApiRedmineActivity[];
 }
 
+interface ITeamActivities {
+  activities: IActivity[];
+}
+
 interface ICategory {
   name: string;
   categories_redmine: IApiCategoryRedmine[];
+}
+
+interface ITeamCategories {
+  categories: ICategory[];
 }
 
 interface IUserRedmine {
@@ -41,4 +49,6 @@ export type {
   ICategory,
   IUserRedmine,
   IBasicTeam,
+  ITeamActivities,
+  ITeamCategories,
 };

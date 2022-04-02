@@ -1,29 +1,22 @@
 import LinkRouter from '@/components/LinkRouter';
 import {
   Breadcrumbs,
-  Button,
-  CircularProgress,
   Step,
   StepLabel,
   Stepper,
   Typography,
 } from '@material-ui/core';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ActionButtons from './components/ActionButtons/';
+import CreateTeamProvider from './context/CreateTeamContext';
+import initialValue from './FormModel/initialValue';
+import validationSchema from './FormModel/validationSchema';
 import ActivitiesForm from './Forms/ActivitiesForm';
 import BasicForm from './Forms/BasicForm/';
 import CategoriesForm from './Forms/CategoriesForm';
-import CreateTeamProvider from './context/CreateTeamContext';
-import {
-  DivBtnCreate,
-  DivHeaderPage,
-  HeaderPage,
-  PaperForm,
-  Root,
-} from './styles';
-import validationSchema from './FormModel/validationSchema';
-import initialValue from './FormModel/initialValue';
+import { DivHeaderPage, HeaderPage, PaperForm, Root } from './styles';
 
 interface RouteParams {
   idTeam: string;
@@ -50,7 +43,6 @@ export default function Index() {
 
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
-  const currentInitialValue = initialValue[activeStep];
   const isLastStep = activeStep === steps.length - 1;
 
   function _sleep(ms: number | undefined) {
@@ -68,10 +60,13 @@ export default function Index() {
     setActiveStep(activeStep + 1);
   }
 
-  function _handleSubmit(
-    values: any,
-    actions: { setTouched?: any; setSubmitting: any },
-  ) {
+  async function _handleSubmit(values: any, actions: FormikHelpers<any>) {
+    console.log('subimit');
+
+    // const errors = await actions.validateForm();
+
+    // console.log(errors);
+
     if (isLastStep) {
       _submitForm(values, actions);
     } else {
@@ -111,7 +106,7 @@ export default function Index() {
             ))}
           </Stepper>
           <Formik
-            initialValues={currentInitialValue}
+            initialValues={initialValue}
             validationSchema={currentValidationSchema}
             onSubmit={_handleSubmit}
           >
@@ -119,22 +114,12 @@ export default function Index() {
               <Form>
                 {_renderStepContent(activeStep)}
 
-                <DivBtnCreate>
-                  {activeStep !== 0 && (
-                    <Button onClick={_handleBack}>Voltar</Button>
-                  )}
-                  <div>
-                    <Button
-                      disabled={isSubmitting}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                    >
-                      {isLastStep ? 'Salvar equipe' : 'Próximo'}
-                    </Button>
-                    {isSubmitting && <CircularProgress size={24} />}
-                  </div>
-                </DivBtnCreate>
+                <ActionButtons
+                  activeStep={activeStep}
+                  handleBack={_handleBack}
+                  isLastStep={isLastStep}
+                  isSubmitting={isSubmitting}
+                />
               </Form>
             )}
           </Formik>

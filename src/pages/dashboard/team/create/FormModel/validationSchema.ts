@@ -8,4 +8,14 @@ export default [
       .min(1, 'Selecione pelo menos um colaborador')
       .required(),
   }),
+  Yup.object().shape({
+    activities: Yup.array()
+      .min(1, 'Cadastre pelo menos uma atividade')
+      .required('Cadastre pelo menos uma atividade'),
+  }),
+  Yup.object().shape({
+    categories: Yup.array()
+      .min(1, 'Cadastre pelo menos uma categoria')
+      .required('Cadastre pelo menos uma atividade'),
+  }),
 ];

@@ -1,4 +1,4 @@
-import { IBasicTeam } from '../types/';
+import { IBasicTeam, ITeamActivities, ITeamCategories } from '../types/';
 
 export const initialValuesBasicForm: IBasicTeam = {
   name: '',
@@ -6,4 +6,16 @@ export const initialValuesBasicForm: IBasicTeam = {
   users_redmine: [],
 };
 
-export default [initialValuesBasicForm];
+const initialValuesActivities: ITeamActivities = {
+  activities: [],
+};
+
+const initialValuesCategories: ITeamCategories = {
+  categories: [],
+};
+
+export default {
+  ...initialValuesBasicForm,
+  ...initialValuesActivities,
+  ...initialValuesCategories,
+};
