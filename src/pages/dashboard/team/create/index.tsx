@@ -47,7 +47,6 @@ export default function Index() {
   const { idTeam } = useParams<RouteParams>();
   const isEditMode = idTeam != null;
   const caption = isEditMode ? 'Editar' : 'Nova';
-  const captionBtnSave = isEditMode ? 'Salvar' : 'Criar';
 
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = validationSchema[activeStep];
@@ -117,9 +116,7 @@ export default function Index() {
             onSubmit={_handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form
-              // id={formId}
-              >
+              <Form>
                 {_renderStepContent(activeStep)}
 
                 <DivBtnCreate>
@@ -133,7 +130,7 @@ export default function Index() {
                       variant="contained"
                       color="primary"
                     >
-                      {isLastStep ? `${captionBtnSave} equipe` : 'Próximo'}
+                      {isLastStep ? 'Salvar equipe' : 'Próximo'}
                     </Button>
                     {isSubmitting && <CircularProgress size={24} />}
                   </div>
