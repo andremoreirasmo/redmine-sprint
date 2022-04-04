@@ -23,7 +23,7 @@ import {
   CreateTeamContext,
   CreateTeamContextType,
 } from '../../context/CreateTeamContext';
-import { ITeamActivities } from '../../types';
+import { ICreateTeam } from '../../types';
 import DialogAddActvity from './components/DialogAddActvity';
 import { DivHeader, DivNoData } from './styles';
 
@@ -37,7 +37,7 @@ export default function ActivitiesForm() {
   const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
   const [indexEditActivity, setIndexEditActivity] = useState(-1);
   const { errors, setErrors, touched, setTouched, values } =
-    useFormikContext<ITeamActivities>();
+    useFormikContext<ICreateTeam>();
   const { activities } = values;
 
   useEffect(() => {

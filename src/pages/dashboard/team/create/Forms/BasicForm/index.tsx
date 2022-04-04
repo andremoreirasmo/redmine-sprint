@@ -8,14 +8,14 @@ import { TextField } from 'formik-material-ui';
 import { useCallback, useState } from 'react';
 import { toast, TypeOptions } from 'react-toastify';
 import { initialValuesBasicForm } from '../../FormModel/initialValue';
-import { IBasicTeam, IUserRedmine } from '../../types';
+import { ICreateTeam, IUserRedmine } from '../../types';
 import FetchUsersRedmineService from './services/FetchUsersRedmineService';
 
 export default function BasicForm() {
   const redmine = useRedmineSelected();
   const [isLoadingUsersRedmine, setIsLoadingUsersRedmine] = useState(false);
   const [usersRedmine, setUsersRedmine] = useState<IUserRedmine[]>([]);
-  const { setFieldValue, values } = useFormikContext<IBasicTeam>();
+  const { setFieldValue, values } = useFormikContext<ICreateTeam>();
 
   const fetchUsers = useCallback(async () => {
     if (isLoadingUsersRedmine) {
@@ -99,13 +99,13 @@ export default function BasicForm() {
               option.id === value.id
             }
             defaultValue={initialValuesBasicForm.users_redmine}
-            wasTouched={(touched: FormikTouched<IBasicTeam>) =>
+            wasTouched={(touched: FormikTouched<ICreateTeam>) =>
               touched.users_redmine != undefined
             }
-            errorMessage={(errors: FormikErrors<IBasicTeam>) =>
+            errorMessage={(errors: FormikErrors<ICreateTeam>) =>
               errors.users_redmine as string
             }
-            valueSelected={(values: IBasicTeam) => values.users_redmine}
+            valueSelected={(values: ICreateTeam) => values.users_redmine}
           />
         </Grid>
       </Grid>

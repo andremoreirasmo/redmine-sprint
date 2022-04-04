@@ -1,21 +1,11 @@
-import { IBasicTeam, ITeamActivities, ITeamCategories } from '../types/';
+import { ICreateTeam } from '../types/';
 
-export const initialValuesBasicForm: IBasicTeam = {
+export const initialValuesBasicForm: ICreateTeam = {
   name: '',
   hours_per_point: 0,
   users_redmine: [],
-};
-
-const initialValuesActivities: ITeamActivities = {
   activities: [],
-};
-
-const initialValuesCategories: ITeamCategories = {
   categories: [],
 };
 
-export default {
-  ...initialValuesBasicForm,
-  ...initialValuesActivities,
-  ...initialValuesCategories,
-};
+export default initialValuesBasicForm;

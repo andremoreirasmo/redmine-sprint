@@ -1,9 +1,9 @@
 import FieldAsynchronousAutocomplete from '@/components/FieldAsynchronousAutocomplete';
 import LoadingButton from '@/components/LoadingButton/';
-import { useCreateTeamContext } from '@/pages/dashboard/team/create/context/CreateTeamContext';
 import {
   IActivity,
   IApiRedmineActivity,
+  ICreateTeam,
 } from '@/pages/dashboard/team/create/types';
 import AppError from '@/shared/errors/AppError';
 import Yup from '@/shared/global/YupDictionary';
@@ -21,6 +21,7 @@ import {
   FormikErrors,
   FormikHelpers,
   FormikTouched,
+  useFormikContext,
 } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useCallback, useEffect, useState } from 'react';
@@ -61,10 +62,8 @@ export default function DialogAddActvity({
   const redmineSelectedId = useSelector(
     (state: RootState) => state.redmine.redmineSelectedId,
   );
-  const createTeamContext = useCreateTeamContext();
-
-  const { activities } = createTeamContext.state;
-  const { addActivity, editActivity } = createTeamContext.actions;
+  const { values, setFieldValue } = useFormikContext<ICreateTeam>();
+  const { activities } = values;
 
   const [isLoadingActivities, setIsLoadingActivities] = useState(false);
   const [activitiesRedmine, setActivitiesRedmine] = useState<
@@ -126,11 +125,13 @@ export default function DialogAddActvity({
       setSubmitting(false);
       return;
     }
+
     if (indexEditActivity === -1) {
-      addActivity(values);
+      activities.push(values);
     } else {
-      editActivity(values, indexEditActivity);
+      activities[indexEditActivity] = values;
     }
+    setFieldValue('activities', activities, false);
 
     handleClose();
   };
