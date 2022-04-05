@@ -1,9 +1,9 @@
 import FieldAsynchronousAutocomplete from '@/components/FieldAsynchronousAutocomplete';
 import LoadingButton from '@/components/LoadingButton/';
-import { useCreateTeamContext } from '@/pages/dashboard/team/create/context/CreateTeamContext';
 import {
-  ICategory,
   IApiCategoryRedmine,
+  ICategory,
+  ICreateTeam,
 } from '@/pages/dashboard/team/create/types';
 import AppError from '@/shared/errors/AppError';
 import Yup from '@/shared/global/YupDictionary';
@@ -21,6 +21,7 @@ import {
   FormikErrors,
   FormikHelpers,
   FormikTouched,
+  useFormikContext,
 } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useCallback, useEffect, useState } from 'react';
@@ -58,13 +59,11 @@ export default function DialogAddCategory({
   handleClose,
   indexEditCategory,
 }: Props) {
+  const { values, setFieldValue } = useFormikContext<ICreateTeam>();
+  const { categories } = values;
   const redmineSelectedId = useSelector(
     (state: RootState) => state.redmine.redmineSelectedId,
   );
-  const createTeamContext = useCreateTeamContext();
-
-  const { categories } = createTeamContext.state;
-  const { addCategory, editCategory } = createTeamContext.actions;
 
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
   const [categoriesRedmine, setCategoriesRedmine] = useState<
@@ -128,10 +127,11 @@ export default function DialogAddCategory({
     }
 
     if (indexEditCategory === -1) {
-      addCategory(values);
+      categories.push(values);
     } else {
-      editCategory(values, indexEditCategory);
+      categories[indexEditCategory] = values;
     }
+    setFieldValue('categories', categories, false);
 
     handleClose();
   };

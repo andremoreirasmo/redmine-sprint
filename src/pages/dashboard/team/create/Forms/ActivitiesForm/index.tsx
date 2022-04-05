@@ -1,6 +1,5 @@
 import If from '@/components/If';
 import NoDataSvg from '@/components/NoDataSvg';
-import useMountEffect from '@/shared/hooks/useMountEffect';
 import {
   IconButton,
   Paper,
@@ -17,26 +16,16 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { useFormikContext } from 'formik';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import {
-  CreateTeamContext,
-  CreateTeamContextType,
-} from '../../context/CreateTeamContext';
-import { ICreateTeam } from '../../types';
+import { IActivity, ICreateTeam } from '../../types';
 import DialogAddActvity from './components/DialogAddActvity';
 import { DivHeader, DivNoData } from './styles';
 
 export default function ActivitiesForm() {
-  const createTeamContext = useContext(
-    CreateTeamContext,
-  ) as CreateTeamContextType;
-
-  // const { activities } = createTeamContext.state;
-  const { removeActivity } = createTeamContext.actions;
   const [openDialogAddActivity, setOpenDialogAddActivity] = useState(false);
   const [indexEditActivity, setIndexEditActivity] = useState(-1);
-  const { errors, setErrors, touched, setTouched, values } =
+  const { errors, setErrors, touched, setTouched, values, setFieldValue } =
     useFormikContext<ICreateTeam>();
   const { activities } = values;
 
@@ -50,6 +39,15 @@ export default function ActivitiesForm() {
       toast.warn(errors.activities, { onClose });
     }
   }, [errors, setErrors, setTouched, touched.activities]);
+
+  const removeActivity = (activity: IActivity) => {
+    const index = activities.indexOf(activity);
+    if (index > -1) {
+      activities.splice(index, 1);
+    }
+
+    setFieldValue('activities', activities);
+  };
 
   return (
     <>

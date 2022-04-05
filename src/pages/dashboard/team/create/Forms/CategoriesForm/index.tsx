@@ -15,23 +15,39 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { useContext, useState } from 'react';
-import {
-  CreateTeamContext,
-  CreateTeamContextType,
-} from '../../context/CreateTeamContext';
+import { useFormikContext } from 'formik';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { ICategory, ICreateTeam } from '../../types';
 import DialogAddCategory from './components/DialogAddCategory';
 import { DivHeader, DivNoData } from './styles';
 
 export default function CategoriesForm() {
-  const createTeamContext = useContext(
-    CreateTeamContext,
-  ) as CreateTeamContextType;
-
-  const { categories } = createTeamContext.state;
-  const { removeCategory } = createTeamContext.actions;
+  const { values, setFieldValue, errors, touched, setErrors, setTouched } =
+    useFormikContext<ICreateTeam>();
+  const { categories } = values;
   const [openDialogAddCategory, setOpenDialogAddCategory] = useState(false);
   const [indexEditCategory, setIndexEditCategory] = useState(-1);
+
+  useEffect(() => {
+    if (errors.categories && touched.categories) {
+      const onClose = () => {
+        setErrors({});
+        setTouched({});
+      };
+
+      toast.warn(errors.categories, { onClose });
+    }
+  }, [errors.categories, setErrors, setTouched, touched.categories]);
+
+  const removeCategory = (category: ICategory) => {
+    const index = categories.indexOf(category);
+    if (index > -1) {
+      categories.splice(index, 1);
+    }
+
+    setFieldValue('categories', categories);
+  };
 
   return (
     <>
