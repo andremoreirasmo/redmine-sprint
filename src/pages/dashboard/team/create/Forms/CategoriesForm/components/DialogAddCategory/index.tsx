@@ -14,6 +14,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
 } from '@material-ui/core/';
 import {
   Field,
@@ -23,7 +24,7 @@ import {
   FormikTouched,
   useFormikContext,
 } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Switch, TextField } from 'formik-material-ui';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast, TypeOptions } from 'react-toastify';
@@ -38,7 +39,7 @@ interface Props {
 
 const schema = Yup.object().shape({
   name: Yup.string().required(),
-  categories_redmine: Yup.array()
+  redmine_categories: Yup.array()
     .of(
       Yup.object().shape({
         id: Yup.number().required(),
@@ -51,7 +52,8 @@ const schema = Yup.object().shape({
 
 const initialValues: ICategory = {
   name: '',
-  categories_redmine: [],
+  redmine_categories: [],
+  productive: false,
 };
 
 export default function DialogAddCategory({
@@ -115,9 +117,9 @@ export default function DialogAddCategory({
 
     const existsActivityRedmine = categories
       .filter((e, index) => index != indexEditCategory)
-      .flatMap(e => e.categories_redmine)
+      .flatMap(e => e.redmine_categories)
       .find(e =>
-        values.categories_redmine.find(category => e.id === category.id),
+        values.redmine_categories.find(category => e.id === category.id),
       );
 
     if (existsActivityRedmine) {
@@ -167,8 +169,18 @@ export default function DialogAddCategory({
                   name="name"
                   fullWidth
                 />
+                <FormControlLabel
+                  control={
+                    <Field
+                      component={Switch}
+                      type="checkbox"
+                      name="productive"
+                    />
+                  }
+                  label="Categoria produtiva"
+                />
                 <FieldAsynchronousAutocomplete
-                  name="categories_redmine"
+                  name="redmine_categories"
                   label="Categorias"
                   options={categoriesRedmine}
                   isLoading={isLoadingCategories}
@@ -184,15 +196,15 @@ export default function DialogAddCategory({
                     option: IApiCategoryRedmine,
                     value: IApiCategoryRedmine,
                   ) => option.id === value.id}
-                  defaultValue={initialValues.categories_redmine}
+                  defaultValue={initialValues.redmine_categories}
                   wasTouched={(touched: FormikTouched<ICategory>) =>
-                    touched.categories_redmine != undefined
+                    touched.redmine_categories != undefined
                   }
                   errorMessage={(errors: FormikErrors<ICategory>) =>
-                    errors.categories_redmine as string
+                    errors.redmine_categories as string
                   }
                   valueSelected={(values: ICategory) =>
-                    values.categories_redmine
+                    values.redmine_categories
                   }
                 />
               </FormActivities>

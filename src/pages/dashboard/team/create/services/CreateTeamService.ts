@@ -1,17 +1,11 @@
 import AppError from '@/shared/errors/AppError';
 import getApi, { ErrorResponse } from '@/shared/providers/api';
 import { AxiosError } from 'axios';
+import { ICreateTeam } from '../types/index';
 
-export interface CreateRedmineRequest {
-  project_import: number;
-  name: string;
-  url: string;
-  apiKey: string;
-}
-
-const CreateRedmineService = async (redmine: CreateRedmineRequest) => {
+const CreateTeamService = async (team: ICreateTeam) => {
   await getApi()
-    .post('redmine', redmine)
+    .post('team', team)
     .catch((e: AxiosError) => {
       const serverError = e as AxiosError<ErrorResponse>;
 
@@ -30,4 +24,4 @@ const CreateRedmineService = async (redmine: CreateRedmineRequest) => {
     });
 };
 
-export default CreateRedmineService;
+export default CreateTeamService;

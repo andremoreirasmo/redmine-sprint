@@ -14,12 +14,13 @@ interface IApiCategoryRedmine {
 
 interface IActivity {
   name: string;
-  activities_redmine: IApiRedmineActivity[];
+  redmine_activities: IApiRedmineActivity[];
 }
 
 interface ICategory {
   name: string;
-  categories_redmine: IApiCategoryRedmine[];
+  productive: boolean;
+  redmine_categories: IApiCategoryRedmine[];
 }
 
 interface IUserRedmine {
@@ -31,6 +32,7 @@ interface IUserRedmine {
 interface ICreateTeam {
   name: string;
   hours_per_point: number;
+  redmine_id: string;
   users_redmine: IUserRedmine[];
   categories: ICategory[];
   activities: IActivity[];

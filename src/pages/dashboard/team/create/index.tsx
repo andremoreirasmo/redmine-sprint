@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import ActionButtons from './components/ActionButtons/';
 import initialValue from './FormModel/initialValue';
 import validationSchema from './FormModel/validationSchema';
@@ -17,6 +17,11 @@ import BasicForm from './Forms/BasicForm/';
 import CategoriesForm from './Forms/CategoriesForm';
 import { DivHeaderPage, HeaderPage, PaperForm, Root } from './styles';
 import { ICreateTeam } from './types';
+import CreateTeamService from './services/CreateTeamService';
+import { toast, TypeOptions } from 'react-toastify';
+import AppError from '@/shared/errors/AppError';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 interface RouteParams {
   idTeam: string;
@@ -37,7 +42,11 @@ function _renderStepContent(step: number) {
 }
 
 export default function Index() {
+  const history = useHistory();
   const { idTeam } = useParams<RouteParams>();
+  const redmineSelectedId = useSelector(
+    (state: RootState) => state.redmine.redmineSelectedId,
+  );
   const isEditMode = idTeam != null;
   const caption = isEditMode ? 'Editar' : 'Nova';
 
@@ -45,33 +54,30 @@ export default function Index() {
   const currentValidationSchema = validationSchema[activeStep];
   const isLastStep = activeStep === steps.length - 1;
 
-  function _sleep(ms: number | undefined) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  async function _submitForm(values: ICreateTeam) {
+    try {
+      values.redmine_id = redmineSelectedId;
+      // if (!isEditMode) {
+      await CreateTeamService(values);
+      // } else {
+      //   await UpdateRedmineService({ id: idRedmine, redmineProps: redmine });
+      // }
 
-  async function _submitForm(
-    values: ICreateTeam,
-    actions: { setSubmitting: (arg0: boolean) => void },
-  ) {
-    await _sleep(1000);
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+      toast.success('Sucesso');
+      history.push('/dashboard/team/');
+    } catch (e) {
+      const error = e as AppError;
 
-    setActiveStep(activeStep + 1);
+      toast(error.message, { type: error.type as TypeOptions });
+    }
   }
 
   async function _handleSubmit(
     values: ICreateTeam,
     actions: FormikHelpers<ICreateTeam>,
   ) {
-    console.log('subimit');
-
-    // const errors = await actions.validateForm();
-
-    // console.log(errors);
-
     if (isLastStep) {
-      _submitForm(values, actions);
+      _submitForm(values);
     } else {
       setActiveStep(activeStep + 1);
       actions.setTouched({});

@@ -86,7 +86,7 @@ export default function ActivitiesForm() {
                     {activity.name}
                   </TableCell>
                   <TableCell>
-                    {activity.activities_redmine.map(e => e.name).join(', ')}
+                    {activity.redmine_activities.map(e => e.name).join(', ')}
                   </TableCell>
                   <TableCell align="right">
                     <Tooltip title="Editar" aria-label="Edit">

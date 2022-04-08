@@ -76,6 +76,7 @@ export default function CategoriesForm() {
               <TableRow>
                 <TableCell>Nome</TableCell>
                 <TableCell>Categorias Redmine</TableCell>
+                <TableCell>Produtivo</TableCell>
                 <TableCell align="right">Ações</TableCell>
               </TableRow>
             </TableHead>
@@ -86,8 +87,9 @@ export default function CategoriesForm() {
                     {category.name}
                   </TableCell>
                   <TableCell>
-                    {category.categories_redmine.map(e => e.name).join(', ')}
+                    {category.redmine_categories.map(e => e.name).join(', ')}
                   </TableCell>
+                  <TableCell>{category.productive ? 'Sim' : 'Não'}</TableCell>
                   <TableCell align="right">
                     <Tooltip title="Editar" aria-label="Edit">
                       <IconButton

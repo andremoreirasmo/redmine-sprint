@@ -38,7 +38,7 @@ interface Props {
 
 const schema = Yup.object().shape({
   name: Yup.string().required(),
-  activities_redmine: Yup.array()
+  redmine_activities: Yup.array()
     .of(
       Yup.object().shape({
         id: Yup.number().required(),
@@ -51,7 +51,7 @@ const schema = Yup.object().shape({
 
 const initialValues: IActivity = {
   name: '',
-  activities_redmine: [],
+  redmine_activities: [],
 };
 
 export default function DialogAddActvity({
@@ -115,9 +115,9 @@ export default function DialogAddActvity({
 
     const existsActivityRedmine = activities
       .filter((e, index) => index != indexEditActivity)
-      .flatMap(e => e.activities_redmine)
+      .flatMap(e => e.redmine_activities)
       .find(e =>
-        values.activities_redmine.find(activity => e.id === activity.id),
+        values.redmine_activities.find(activity => e.id === activity.id),
       );
 
     if (existsActivityRedmine) {
@@ -168,7 +168,7 @@ export default function DialogAddActvity({
                   fullWidth
                 />
                 <FieldAsynchronousAutocomplete
-                  name="activities_redmine"
+                  name="redmine_activities"
                   label="Atividades"
                   options={activitiesRedmine}
                   isLoading={isLoadingActivities}
@@ -181,15 +181,15 @@ export default function DialogAddActvity({
                     option: IApiRedmineActivity,
                     value: IApiRedmineActivity,
                   ) => option.id === value.id}
-                  defaultValue={initialValues.activities_redmine}
+                  defaultValue={initialValues.redmine_activities}
                   wasTouched={(touched: FormikTouched<IActivity>) =>
-                    touched.activities_redmine != undefined
+                    touched.redmine_activities != undefined
                   }
                   errorMessage={(errors: FormikErrors<IActivity>) =>
-                    errors.activities_redmine as string
+                    errors.redmine_activities as string
                   }
                   valueSelected={(values: IActivity) =>
-                    values.activities_redmine
+                    values.redmine_activities
                   }
                 />
               </FormActivities>
